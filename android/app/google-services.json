@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "103737523377",
+    "firebase_url": "https://farazis-capstone.firebaseio.com",
+    "project_id": "farazis-capstone",
+    "storage_bucket": "farazis-capstone.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:103737523377:android:dee22bd761a865d9857690",
+        "android_client_info": {
+          "package_name": "edu.oregonstate.farazis.capstone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "103737523377-8a87dtrjg0ar3u02p01ld6plljk366tc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCbzzNKbLcnVh1EzCzUFZMpUj21QkAMdkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "103737523377-8a87dtrjg0ar3u02p01ld6plljk366tc.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "103737523377-fhqmopnipdbp6a8ncdnek2qhf6hrl6n9.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "edu.oregonstate.farazis.capstone"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
