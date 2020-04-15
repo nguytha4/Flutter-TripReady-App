@@ -22,6 +22,7 @@ class CapstoneScaffold extends StatelessWidget {
           //     })
           //   ,
           // ],
+          centerTitle: true,
       ),
       body: child,
       floatingActionButton: Padding(
