@@ -13,7 +13,6 @@ class CapstoneScaffold extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: Text(title),
-          centerTitle: true
           // actions: [
           //     Builder(builder: (context) {
           //       return IconButton (
