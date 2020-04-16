@@ -13,15 +13,15 @@ class CapstoneScaffold extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           title: Text(title),
-          // actions: [
-          //     Builder(builder: (context) {
-          //       return IconButton (
-          //       icon: Icon(Icons.settings),
-          //       onPressed: () => Scaffold.of(context).openEndDrawer()
-          //       );
-          //     })
-          //   ,
-          // ],
+          actions: [
+              Builder(builder: (context) {
+                return IconButton (
+                icon: Icon(Icons.dehaze),
+                onPressed: () => Scaffold.of(context).openEndDrawer()
+                );
+              })
+            ,
+          ],
           centerTitle: true,
       ),
       body: child,
