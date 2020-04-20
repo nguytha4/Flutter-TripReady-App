@@ -1,5 +1,7 @@
-import 'package:capstone/widgets/capstone_scaffold.dart';
 import 'package:flutter/material.dart';
+import 'package:capstone/screens/login_screen.dart';
+import 'package:capstone/widgets/capstone_scaffold.dart';
+import 'package:capstone/screens/register_page.dart';
 
 class MainScreen extends StatelessWidget {
   static const routeName = 'main_screen';
@@ -8,15 +10,28 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return CapstoneScaffold(
       title: "Trip Ready",
-      child: buildMainScreen(),
+      child: buildMainScreen(context),
   
     );
   }
-  Widget buildMainScreen() {
+  Widget buildMainScreen(BuildContext context) {
     return Column(
-      children: [logo(), Text("Catchy Text", style: TextStyle(fontSize: 30),), SizedBox(height: 60), SizedBox(height: 120), signInBtn(), createAccountBtn()],
+      children: [logo(), Text("Catchy Placeholder Text", style: TextStyle(fontSize: 30),), SizedBox(height: 60), SizedBox(height: 120), signInBtn(context), createAccountBtn(context)],
     );
   }
+
+  Widget signInBtn(BuildContext context) {
+  return ButtonTheme(
+    minWidth: 300,
+    child:RaisedButton(
+    color: Colors.blue,
+    onPressed: () {
+      Navigator.of(context).pushNamed(SignInPage.routeName);
+    },
+    child: Text('Sign in')
+  )
+  );
+}
 }
 
 Widget logo() {
@@ -30,23 +45,16 @@ Widget logo() {
   ); 
 }
 
-Widget signInBtn() {
-  return ButtonTheme(
-    minWidth: 300,
-    child:RaisedButton(
-    color: Colors.blue,
-    onPressed: () {},
-    child: Text('Sign in')
-  )
-  );
-}
 
-Widget createAccountBtn() {
+
+Widget createAccountBtn(BuildContext context) {
   return ButtonTheme(
     minWidth: 300,
     child:RaisedButton(
     color: Colors.white,
-    onPressed: () {},
+    onPressed: () {
+      Navigator.of(context).pushNamed(RegisterPage.routeName);
+    },
     child: Text('Create Account')
   )
   );
