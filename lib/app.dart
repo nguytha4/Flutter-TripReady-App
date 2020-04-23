@@ -10,7 +10,7 @@ class App extends StatelessWidget {
 
   static final routes = {
     MainScreen.routeName: (context) => MainScreen(),
-    SignInPage.routeName: (context) => SignInPage(),
+    LoginScreen.routeName: (context) => LoginScreen(),
     RegisterPage.routeName: (context) => RegisterPage()
   };
 

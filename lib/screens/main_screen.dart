@@ -16,7 +16,7 @@ class MainScreen extends StatelessWidget {
   }
   Widget buildMainScreen(BuildContext context) {
     return Column(
-      children: [logo(), Text("Catchy Placeholder Text", style: TextStyle(fontSize: 30),), SizedBox(height: 60), SizedBox(height: 120), signInBtn(context), createAccountBtn(context)],
+      children: [logo(), Text("Trip Like Never Before", style: TextStyle(color: Colors.blue, fontSize: 30, fontFamily: 'Sans-serif', fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),), SizedBox(height: 60), SizedBox(height: 120), signInBtn(context), createAccountBtn(context)],
     );
   }
 
@@ -26,7 +26,7 @@ class MainScreen extends StatelessWidget {
     child:RaisedButton(
     color: Colors.blue,
     onPressed: () {
-      Navigator.of(context).pushNamed(SignInPage.routeName);
+      Navigator.of(context).pushNamed(LoginScreen.routeName);
     },
     child: Text('Sign in')
   )
