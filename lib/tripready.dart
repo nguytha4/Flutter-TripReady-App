@@ -8,3 +8,4 @@ export 'screens/transit_form.dart';
 export 'screens/event_form.dart';
 export 'screens/accomodation_form.dart';
 export 'models/passport_id.dart';
+export 'models/accomodation.dart';
