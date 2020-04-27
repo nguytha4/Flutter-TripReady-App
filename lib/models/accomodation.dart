@@ -1,15 +1,16 @@
-// A class representing an accomodation object 
 class Accomodation {
   String name;   
   String phoneNum;
   String email;
   String address;
   String confirmNum;  
-  DateTime checkIn;
-  DateTime checkOut;
+  DateTime checkInDateTime;
+  DateTime checkOutDateTime;
 
-  String dateTime;
+  DateTime timestamp;
   String imageURL;
 
-  Accomodation({this.name, this.phoneNum, this.email, this.address, this.confirmNum, this.checkIn, this.checkOut, this.dateTime, this.imageURL});
+  Accomodation({
+    this.name, this.phoneNum, this.email, this.address, this.confirmNum, this.checkInDateTime, this.checkOutDateTime, 
+    this.timestamp, this.imageURL});
 }

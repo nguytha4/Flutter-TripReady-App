@@ -2,7 +2,7 @@
 class PassportID {
   String name;      // Name of the person that passport / id belongs to
   String imageURL;  // ImageURL of the uploaded passport / id photo
-  String dateTime;  // DateTime passport / id image was uploaded
+  DateTime timestamp;  // To use for timestamp that 
 
-  PassportID({this.name, this.imageURL});
+  PassportID({this.name, this.imageURL, this.timestamp});
 }

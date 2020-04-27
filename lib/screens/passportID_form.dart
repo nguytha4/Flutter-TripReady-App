@@ -74,9 +74,7 @@ class _PassportIDFormState extends State<PassportIDForm> {
   // ====================================== Functions ========================================
 
   void retrieveDateAndTime() async {
-    var dateTimeNow = DateTime.now();
-    var formatterDateTime = DateFormat('yyyy-MM-dd.H.m.s');
-    passportID.dateTime = formatterDateTime.format(dateTimeNow);
+    passportID.timestamp = DateTime.now();
   }
 
   void getImage() async {
@@ -92,8 +90,9 @@ class _PassportIDFormState extends State<PassportIDForm> {
   }
 
   void uploadImage(File image) async {
+    final imageName = DateFormat('yyyy-MM-dd.H.m.s').format(passportID.timestamp);
     StorageReference storageReference =
-      FirebaseStorage.instance.ref().child('passportid_' + passportID.dateTime);
+      FirebaseStorage.instance.ref().child('passportid_' + imageName);
     StorageUploadTask uploadTask = storageReference.putFile(image);
     await uploadTask.onComplete;
     final url = await storageReference.getDownloadURL();
@@ -184,8 +183,8 @@ class _PassportIDFormState extends State<PassportIDForm> {
           if (formKey.currentState.validate()) {
             formKey.currentState.save();
 
-            Firestore.instance.collection('passport_id').add( {
-              'date': passportID.dateTime,
+            Firestore.instance.collection('passportID').add( {
+              'timestamp': passportID.timestamp,
               'imageURL': passportID.imageURL,
               'name': passportID.name,
             });

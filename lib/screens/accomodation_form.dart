@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/tripready.dart';
-import 'package:intl/intl.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:intl/intl.dart';
 
 class AccomodationForm extends StatefulWidget {
   @override
@@ -106,9 +106,7 @@ class _AccomodationFormState extends State<AccomodationForm> {
   }
 
   void retrieveDateAndTime() async {
-    var dateTimeNow = DateTime.now();
-    var formatterDateTime = DateFormat('yyyy-MM-dd.H.m.s');
-    accomodation.dateTime = formatterDateTime.format(dateTimeNow);
+    accomodation.timestamp = DateTime.now();
   }
 
   // ==================================== Widget functions ====================================
@@ -118,14 +116,14 @@ class _AccomodationFormState extends State<AccomodationForm> {
       padding: const EdgeInsets.only(top: 4, bottom: 12),
       child: TextFormField(
         decoration: InputDecoration(
-          labelText: 'Enter Name', border: OutlineInputBorder(), icon: Icon(Icons.perm_identity)
+          labelText: 'Enter Accomodation Name', border: OutlineInputBorder(), icon: Icon(Icons.home)
         ),
         onSaved: (value) {
           accomodation.name = value;
         },
         validator: (value) {
           if (value.isEmpty) {
-            return 'Please enter a name';
+            return 'Please enter a name for the accomodation';
           } else {
             return null;
           }
@@ -183,7 +181,7 @@ class _AccomodationFormState extends State<AccomodationForm> {
       padding: const EdgeInsets.only(bottom: 12),
       child: TextFormField(
         decoration: InputDecoration(
-          labelText: 'Enter Confirmation Number', border: OutlineInputBorder(), icon: Icon(Icons.receipt)
+          labelText: 'Enter Confirmation Number', border: OutlineInputBorder(), icon: Icon(Icons.confirmation_number)
         ),
         onSaved: (value) {
           accomodation.confirmNum = value;
@@ -205,7 +203,7 @@ class _AccomodationFormState extends State<AccomodationForm> {
           _chooseDateIn(context, _controllerCheckIn.text, accomodation);
         },
         onSaved: (value) {
-          accomodation.checkIn = convertToDate(value);
+          accomodation.checkInDateTime = convertToDate(value);
         },
         validator: (value) {
           if (value.isEmpty) {
@@ -231,7 +229,7 @@ class _AccomodationFormState extends State<AccomodationForm> {
               _chooseDateOut(context, _controllerCheckOut.text, accomodation);
             },
             onSaved: (value) {
-              accomodation.checkOut = convertToDate(value);
+              accomodation.checkOutDateTime = convertToDate(value);
             },
             validator: (value) {
               if (value.isEmpty) {
@@ -254,14 +252,14 @@ class _AccomodationFormState extends State<AccomodationForm> {
             formKey.currentState.save();
 
             Firestore.instance.collection('accomodation').add( {
-               'date': accomodation.dateTime,
+               'timestamp': accomodation.timestamp,
                'name': accomodation.name,
                'phoneNum': accomodation.phoneNum,
                'email': accomodation.email,
                'address': accomodation.address,
                'confirmNum': accomodation.confirmNum,
-               'checkIn': accomodation.checkIn,
-              'checkOut': accomodation.checkOut,
+               'checkInDateTime': accomodation.checkInDateTime,
+               'checkOutDateTime': accomodation.checkOutDateTime,
             });
 
             toWalletScreen(context);
