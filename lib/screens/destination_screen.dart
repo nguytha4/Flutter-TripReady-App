@@ -26,6 +26,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
   @override
   Widget build(BuildContext context) {
     return CapstoneScaffold(
+      hideAppBar: true,
       title: 'Tripss',
       child: Column(
         children: <Widget>[
