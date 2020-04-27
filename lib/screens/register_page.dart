@@ -10,7 +10,7 @@ final FirebaseAuth _auth = FirebaseAuth.instance;
 
 class RegisterPage extends StatefulWidget {
   static const routeName = 'register_screen';
-  final String title = 'Registration';
+  final String title = 'Create Account';
   @override
   State<StatefulWidget> createState() => RegisterPageState();
 }
@@ -42,10 +42,10 @@ class RegisterPageState extends State<RegisterPage> {
             buildPasswordBox(),
             buildRePasswordBox(),
             Container(
-              padding: const EdgeInsets.symmetric(vertical: 30.0),
+              padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
               alignment: Alignment.center,
               child: ButtonTheme(
-                minWidth: 300,
+                minWidth: double.infinity,
                 child:RaisedButton(
                 shape: RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(30.0)
@@ -55,7 +55,7 @@ class RegisterPageState extends State<RegisterPage> {
                     _register(context);
                   }
                 },
-                child: const Text('Submit'),
+                child: const Text('Submit', style: TextStyle(color: Colors.white)),
               ),
             )),
             Container(
@@ -73,25 +73,37 @@ class RegisterPageState extends State<RegisterPage> {
   }
 
   Widget buildPasswordBox() {
-    return Padding(
-      padding: EdgeInsets.all(20),
-      child:Align(
+    return Align(
         alignment: Alignment.center,
         child:Container(
-        height: 50,
-        width: 300,
+        padding: EdgeInsets.only(left: 20, right: 20, top: 10),
           child:TextFormField(
+            autofocus: true,
+            obscureText: true,
+            style: TextStyle(fontSize: 13),
             controller: _passwordController,
             decoration: new InputDecoration(
+                    // hintStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue),
+                    // hintText: "PASSWORD",
                     labelText: "Password",
                     fillColor: Colors.white,
-                    border: new OutlineInputBorder(
-                      borderRadius: new BorderRadius.circular(30.0),
-                      borderSide: new BorderSide(
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                      borderSide: BorderSide(
+                        color: Colors.blue,
+                        width: 10
                       ),
                     ),
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    child: IconTheme(
+                      data: IconThemeData(color: Colors.blue),
+                      child: Icon(Icons.lock)
+                    )
+                  )
                     //fillColor: Colors.green
                   ),
+                  
             validator: (String value) {
               _userPassword = value.trim();
               if (value.isEmpty) {
@@ -99,7 +111,7 @@ class RegisterPageState extends State<RegisterPage> {
               }
               return null;
             },
-          )))
+          ))
     );
   }
   
@@ -107,9 +119,10 @@ class RegisterPageState extends State<RegisterPage> {
     return Align(
         alignment: Alignment.center,
         child:Container(
-        height: 50,
-        width: 300,
+        padding: EdgeInsets.only(left: 20, right: 20, top: 20),
           child:TextFormField(
+            style: TextStyle(fontSize: 13),
+            obscureText: true,
             controller: _confirmPasswordController,
             decoration: new InputDecoration(
                     labelText: "Re-enter Password",
@@ -117,8 +130,18 @@ class RegisterPageState extends State<RegisterPage> {
                     border: new OutlineInputBorder(
                       borderRadius: new BorderRadius.circular(30.0),
                       borderSide: new BorderSide(
+                        color: Colors.blue,
+                        width: 2
                       ),
                     ),
+                  prefixIcon: Padding(
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    child: IconTheme(
+                      data: IconThemeData(color: Colors.blue),
+                      child: Icon(Icons.lock)
+                    )
+                  )
+                    //fillColor: Colors.green
                     //fillColor: Colors.green
                   ),
             validator: (String value) {
@@ -139,9 +162,9 @@ class RegisterPageState extends State<RegisterPage> {
     return Align(
           alignment: Alignment.center,
           child:Container(
-          height: 50,
-          width: 300,
+          padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
           child:TextFormField(
+            style: TextStyle(fontSize: 13),
             controller: _emailController,
             decoration: new InputDecoration(
                       labelText: "Email",
@@ -149,8 +172,18 @@ class RegisterPageState extends State<RegisterPage> {
                       border: new OutlineInputBorder(
                         borderRadius: new BorderRadius.circular(30.0),
                         borderSide: new BorderSide(
+                          color: Colors.blue,
+                          width: 2
                         ),
                       ),
+                      prefixIcon: Padding(
+                    padding: EdgeInsets.only(left: 10, right: 10),
+                    child: IconTheme(
+                      data: IconThemeData(color: Colors.blue),
+                      child: Icon(Icons.email)
+                    )
+                  )
+                    //fillColor: Colors.green
                       //fillColor: Colors.green
                     ),
             validator: (String value) {
