@@ -1,7 +1,6 @@
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:capstone/widgets/capstone_scaffold.dart';
 import 'package:capstone/widgets/destination_carousel.dart';
-import 'package:capstone/widgets/hotel_carousel.dart';
+// import 'package:capstone/screen/new_destination_entry_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainLandingScreen extends StatefulWidget {
@@ -12,80 +11,90 @@ class MainLandingScreen extends StatefulWidget {
 }
 
 class _MainLandingScreenState extends State<MainLandingScreen> {
-  int _selectedIndex = 0;
-  //int _currentTab = 0;
-  List<IconData> _icons = [
-    FontAwesomeIcons.plane,
-    FontAwesomeIcons.bed,
-    FontAwesomeIcons.walking,
-    FontAwesomeIcons.biking,
-  ];
+  List<bool> isSelected;
 
-  Widget _buildIcon(int index) {
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          _selectedIndex = index;
-        });
-      },
-      child: Container(
-        height: 60.0,
-        width: 60.0,
-        decoration: BoxDecoration(
-          color: _selectedIndex == index
-              ? Theme.of(context).accentColor
-              : Color(0xFFE7EBEE),
-          borderRadius: BorderRadius.circular(30.0),
-        ),
-        child: Icon(
-          _icons[index],
-          size: 25.0,
-          color: _selectedIndex == index
-              ? Theme.of(context).primaryColor
-              : Color(0xFFB4C1C4),
-        ),
-      ),
-    );
-  }
+  @override
+    void initState() {
+        isSelected = [true, false];
+        super.initState();
+    }
 
   @override
   Widget build(BuildContext context) {
     return CapstoneScaffold(
       title: 'Trips',
       hideAppBar: false,
-      child: SafeArea(
-        child: ListView(
-          padding: EdgeInsets.symmetric(vertical: 30.0),
-          children: <Widget>[
-            // Padding(
-            //   padding: EdgeInsets.only(left: 20.0, right: 120.0),
-            //   child: Text(
-            //     'What would you like to find?',
-            //     style: TextStyle(
-            //       fontSize: 30.0,
-            //       fontWeight: FontWeight.bold,
-            //     ),
-            //   ),
-            // ),
-            // SizedBox(height: 20.0),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: _icons
-                  .asMap()
-                  .entries
-                  .map(
-                    (MapEntry map) => _buildIcon(map.key),
-                  )
-                  .toList(),
-            ),
+      fab: addEntryFab(context),
+        child: Column(
+          children: [
             SizedBox(height: 20.0),
-            DestinationCarousel(),
-            //SizedBox(height: 20.0),
-            //HotelCarousel(),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [ToggleButtons (
+                borderRadius: BorderRadius.circular(8),
+                borderWidth: 2,
+                fillColor: Colors.blue[300],
+                selectedColor: Colors.white,
+                children: [
+                  Container(
+                    alignment: Alignment.center,
+                    width: (MediaQuery.of(context).size.width - 36) / 2,
+                    child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      "Upcoming",
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.0,
+                      )),
+                  )), 
+                  Container(
+                    alignment: Alignment.center,
+                    width: (MediaQuery.of(context).size.width - 36) / 2,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        "Past",
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.0,
+                        )),
+                    ),
+                  )
+                ],
+                onPressed: (int index) {
+                  setState(() {
+                    for(int i = 0; i < isSelected.length; i++) {
+                    isSelected[i] = i == index;
+                    }
+                  });
+                },
+                isSelected: isSelected,
+              )
+            ]),
+            SizedBox(height: 10.0),
+            Expanded(child: DestinationCarousel()),
           ],
         ),
-      ),
     );
+  }
+  Widget addEntryFab(BuildContext context) {
+    return Semantics(
+      button: true,
+      onTapHint: 'Add a new destination',
+      child: FloatingActionButton(
+        key: Key('new'),
+        child: Icon(Icons.add),
+        backgroundColor: Colors.blue[300],
+        onPressed: () {
+          displayNewEntryForm(context);
+        })
+    );
+  }
+  void displayNewEntryForm(BuildContext context) {
+    //  Navigator.pushNamed(context, NewDestinationEntryScreen.routeName);
   }
 }
 

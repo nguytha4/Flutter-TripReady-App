@@ -17,7 +17,7 @@ class CapstoneScaffold extends StatelessWidget {
       floatingActionButton: Padding(
         padding: EdgeInsets.all(20), 
         child: fab),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
     );
   }
 

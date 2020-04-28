@@ -29,9 +29,9 @@ class _DestinationScreenState extends State<DestinationScreen> {
       hideAppBar: true,
       title: 'Tripss',
       child: Column(
-        children: <Widget>[
+        children: [
           Stack(
-            children: <Widget>[
+            children: [
               Container(
                 height: MediaQuery.of(context).size.width,
                 decoration: BoxDecoration(
@@ -59,7 +59,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
                 padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 40.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: <Widget>[
+                  children: [
                     IconButton(
                       icon: Icon(Icons.arrow_back),
                       iconSize: 30.0,
@@ -67,7 +67,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
                       onPressed: () => Navigator.pop(context),
                     ),
                     Row(
-                      children: <Widget>[
+                      children: [
                         IconButton(
                           icon: Icon(Icons.search),
                           iconSize: 30.0,
@@ -90,7 +90,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
                 bottom: 20.0,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
+                  children: [
                     Text(
                       widget.destination.city,
                       style: TextStyle(
@@ -101,7 +101,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
                       ),
                     ),
                     Row(
-                      children: <Widget>[
+                      children: [
                         Icon(
                           FontAwesomeIcons.locationArrow,
                           size: 15.0,
@@ -138,7 +138,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
               itemBuilder: (BuildContext context, int index) {
                 Activity activity = widget.destination.activities[index];
                 return Stack(
-                  children: <Widget>[
+                  children: [
                     Container(
                       margin: EdgeInsets.fromLTRB(40.0, 5.0, 20.0, 5.0),
                       height: 170.0,
@@ -152,11 +152,11 @@ class _DestinationScreenState extends State<DestinationScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: <Widget>[
+                          children: [
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               crossAxisAlignment: CrossAxisAlignment.start,
-                              children: <Widget>[
+                              children: [
                                 Container(
                                   width: 120.0,
                                   child: Text(
@@ -170,7 +170,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
                                   ),
                                 ),
                                 Column(
-                                  children: <Widget>[
+                                  children: [
                                     Text(
                                       '\$${activity.price}',
                                       style: TextStyle(
@@ -197,7 +197,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
                             _buildRatingStars(activity.rating),
                             SizedBox(height: 10.0),
                             Row(
-                              children: <Widget>[
+                              children: [
                                 Container(
                                   padding: EdgeInsets.all(5.0),
                                   width: 70.0,
