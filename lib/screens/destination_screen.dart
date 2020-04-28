@@ -81,13 +81,13 @@ class _DestinationScreenState extends State<DestinationScreen> {
             ],
           ),
           Container(
-            height: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width + 60,
             child: Padding(
-              padding: const EdgeInsets.all(10.0),
+              padding: const EdgeInsets.all(30.0),
               child: GridView.count(
                 crossAxisCount: 2,
-                crossAxisSpacing: 10,
-                mainAxisSpacing: 10,
+                crossAxisSpacing: 15,
+                mainAxisSpacing: 15,
                 children: [
                   GestureDetector(
                   onTap: () => Navigator.push(
@@ -101,96 +101,54 @@ class _DestinationScreenState extends State<DestinationScreen> {
                       color: Colors.red,
                       alignment: Alignment.bottomCenter,
                       child: 
-                      Column(
-                        children: [ 
-                          Icon(
-                            Icons.account_balance,
-                            size: 30.0,
-                            color: Colors.black,
-                            //onPressed: () => Navigator.pop(context),
-                          ),
-                          Icon(
-                            Icons.fastfood,
-                            size: 30.0,
-                            color: Colors.black,
-                          ),
-                          Text(
-                          'Sites / Food',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15.0,
-                            letterSpacing: 1.2,
-                          ),
-                        )],
+                      Text(
+                      'Sites / Food',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 15.0,
+                        letterSpacing: 1.2,
                       ),
+                        ),
                     ),
                   ),
                   Container(
                     color: Colors.yellow,
                     alignment: Alignment.bottomCenter,
                     child: 
-                    Column(
-                      children: [ 
-                        IconButton(
-                          icon: Icon(Icons.lightbulb_outline),
-                          iconSize: 30.0,
-                          color: Colors.black,
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                        Text(
-                        'Tips',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15.0,
-                          letterSpacing: 1.2,
-                        ),
-                      )],
+                    Text(
+                    'Tips',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15.0,
+                      letterSpacing: 1.2,
                     ),
+                      ),
                   ),
                   Container(
                     color: Colors.blue,
                     alignment: Alignment.bottomCenter,
                     child: 
-                    Column(
-                      children: [ 
-                        IconButton(
-                          icon: Icon(Icons.check_box),
-                          iconSize: 30.0,
-                          color: Colors.black,
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                        Text(
-                        'Items Checklist',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15.0,
-                          letterSpacing: 1.2,
-                        ),
-                      )],
+                    Text(
+                    'Items Checklist',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15.0,
+                      letterSpacing: 1.2,
                     ),
+                      ),
                   ),
                   Container(
                     color: Colors.green,
                     alignment: Alignment.bottomCenter,
                     child: 
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [ 
-                        IconButton(
-                          icon: Icon(Icons.account_balance_wallet),
-                          iconSize: 70.0,
-                          color: Colors.black,
-                          onPressed: () => Navigator.pop(context),
-                        ),
-                        Text(
-                        'Wallet',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 15.0,
-                          letterSpacing: 1.2,
-                        ),
-                      )],
+                    Text(
+                    'Wallet',
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 15.0,
+                      letterSpacing: 1.2,
                     ),
+                      ),
                   ),
                 ],
               ),
