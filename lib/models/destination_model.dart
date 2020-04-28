@@ -74,7 +74,7 @@ List<Destination> destinations = [
   ),
   Destination(
     imageUrl: 'assets/images/newyork.jpg',
-    city: 'NYC',
+    city: 'New York',
     country: 'United States',
     description: 'Visit New York for an amazing and unforgettable adventure.',
     activities: activities,
