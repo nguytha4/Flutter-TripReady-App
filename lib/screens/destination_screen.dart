@@ -66,7 +66,8 @@ class _DestinationScreenState extends State<DestinationScreen> {
                 bottom: 10.0,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: 
+                  [
                     Text(
                       widget.destination.city,
                       style: TextStyle(
@@ -81,13 +82,15 @@ class _DestinationScreenState extends State<DestinationScreen> {
             ],
           ),
           Container(
-            height: MediaQuery.of(context).size.width + 60,
+            height: MediaQuery.of(context).size.width,
             child: Padding(
-              padding: const EdgeInsets.all(30.0),
+              padding: const EdgeInsets.all(15.0),
               child: GridView.count(
                 crossAxisCount: 2,
                 crossAxisSpacing: 15,
                 mainAxisSpacing: 15,
+                physics: new NeverScrollableScrollPhysics(),
+                padding: const EdgeInsets.all(15.0),
                 children: [
                   GestureDetector(
                   onTap: () => Navigator.push(
