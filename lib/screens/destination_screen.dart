@@ -1,4 +1,5 @@
 import 'package:capstone/screens/sites_food_detail_screen.dart';
+import 'package:capstone/screens/sites_food_screen.dart';
 import 'package:capstone/widgets/capstone_scaffold.dart';
 import 'package:capstone/widgets/image_header.dart';
 import 'package:flutter/material.dart';
@@ -50,10 +51,10 @@ class _DestinationScreenState extends State<DestinationScreen> {
           physics: new NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.all(15.0),
           children: [
-            buildButton(SitesFoodDetailScreen.routeName, 'Sites / Food'),
-            buildButton(SitesFoodDetailScreen.routeName, 'Tips'),
-            buildButton(SitesFoodDetailScreen.routeName, 'Items Checklist'),
-            buildButton(WalletScreen.routeName, 'Wallet'),
+            buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Sites / Food'),
+            buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Tips'),
+            buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Items Checklist'),
+            buildButton((_) => WalletScreen(), 'Wallet'),
           ],
         ),
       ),
@@ -64,10 +65,15 @@ class _DestinationScreenState extends State<DestinationScreen> {
     return ImageHeader(imageUrl: widget.destination.imageUrl, label: widget.destination.city);
   }
 
-  Widget buildButton(String routeName, String label) {
+  Widget buildButton(WidgetBuilder screen, String label) {
     return GestureDetector(
       onTap: () {
-        return Navigator.pushNamed(context, routeName);
+        Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: screen,
+              ));
+        //return Navigator.pushNamed(context, routeName);
       },
       child: Container(
         alignment: Alignment.center,
