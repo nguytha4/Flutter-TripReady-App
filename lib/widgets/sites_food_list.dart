@@ -2,7 +2,6 @@ import 'package:capstone/models/activity_model.dart';
 import 'package:capstone/screens/sites_food_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/models/destination_model.dart';
-import 'package:capstone/screens/sites_food_screen.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SitesFoodList extends StatelessWidget {
