@@ -1,5 +1,5 @@
 import 'package:capstone/widgets/capstone_scaffold.dart';
-import 'package:capstone/widgets/destination_carousel.dart';
+import 'package:capstone/widgets/destination_list.dart';
 // import 'package:capstone/screen/new_destination_entry_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -38,31 +38,8 @@ class _MainLandingScreenState extends State<MainLandingScreen> {
                 selectedColor: Colors.black,
                 color: Colors.grey,
                 children: [
-                  Container(
-                    alignment: Alignment.center,
-                    width: (MediaQuery.of(context).size.width - 36) / 2,
-                    child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Text(
-                      "Upcoming",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.0,
-                      )),
-                  )), 
-                  Container(
-                    alignment: Alignment.center,
-                    width: (MediaQuery.of(context).size.width - 36) / 2,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        "Past",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16.0,
-                        )),
-                    ),
-                  )
+                  buildContainer(context, 'Upcoming'),
+                  buildContainer(context, 'Past'),  
                 ],
                 onPressed: (int index) {
                   setState(() {
@@ -75,11 +52,27 @@ class _MainLandingScreenState extends State<MainLandingScreen> {
               )
             ]),
             SizedBox(height: 10.0),
-            Expanded(child: DestinationCarousel()),
+            Expanded(child: DestinationList()),
           ],
         ),
     );
   }
+
+  Container buildContainer(BuildContext context, String text) {
+    return Container(
+      alignment: Alignment.center,
+      width: (MediaQuery.of(context).size.width - 36) / 2,
+      child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontWeight: FontWeight.w600,
+          fontSize: 16.0,
+        )),
+    ));
+  }
+
   Widget addEntryFab(BuildContext context) {
     return Semantics(
       button: true,
@@ -87,12 +80,13 @@ class _MainLandingScreenState extends State<MainLandingScreen> {
       child: FloatingActionButton(
         key: Key('new'),
         child: Icon(Icons.add),
-        backgroundColor: Colors.blue[300],
+        backgroundColor: Colors.blue,
         onPressed: () {
           displayNewEntryForm(context);
         })
     );
   }
+
   void displayNewEntryForm(BuildContext context) {
     //  Navigator.pushNamed(context, NewDestinationEntryScreen.routeName);
   }

@@ -15,3 +15,4 @@ class Activity {
     this.price,
   });
 }
+
