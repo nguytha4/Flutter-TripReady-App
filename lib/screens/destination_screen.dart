@@ -140,7 +140,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
       },
       child: Container(
         alignment: Alignment.center,
-        decoration: buildBorder(Colors.black45),
+        decoration: buildBorder(Colors.black),
         child: Text(
           label,
           style: TextStyle(
