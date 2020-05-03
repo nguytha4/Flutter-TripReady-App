@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:capstone/widgets/logo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -38,7 +39,7 @@ class RegisterPageState extends State<RegisterPage> {
           child:Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            logo(),
+            Logo(),
             buildEmailBox(),
             buildPasswordBox(),
             buildRePasswordBox(),
@@ -208,17 +209,6 @@ class RegisterPageState extends State<RegisterPage> {
           ))));
   }
 
-  Widget logo() {
-  return Align(
-    alignment: Alignment.center,
-    child: Container(
-    height: 200,
-    width: 200,
-    child: Image.asset('assets/images/logo.png')
-  )
-  ); 
-}
-
   @override
   void dispose() {
     // Clean up the controller when the Widget is disposed
@@ -259,3 +249,4 @@ class RegisterPageState extends State<RegisterPage> {
     }
   }
 }
+
