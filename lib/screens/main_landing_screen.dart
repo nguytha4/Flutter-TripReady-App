@@ -1,7 +1,7 @@
 import 'package:capstone/widgets/capstone_scaffold.dart';
 import 'package:capstone/widgets/destination_list.dart';
-// import 'package:capstone/screen/new_destination_entry_screen.dart';
 import 'package:flutter/material.dart';
+import 'new_destination_entry_screen.dart';
 
 class MainLandingScreen extends StatefulWidget {
   static const routeName = 'main_landing_screen';
@@ -88,7 +88,7 @@ class _MainLandingScreenState extends State<MainLandingScreen> {
   }
 
   void displayNewEntryForm(BuildContext context) {
-    //  Navigator.pushNamed(context, NewDestinationEntryScreen.routeName);
+    Navigator.pushNamed(context, NewDestinationEntryScreen.routeName);
   }
 }
 

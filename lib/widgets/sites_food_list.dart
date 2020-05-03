@@ -1,5 +1,4 @@
- import 'package:capstone/models/activity_model.dart';
-import 'package:capstone/models/mock_data.dart';
+import 'package:capstone/models/activity_model.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/models/destination_model.dart';
 import 'package:capstone/screens/sites_food_screen.dart';

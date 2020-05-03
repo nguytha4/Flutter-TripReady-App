@@ -1,48 +1,85 @@
-import 'dart:io';
-
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-
 import 'package:capstone/widgets/capstone_scaffold.dart';
 
-class NewWastePhotoScreen extends StatefulWidget {
-  static const routeName = 'new_entry_photo';
+
+class NewDestinationEntryScreen extends StatefulWidget {
+  static const routeName = 'new_destination_entry_screen';
 
   @override
-  _NewWastePhotoScreenState createState() => _NewWastePhotoScreenState();
+  _NewDestinationEntryScreenState createState() => _NewDestinationEntryScreenState();
 }
 
-class _NewWastePhotoScreenState extends State<NewWastePhotoScreen> {
-  File _image;
-
-  Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-
-    setState(() {
-      _image = image;
-    });
-
-    // Navigator.popAndPushNamed(context, NewWasteDetailScreen.routeName, arguments: _image);
-  }
+class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
+  
+  //Navigator.popAndPushNamed(context, MainLandingScreen.routeName);
+  int selectitem = 1;
 
   @override
   Widget build(BuildContext context) {
+    
     return CapstoneScaffold(
       title: 'New Destination Entry',
-      child: Center(
-        child: _image == null
-            ? Text('No image selected.')
-            : Image.file(_image),
-      ),
-      fab: Semantics(
-        button: true,
-        onTapHint: 'Pick an image from your device''s gallery',
-        child: FloatingActionButton(
-          key: Key('photo'),
-          onPressed: getImage,
-          tooltip: 'Pick Image',
-          child: Icon(Icons.add_a_photo),
-      )),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Container(
+            height: 700.0,
+            child: CupertinoPicker(
+              magnification: 1.0,
+              backgroundColor: Colors.black87,
+              children:[
+                Text(
+                  'City Name',
+                  style: TextStyle(
+                  color: Colors.white, 
+                  fontSize: 20),
+                ),
+              ],
+            itemExtent: 30, //height of each item
+            looping: true,
+            
+            onSelectedItemChanged: (int index) {  
+              selectitem = index;
+            },
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              border: Border(
+                bottom: BorderSide(
+                  color: Colors.white,
+                  width: 0.0,
+                ),
+              ),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CupertinoButton(
+                  child: Text('Cancel'),
+                  onPressed: () {},
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30.0,
+                    vertical: 30.0,
+                  ),
+                ),
+                CupertinoButton(
+                  child: Text('Confirm'),
+                  onPressed: () {},
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 30.0,
+                    vertical: 30.0,
+                  ),
+                )
+              ],
+            ),
+          ),
+        ],
+      )
     );
   }
 }
+
+  

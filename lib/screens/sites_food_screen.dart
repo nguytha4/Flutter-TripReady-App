@@ -1,5 +1,4 @@
 import 'package:capstone/widgets/capstone_scaffold.dart';
-import 'package:capstone/widgets/destination_list.dart';
 import 'package:capstone/widgets/sites_food_list.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/models/destination_model.dart';

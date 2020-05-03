@@ -1,4 +1,5 @@
 import 'package:capstone/screens/main_landing_screen.dart';
+import 'package:capstone/screens/new_destination_entry_screen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -8,6 +9,7 @@ class App extends StatelessWidget {
 
   static final routes = {
     MainLandingScreen.routeName: (context) => MainLandingScreen(),
+    NewDestinationEntryScreen.routeName: (context) => NewDestinationEntryScreen(),
   };
 
   @override
