@@ -14,3 +14,11 @@ export 'models/passportID.dart';
 export 'models/accomodation.dart';
 export 'models/event.dart';
 export 'models/transit.dart';
+export 'models/activity_model.dart';
+export 'models/destination_model.dart';
+export 'screens/main_landing_screen.dart';
+export 'screens/destination_screen.dart';
+export 'screens/new_destination_entry_screen.dart';
+export 'screens/sites_food_screen.dart';
+export 'screens/sites_food_detail_screen.dart';
+

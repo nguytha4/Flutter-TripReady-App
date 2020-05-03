@@ -1,5 +1,4 @@
 import 'package:capstone/screens/sites_food_detail_screen.dart';
-import 'package:capstone/screens/sites_food_screen.dart';
 import 'package:capstone/widgets/capstone_scaffold.dart';
 import 'package:capstone/widgets/image_header.dart';
 import 'package:flutter/material.dart';
