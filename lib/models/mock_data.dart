@@ -4,7 +4,7 @@ import 'destination_model.dart';
 List<Activity> _activities = [
   Activity(
     imageUrl: 'assets/images/vaticancity.jpg',
-    name: 'Vatican City2',
+    name: 'Vatican City',
     type: 'Sightseeing Tour',
     startTimes: ['9:00 am', '11:00 am'],
     rating: 5,

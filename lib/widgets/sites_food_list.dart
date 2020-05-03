@@ -1,4 +1,5 @@
 import 'package:capstone/models/activity_model.dart';
+import 'package:capstone/screens/sites_food_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/models/destination_model.dart';
 import 'package:capstone/screens/sites_food_screen.dart';
@@ -21,7 +22,7 @@ class SitesFoodList extends StatelessWidget {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (_) => SitesFoodScreen(
+                builder: (_) => SitesFoodDetailScreen(
                   destination: destination,
                 ),
               ),
@@ -32,13 +33,6 @@ class SitesFoodList extends StatelessWidget {
               child: Stack(
                 alignment: Alignment.topCenter,
                 children: [
-                  Positioned(
-                    bottom: 15.0,
-                    child: Container(
-                      height: 120.0,
-                      width: 200.0,
-                    ),
-                  ),
                   Container(
                     decoration: BoxDecoration(
                       color: Colors.white,
@@ -62,53 +56,65 @@ class SitesFoodList extends StatelessWidget {
                                 width: MediaQuery.of(context).size.width,
                                 image: AssetImage(activity.imageUrl),
                                 fit: BoxFit.cover,)),
+                          buildTitle(context, activity),
                           Positioned(
-                            child: Container(
-                              color: Colors.black26,
-                              width: MediaQuery.of(context).size.width,
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      activity.name,
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 24.0,
-                                        letterSpacing: 1.2,
-                                      ),
-                                    ),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          FontAwesomeIcons.locationArrow,
-                                          size: 10.0,
-                                          color: Colors.white,
-                                        ),
-                                        SizedBox(width: 5.0),
-                                        Text(
-                                          activity.type,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                    top: 15.0,
+                    right: 15.0,
+                    child: Icon(
+                            FontAwesomeIcons.solidHeart,
+                            size: 20.0,
+                            color: Colors.white,
                           ),
-                        ],
+                        )],
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
           );
         },
+      ),
+    );
+  }
+
+  Positioned buildTitle(BuildContext context, Activity activity) {
+    return Positioned(
+      child: Container(
+        color: Colors.black26,
+        width: MediaQuery.of(context).size.width,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                activity.name,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24.0,
+                  letterSpacing: 1.2,
+                ),
+              ),
+              Row(
+                children: [
+                  Icon(
+                    FontAwesomeIcons.locationArrow,
+                    size: 10.0,
+                    color: Colors.white,
+                  ),
+                  SizedBox(width: 5.0),
+                  Text(
+                    activity.type,
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

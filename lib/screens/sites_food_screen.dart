@@ -1,9 +1,19 @@
+import 'package:capstone/screens/sites_food_detail_screen.dart';
 import 'package:capstone/widgets/capstone_scaffold.dart';
 import 'package:capstone/widgets/sites_food_list.dart';
+// import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/models/destination_model.dart';
 
+class Post {
+  final String title;
+  final String description;
+
+  Post(this.title, this.description);
+}
+
 class SitesFoodScreen extends StatefulWidget {
+  static const routeName = 'sites_food_screen';
   final Destination destination;
 
   SitesFoodScreen({this.destination});
@@ -17,8 +27,8 @@ class _SitesFoodScreenState extends State<SitesFoodScreen> {
 
   @override
     void initState() {
-        isSelected = [true, false, false];
-        super.initState();
+      isSelected = [true, false, false];
+      super.initState();
   }
 
   @override
@@ -26,7 +36,7 @@ class _SitesFoodScreenState extends State<SitesFoodScreen> {
     return CapstoneScaffold(
       title: '${this.widget.destination.city} - Sites / Food',
       hideAppBar: false,
-      fab: addEntryFab(context),
+      // fab: addEntryFab(context),
         child: Column(
           children: [
             SizedBox(height: 20.0),
@@ -55,6 +65,23 @@ class _SitesFoodScreenState extends State<SitesFoodScreen> {
               )
             ]),
             SizedBox(height: 10.0),
+            Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: TextField(
+              decoration: new InputDecoration(
+                labelText: "Search something"
+              )),
+            ),
+            // SearchBar<Post>(
+            // onSearch: (String s) => Future.sync(() => List<Post>()),
+            // onItemFound: (Post post, int index) {
+            //   return ListTile(
+            //     title: Text(post.title),
+            //     subtitle: Text(post.description),
+            //   );
+            // }
+            // ),
+            SizedBox(height: 10.0),
             Expanded(child: SitesFoodList(destination: this.widget.destination)),
           ],
         ),
@@ -76,21 +103,22 @@ class _SitesFoodScreenState extends State<SitesFoodScreen> {
     ));
   }
 
-  Widget addEntryFab(BuildContext context) {
-    return Semantics(
-      button: true,
-      onTapHint: 'Add a new destination',
-      child: FloatingActionButton(
-        key: Key('new'),
-        child: Icon(Icons.search),
-        backgroundColor: Colors.blue,
-        onPressed: () {
-          displayNewEntryForm(context);
-        })
-    );
-  }
+  // Widget addEntryFab(BuildContext context) {
+  //   return Semantics(
+  //     button: true,
+  //     onTapHint: 'Add a new destination',
+  //     child: FloatingActionButton(
+  //       key: Key('new'),
+  //       child: Icon(Icons.search),
+  //       backgroundColor: Colors.blue,
+  //       onPressed: () {
+  //         SearchBar();
+  //       })
+  //   );
+  // }
 
   void displayNewEntryForm(BuildContext context) {
-    //  Navigator.pushNamed(context, NewDestinationEntryScreen.routeName);
+    Navigator.pushNamed(context, SitesFoodDetailScreen.routeName);
   }
 }
+
