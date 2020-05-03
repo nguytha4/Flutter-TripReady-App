@@ -24,6 +24,7 @@ class SitesFoodList extends StatelessWidget {
               MaterialPageRoute(
                 builder: (_) => SitesFoodDetailScreen(
                   destination: destination,
+                  activity: activity,
                 ),
               ),
             ),

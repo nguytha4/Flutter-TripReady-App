@@ -1,5 +1,6 @@
 import 'package:capstone/screens/sites_food_screen.dart';
 import 'package:capstone/widgets/capstone_scaffold.dart';
+import 'package:capstone/widgets/image_header.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/models/destination_model.dart';
 
@@ -63,72 +64,8 @@ class _DestinationScreenState extends State<DestinationScreen> {
     );
   }
 
-  ClipRRect buildHeader(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(30.0),
-      child: Stack(
-        children: [
-          Container(
-            height: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(30.0),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black26,
-                  offset: Offset(0.0, 2.0),
-                  blurRadius: 6.0,
-                ),
-              ],
-            ),
-            child: Hero(
-              tag: widget.destination.imageUrl,
-              child: Image(
-                image: AssetImage(widget.destination.imageUrl),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: 10.0, vertical: 40.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back),
-                  iconSize: 30.0,
-                  color: Colors.black,
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
-            ),
-          ),
-          Positioned(
-            bottom: 0.0,
-            child: Container(
-              color: Colors.black45,
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.destination.city,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 35.0,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  Widget buildHeader(BuildContext context) {
+    return ImageHeader(imageUrl: widget.destination.imageUrl, label: widget.destination.city);
   }
 
   Widget buildButton(Route route, String label) {
@@ -152,3 +89,4 @@ class _DestinationScreenState extends State<DestinationScreen> {
     );
   }
 }
+
