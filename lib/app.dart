@@ -5,7 +5,7 @@ import 'package:capstone/screens/sites_food_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/screens/login_screen.dart';
 import 'package:capstone/screens/register_page.dart';
-import 'package:capstone/screens/main_page.dart';
+import 'package:capstone/screens/main_screen.dart';
 
 
 
