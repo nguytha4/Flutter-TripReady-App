@@ -5,6 +5,8 @@ import 'package:capstone/screens/sites_food_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/screens/login_screen.dart';
 import 'package:capstone/screens/register_page.dart';
+import 'package:capstone/screens/main_page.dart';
+
 
 
 class App extends StatelessWidget {
@@ -17,7 +19,8 @@ class App extends StatelessWidget {
     SitesFoodScreen.routeName: (context) => SitesFoodScreen(),
     SitesFoodDetailScreen.routeName: (context) => SitesFoodDetailScreen(),
     LoginScreen.routeName: (context) => LoginScreen(),
-    RegisterPage.routeName: (context) => RegisterPage()
+    RegisterPage.routeName: (context) => RegisterPage(),
+    MainScreen.routeName: (context) => MainScreen()
   };
 
   @override
@@ -29,7 +32,7 @@ class App extends StatelessWidget {
           primaryColor: Colors.white
         ),
       routes: App.routes,
-      initialRoute: MainLandingScreen.routeName,
+      initialRoute: MainScreen.routeName,
     );
   }
 }

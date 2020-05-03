@@ -5,9 +5,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:capstone/widgets/capstone_scaffold.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+import 'package:capstone/widgets/capstone_scaffold.dart';
+import 'package:capstone/screens/main_landing_screen.dart';
 
 
 
@@ -35,7 +36,7 @@ class LoginScreenState extends State<LoginScreen> {
           Builder(builder: (BuildContext context) {
             return FlatButton(
               child: const Text('Sign out'),
-              textColor: Theme.of(context).buttonColor,
+              textColor: Colors.blue,
               onPressed: () async {
                 final FirebaseUser user = await _auth.currentUser();
                 if (user == null) {
@@ -147,7 +148,11 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
           alignment: Alignment.center,
           child:Container(
           padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-          child:TextFormField(
+          child:Theme(
+            data: ThemeData(
+              primaryColor: Colors.blue
+            ),
+            child:TextFormField(
             style: TextStyle(fontSize: 13),
             controller: _emailController,
             decoration: new InputDecoration(
@@ -157,7 +162,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                         borderRadius: new BorderRadius.circular(30.0),
                         borderSide: new BorderSide(
                           color: Colors.blue,
-                          width: 2
+                          width: 10
                         ),
                       ),
                       prefixIcon: Padding(
@@ -167,8 +172,6 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                       child: Icon(Icons.email)
                     )
                   )
-                    //fillColor: Colors.green
-                      //fillColor: Colors.green
                     ),
             validator: (String value) {
               if (value.isEmpty) {
@@ -176,7 +179,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
               }
               return null;
             },
-          )));
+          ))));
   }
 
   Widget buildPasswordBox() {
@@ -184,7 +187,11 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
         alignment: Alignment.center,
         child:Container(
         padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-          child:TextFormField(
+          child:Theme(
+            data: ThemeData(
+              primaryColor: Colors.blue
+            ),
+            child:TextFormField(
             autofocus: true,
             obscureText: true,
             style: TextStyle(fontSize: 13),
@@ -193,7 +200,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                     // hintStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue),
                     // hintText: "PASSWORD",
                     labelText: "Password",
-                    fillColor: Colors.white,
+                    fillColor: Colors.blue,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30.0),
                       borderSide: BorderSide(
@@ -208,7 +215,6 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
                       child: Icon(Icons.lock)
                     )
                   )
-                    //fillColor: Colors.green
                   ),
                   
             validator: (String value) {
@@ -217,33 +223,10 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
               }
               return null;
             },
-          ))
+          )))
     );
   }
 
-  Widget _entryField(String title, {bool isPassword = false}) {
-    return Container(
-      margin: EdgeInsets.symmetric(vertical: 10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Text(
-            title,
-            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          TextField(
-              obscureText: isPassword,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  fillColor: Color(0xfff3f3f4),
-                  filled: true))
-        ],
-      ),
-    );
-  }
 
   @override
   void dispose() {
@@ -270,6 +253,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
       setState(() {
         _success = true;
         _userEmail = user.email;
+        Navigator.of(context).pushNamed(MainLandingScreen.routeName);
       });
     } else {
       setState(() {
@@ -346,6 +330,7 @@ class _GoogleSignInSectionState extends State<_GoogleSignInSection> {
       if (user != null) {
         _success = true;
         _userID = user.uid;
+        Navigator.of(context).pushNamed(MainLandingScreen.routeName);
       } else {
         _success = false;
       }

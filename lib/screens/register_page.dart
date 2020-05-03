@@ -77,7 +77,11 @@ class RegisterPageState extends State<RegisterPage> {
         alignment: Alignment.center,
         child:Container(
         padding: EdgeInsets.only(left: 20, right: 20, top: 10),
-          child:TextFormField(
+          child:Theme(
+            data: ThemeData(
+              primaryColor: Colors.blue,
+            ),
+            child:TextFormField(
             autofocus: true,
             obscureText: true,
             style: TextStyle(fontSize: 13),
@@ -111,7 +115,7 @@ class RegisterPageState extends State<RegisterPage> {
               }
               return null;
             },
-          ))
+          )))
     );
   }
   
@@ -120,7 +124,11 @@ class RegisterPageState extends State<RegisterPage> {
         alignment: Alignment.center,
         child:Container(
         padding: EdgeInsets.only(left: 20, right: 20, top: 20),
-          child:TextFormField(
+          child:Theme(
+            data: ThemeData(
+              primaryColor: Colors.blue,
+            ),
+            child:TextFormField(
             style: TextStyle(fontSize: 13),
             obscureText: true,
             controller: _confirmPasswordController,
@@ -155,7 +163,7 @@ class RegisterPageState extends State<RegisterPage> {
               }
               return null;
             },
-          )));
+          ))));
   }
 
   Align buildEmailBox() {
@@ -163,7 +171,11 @@ class RegisterPageState extends State<RegisterPage> {
           alignment: Alignment.center,
           child:Container(
           padding: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-          child:TextFormField(
+          child:Theme(
+            data: ThemeData(
+              primaryColor: Colors.blue
+            ),
+            child:TextFormField(
             style: TextStyle(fontSize: 13),
             controller: _emailController,
             decoration: new InputDecoration(
@@ -192,7 +204,7 @@ class RegisterPageState extends State<RegisterPage> {
               }
               return null;
             },
-          )));
+          ))));
   }
 
   Widget logo() {
