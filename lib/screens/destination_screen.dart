@@ -145,6 +145,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
           label,
           style: TextStyle(
             color: Colors.black,
+            fontWeight: FontWeight.w700,
             fontSize: 15.0,
             letterSpacing: 1.2,
           ),
