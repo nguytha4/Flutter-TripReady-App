@@ -3,7 +3,6 @@ import 'package:capstone/screens/new_destination_entry_screen.dart';
 import 'package:capstone/screens/sites_food_detail_screen.dart';
 import 'package:capstone/screens/sites_food_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone/screens/main_screen.dart';
 import 'package:capstone/screens/login_screen.dart';
 import 'package:capstone/screens/register_page.dart';
 
@@ -17,7 +16,6 @@ class App extends StatelessWidget {
     NewDestinationEntryScreen.routeName: (context) => NewDestinationEntryScreen(),
     SitesFoodScreen.routeName: (context) => SitesFoodScreen(),
     SitesFoodDetailScreen.routeName: (context) => SitesFoodDetailScreen(),
-    MainScreen.routeName: (context) => MainScreen(),
     LoginScreen.routeName: (context) => LoginScreen(),
     RegisterPage.routeName: (context) => RegisterPage()
   };
