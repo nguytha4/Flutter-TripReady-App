@@ -1,5 +1,7 @@
-import 'package:capstone/screens/main_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:capstone/screens/main_screen.dart';
+import 'package:capstone/screens/login_screen.dart';
+import 'package:capstone/screens/register_page.dart';
 
 
 class App extends StatelessWidget {
@@ -8,6 +10,8 @@ class App extends StatelessWidget {
 
   static final routes = {
     MainScreen.routeName: (context) => MainScreen(),
+    LoginScreen.routeName: (context) => LoginScreen(),
+    RegisterPage.routeName: (context) => RegisterPage()
   };
 
   @override
