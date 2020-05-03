@@ -3,6 +3,7 @@
 // found in the LICENSE file.
 
 import 'dart:io';
+import 'package:capstone/widgets/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -96,7 +97,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          logo(),
+          Logo(),
           buildEmailBox(),
           buildPasswordBox(),
           Container(
@@ -133,16 +134,6 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
     );
   }
 
-  Widget logo() {
-    return Align(
-      alignment: Alignment.center,
-      child: Container(
-      height: 200,
-      width: 200,
-      child: Image.asset('assets/images/logo.png')
-    )
-    ); 
-  }
   Align buildEmailBox() {
     return Align(
           alignment: Alignment.center,

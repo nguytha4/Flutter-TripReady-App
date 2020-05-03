@@ -1,3 +1,4 @@
+import 'package:capstone/widgets/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/screens/login_screen.dart';
 import 'package:capstone/widgets/capstone_scaffold.dart';
@@ -16,7 +17,7 @@ class MainScreen extends StatelessWidget {
   }
   Widget buildMainScreen(BuildContext context) {
     return Column(
-      children: [logo(), Text("Trip Like Never Before", style: TextStyle(color: Colors.blue, fontSize: 30, fontFamily: 'Sans-serif', fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),), SizedBox(height: 60), SizedBox(height: 120), signInBtn(context), createAccountBtn(context)],
+      children: [Logo(), Text("Trip Like Never Before", style: TextStyle(color: Colors.blue, fontSize: 30, fontFamily: 'Sans-serif', fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),), SizedBox(height: 60), SizedBox(height: 120), signInBtn(context), createAccountBtn(context)],
     );
   }
 
@@ -33,19 +34,6 @@ class MainScreen extends StatelessWidget {
   );
 }
 }
-
-Widget logo() {
-  return Align(
-    alignment: Alignment.center,
-    child: Container(
-    height: 200,
-    width: 200,
-    child: Image.asset('assets/images/mainlogo.png')
-  )
-  ); 
-}
-
-
 
 Widget createAccountBtn(BuildContext context) {
   return ButtonTheme(

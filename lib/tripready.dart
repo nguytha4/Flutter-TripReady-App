@@ -1,5 +1,6 @@
 export 'app.dart';
 export 'widgets/capstone_scaffold.dart';
+export 'widgets/logo.dart';
 export 'screens/main_screen.dart';
 export 'screens/wallet_screen.dart';
 export 'screens/passportID_form.dart';
