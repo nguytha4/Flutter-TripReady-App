@@ -40,7 +40,7 @@ Widget logo() {
     child: Container(
     height: 200,
     width: 200,
-    child: Image.asset('assets/images/logo.png')
+    child: Image.asset('assets/images/mainlogo.png')
   )
   ); 
 }
