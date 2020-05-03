@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/screens/login_screen.dart';
-import 'package:capstone/widgets/capstone_scaffold.dart';
-import 'package:capstone/screens/register_page.dart';
+import 'package:capstone/tripready.dart';
 
 class MainScreen extends StatelessWidget {
   static const routeName = 'main_screen';

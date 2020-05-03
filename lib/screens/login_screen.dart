@@ -7,8 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:capstone/widgets/capstone_scaffold.dart';
-import 'package:capstone/screens/main_landing_screen.dart';
+import 'package:capstone/tripready.dart';
 
 
 
