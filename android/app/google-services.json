@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "103737523377-917gigrqksdkck5ir6hhtblrshnh4o1q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "edu.oregonstate.farazis.capstone",
+            "certificate_hash": "3fd3ecb9328641ec6f7ae053127938e67715275a"
+          }
+        },
+        {
           "client_id": "103737523377-8a87dtrjg0ar3u02p01ld6plljk366tc.apps.googleusercontent.com",
           "client_type": 3
         }
