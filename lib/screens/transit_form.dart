@@ -387,7 +387,7 @@ final transit = Transit();                // Transit object to save form values
                'startLocation': transit.startLocation,
                'destination': transit.destination,
                'confirmNum': transit.confirmNum,
-               'departDatetime': transit.departDateTime,
+               'departDateTime': transit.departDateTime,
                'arriveDateTime': transit.arriveDateTime,
             });
 

@@ -116,7 +116,8 @@ class _AccomodationFormState extends State<AccomodationForm> {
       padding: const EdgeInsets.only(top: 4, bottom: 12),
       child: TextFormField(
         decoration: InputDecoration(
-          labelText: 'Enter Accomodation Name', border: OutlineInputBorder(), icon: Icon(Icons.home)
+          labelText: 'Enter Accomodation Name', 
+          border: OutlineInputBorder(), icon: Icon(Icons.home)
         ),
         onSaved: (value) {
           accomodation.name = value;
@@ -138,7 +139,8 @@ class _AccomodationFormState extends State<AccomodationForm> {
       child: TextFormField(
         keyboardType: TextInputType.number,
         decoration: InputDecoration(
-          labelText: 'Enter Phone Number', border: OutlineInputBorder(), icon: Icon(Icons.phone)
+          labelText: 'Enter Phone Number', 
+          border: OutlineInputBorder(), icon: Icon(Icons.phone)
         ),
         onSaved: (value) {
           accomodation.phoneNum = value;
@@ -153,7 +155,8 @@ class _AccomodationFormState extends State<AccomodationForm> {
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
-          labelText: 'Enter Email', border: OutlineInputBorder(), icon: Icon(Icons.email)
+          labelText: 'Enter Email', 
+          border: OutlineInputBorder(), icon: Icon(Icons.email)
         ),
         onSaved: (value) {
           accomodation.email = value;
@@ -167,7 +170,8 @@ class _AccomodationFormState extends State<AccomodationForm> {
       padding: const EdgeInsets.only(bottom: 28),
       child: TextFormField(
         decoration: InputDecoration(
-          labelText: 'Enter Address', border: OutlineInputBorder(), icon: Icon(Icons.location_on)
+          labelText: 'Enter Address', 
+          border: OutlineInputBorder(), icon: Icon(Icons.location_on)
         ),
         onSaved: (value) {
           accomodation.address = value;
@@ -181,7 +185,8 @@ class _AccomodationFormState extends State<AccomodationForm> {
       padding: const EdgeInsets.only(bottom: 12),
       child: TextFormField(
         decoration: InputDecoration(
-          labelText: 'Enter Confirmation Number', border: OutlineInputBorder(), icon: Icon(Icons.confirmation_number)
+          labelText: 'Enter Confirmation Number', 
+          border: OutlineInputBorder(), icon: Icon(Icons.confirmation_number)
         ),
         onSaved: (value) {
           accomodation.confirmNum = value;
@@ -196,7 +201,8 @@ class _AccomodationFormState extends State<AccomodationForm> {
       child: TextFormField(
         controller: _controllerCheckIn,
         decoration: InputDecoration(
-          labelText: 'Enter Check-in Date', border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
+          labelText: 'Enter Check-in Date', 
+          border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
         ),
         onTap: () {
           FocusScope.of(context).requestFocus(new FocusNode());
@@ -222,7 +228,8 @@ class _AccomodationFormState extends State<AccomodationForm> {
       child: TextFormField(
             controller: _controllerCheckOut,
             decoration: InputDecoration(
-              labelText: 'Enter Check-out Date', border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
+              labelText: 'Enter Check-out Date', 
+              border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
             ),
             onTap: () {
               FocusScope.of(context).requestFocus(new FocusNode());
