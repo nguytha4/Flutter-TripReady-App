@@ -10,7 +10,7 @@ class Logo extends StatelessWidget {
   return Align(
     alignment: Alignment.center,
     child: Container(
-    child: Image.asset('assets/images/mainlogo.png', height: 300, width: 300,)
+    child: Image.asset('assets/images/mainlogo.png', height: 200, width: 200,)
   )
   ); 
 }
