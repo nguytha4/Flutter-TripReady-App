@@ -7,6 +7,8 @@ import 'package:capstone/screens/login_screen.dart';
 import 'package:capstone/screens/register_page.dart';
 import 'package:capstone/screens/main_page.dart';
 
+import 'screens/wallet_screen.dart';
+
 
 
 class App extends StatelessWidget {
@@ -20,7 +22,8 @@ class App extends StatelessWidget {
     SitesFoodDetailScreen.routeName: (context) => SitesFoodDetailScreen(),
     LoginScreen.routeName: (context) => LoginScreen(),
     RegisterPage.routeName: (context) => RegisterPage(),
-    MainScreen.routeName: (context) => MainScreen()
+    MainScreen.routeName: (context) => MainScreen(),
+    WalletScreen.routeName: (context) => WalletScreen()
   };
 
   @override

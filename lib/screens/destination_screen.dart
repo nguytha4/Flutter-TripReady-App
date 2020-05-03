@@ -1,8 +1,11 @@
+import 'package:capstone/screens/sites_food_detail_screen.dart';
 import 'package:capstone/screens/sites_food_screen.dart';
 import 'package:capstone/widgets/capstone_scaffold.dart';
 import 'package:capstone/widgets/image_header.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/models/destination_model.dart';
+
+import 'wallet_screen.dart';
 
 class DestinationScreen extends StatefulWidget {
   final Destination destination;
@@ -24,25 +27,19 @@ class _DestinationScreenState extends State<DestinationScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var sitesRoute = MaterialPageRoute(
-      builder: (_) => SitesFoodScreen(
-        destination: this.widget.destination,
-      ),
-    );
-
     return CapstoneScaffold(
       title: "",
       hideAppBar: true,
       child: Column(
         children: [
           buildHeader(context),
-          buildGrid(context, sitesRoute)
+          buildGrid(context)
         ],
       ),
     );
   }
 
-  Container buildGrid(BuildContext context, MaterialPageRoute sitesRoute) {
+  Container buildGrid(BuildContext context) {
     return Container(
       height: MediaQuery.of(context).size.width,
       child: Padding(
@@ -54,10 +51,10 @@ class _DestinationScreenState extends State<DestinationScreen> {
           physics: new NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.all(15.0),
           children: [
-            buildButton(sitesRoute, 'Sites / Food'),
-            buildButton(sitesRoute, 'Tips'),
-            buildButton(sitesRoute, 'Items Checklist'),
-            buildButton(sitesRoute, 'Wallet'),
+            buildButton(SitesFoodDetailScreen.routeName, 'Sites / Food'),
+            buildButton(SitesFoodDetailScreen.routeName, 'Tips'),
+            buildButton(SitesFoodDetailScreen.routeName, 'Items Checklist'),
+            buildButton(WalletScreen.routeName, 'Wallet'),
           ],
         ),
       ),
@@ -68,10 +65,10 @@ class _DestinationScreenState extends State<DestinationScreen> {
     return ImageHeader(imageUrl: widget.destination.imageUrl, label: widget.destination.city);
   }
 
-  Widget buildButton(Route route, String label) {
+  Widget buildButton(String routeName, String label) {
     return GestureDetector(
       onTap: () {
-        return Navigator.push(context, route);
+        return Navigator.pushNamed(context, routeName);
       },
       child: Container(
         alignment: Alignment.center,
