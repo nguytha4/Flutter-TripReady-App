@@ -33,8 +33,10 @@ class _MainLandingScreenState extends State<MainLandingScreen> {
               children: [ToggleButtons (
                 borderRadius: BorderRadius.circular(8),
                 borderWidth: 2,
-                fillColor: Colors.blue[300],
-                selectedColor: Colors.white,
+                fillColor: Colors.white,
+                selectedBorderColor: Colors.black,
+                selectedColor: Colors.black,
+                color: Colors.grey,
                 children: [
                   Container(
                     alignment: Alignment.center,
@@ -44,7 +46,6 @@ class _MainLandingScreenState extends State<MainLandingScreen> {
                     child: Text(
                       "Upcoming",
                       style: TextStyle(
-                        color: Colors.black,
                         fontWeight: FontWeight.w600,
                         fontSize: 16.0,
                       )),
@@ -57,7 +58,6 @@ class _MainLandingScreenState extends State<MainLandingScreen> {
                       child: Text(
                         "Past",
                         style: TextStyle(
-                          color: Colors.black,
                           fontWeight: FontWeight.w600,
                           fontSize: 16.0,
                         )),
