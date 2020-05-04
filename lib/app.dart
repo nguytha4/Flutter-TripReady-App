@@ -32,7 +32,7 @@ class App extends StatelessWidget {
       title: 'Trip Ready',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primaryColor: Colors.white
+          primaryColor: Colors.blue
         ),
       routes: App.routes,
       initialRoute: MainScreen.routeName,
