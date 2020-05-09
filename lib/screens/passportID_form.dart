@@ -151,20 +151,25 @@ class _PassportIDFormState extends State<PassportIDForm> {
         height: pHeight * .1,
         child: Form(
           key: formKey,
-          child: TextFormField(
-            decoration: InputDecoration(
-              labelText: 'Enter Name',
+          child: Theme(
+            data: ThemeData(
+              primaryColor: Colors.blue
             ),
-            onSaved: (value) {
-              passportID.name = value;
-            },
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please enter a name';
-              } else {
-                return null;
-              }
-            },
+            child: TextFormField(
+              decoration: InputDecoration(
+                labelText: 'Enter Name',
+              ),
+              onSaved: (value) {
+                passportID.name = value;
+              },
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter a name';
+                } else {
+                  return null;
+                }
+              },
+            ),
           )
         )
       ),

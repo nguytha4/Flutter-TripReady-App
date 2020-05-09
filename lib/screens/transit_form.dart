@@ -233,20 +233,25 @@ final transit = Transit();                // Transit object to save form values
   Widget nameFormField() {
     return Padding(
       padding: const EdgeInsets.only(top: 4, bottom: 12),
-      child: TextFormField(
-        decoration: InputDecoration(
-          labelText: 'Enter Transit Name', border: OutlineInputBorder(), icon: Icon(Icons.flight)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onSaved: (value) {
-          transit.name = value;
-        },
-        validator: (value) {
-          if (value.isEmpty) {
-            return 'Please enter an transit name';
-          } else {
-            return null;
-          }
-        },
+        child: TextFormField(
+          decoration: InputDecoration(
+            labelText: 'Enter Transit Name', border: OutlineInputBorder(), icon: Icon(Icons.flight)
+          ),
+          onSaved: (value) {
+            transit.name = value;
+          },
+          validator: (value) {
+            if (value.isEmpty) {
+              return 'Please enter an transit name';
+            } else {
+              return null;
+            }
+          },
+        ),
       ),
     );
   }
@@ -254,13 +259,18 @@ final transit = Transit();                // Transit object to save form values
   Widget startLocationFormField() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        decoration: InputDecoration(
-          labelText: 'Enter Starting Location ', border: OutlineInputBorder(), icon: Icon(Icons.my_location)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onSaved: (value) {
-          transit.startLocation = value;
-        },
+        child: TextFormField(
+          decoration: InputDecoration(
+            labelText: 'Enter Starting Location ', border: OutlineInputBorder(), icon: Icon(Icons.my_location)
+          ),
+          onSaved: (value) {
+            transit.startLocation = value;
+          },
+        ),
       ),
     );
   }
@@ -268,14 +278,19 @@ final transit = Transit();                // Transit object to save form values
   Widget destinationFormField() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          labelText: 'Enter Destination', border: OutlineInputBorder(), icon: Icon(Icons.location_on)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onSaved: (value) {
-          transit.destination = value;
-        },
+        child: TextFormField(
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            labelText: 'Enter Destination', border: OutlineInputBorder(), icon: Icon(Icons.location_on)
+          ),
+          onSaved: (value) {
+            transit.destination = value;
+          },
+        ),
       ),
     );
   }
@@ -283,13 +298,18 @@ final transit = Transit();                // Transit object to save form values
   Widget confirmNumFormField() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 28),
-      child: TextFormField(
-        decoration: InputDecoration(
-          labelText: 'Enter Confirmation Number', border: OutlineInputBorder(), icon: Icon(Icons.confirmation_number)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onSaved: (value) {
-          transit.confirmNum = value;
-        },
+        child: TextFormField(
+          decoration: InputDecoration(
+            labelText: 'Enter Confirmation Number', border: OutlineInputBorder(), icon: Icon(Icons.confirmation_number)
+          ),
+          onSaved: (value) {
+            transit.confirmNum = value;
+          },
+        ),
       ),
     );
   }
@@ -297,22 +317,27 @@ final transit = Transit();                // Transit object to save form values
   Widget departDateFormField(Transit transit) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        controller: _controllerDepartDate,
-        decoration: InputDecoration(
-          labelText: 'Enter Departure Date', border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          _chooseDepartDate(context, _controllerDepartDate.text, transit);
-        },
-        validator: (value) {
-          if (value.isEmpty) {
-            return 'Please enter a departure date';
-          } else {
-            return null;
-          }
-        },
+        child: TextFormField(
+          controller: _controllerDepartDate,
+          decoration: InputDecoration(
+            labelText: 'Enter Departure Date', border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
+          ),
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+            _chooseDepartDate(context, _controllerDepartDate.text, transit);
+          },
+          validator: (value) {
+            if (value.isEmpty) {
+              return 'Please enter a departure date';
+            } else {
+              return null;
+            }
+          },
+        ),
       ),
     );
   }
@@ -320,15 +345,20 @@ final transit = Transit();                // Transit object to save form values
   Widget departTimeFormField(Transit transit) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        controller: _controllerDepartTime,
-        decoration: InputDecoration(
-          labelText: 'Enter Time of Departure', border: OutlineInputBorder(), icon: Icon(Icons.access_time)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          _chooseDepartTime(context, _controllerDepartTime.text, transit);
-        },
+        child: TextFormField(
+          controller: _controllerDepartTime,
+          decoration: InputDecoration(
+            labelText: 'Enter Time of Departure', border: OutlineInputBorder(), icon: Icon(Icons.access_time)
+          ),
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+            _chooseDepartTime(context, _controllerDepartTime.text, transit);
+          },
+        ),
       ),
     );
   }
@@ -336,22 +366,27 @@ final transit = Transit();                // Transit object to save form values
   Widget arriveDateFormField(Transit transit) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        controller: _controllerArriveDate,
-        decoration: InputDecoration(
-          labelText: 'Enter Arrival Date', border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          _chooseArriveDate(context, _controllerArriveDate.text, transit);
-        },
-        validator: (value) {
-          if (value.isEmpty) {
-            return 'Please enter an arrival date';
-          } else {
-            return null;
-          }
-        },
+        child: TextFormField(
+          controller: _controllerArriveDate,
+          decoration: InputDecoration(
+            labelText: 'Enter Arrival Date', border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
+          ),
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+            _chooseArriveDate(context, _controllerArriveDate.text, transit);
+          },
+          validator: (value) {
+            if (value.isEmpty) {
+              return 'Please enter an arrival date';
+            } else {
+              return null;
+            }
+          },
+        ),
       ),
     );
   }
@@ -359,15 +394,20 @@ final transit = Transit();                // Transit object to save form values
   Widget arriveTimeFormField(Transit transit) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 28),
-      child: TextFormField(
-        controller: _controllerArriveTime,
-        decoration: InputDecoration(
-          labelText: 'Enter Time of Arrival', border: OutlineInputBorder(), icon: Icon(Icons.access_time)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          _chooseArriveTime(context, _controllerArriveTime.text, transit);
-        },
+        child: TextFormField(
+          controller: _controllerArriveTime,
+          decoration: InputDecoration(
+            labelText: 'Enter Time of Arrival', border: OutlineInputBorder(), icon: Icon(Icons.access_time)
+          ),
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+            _chooseArriveTime(context, _controllerArriveTime.text, transit);
+          },
+        ),
       ),
     );
   }

@@ -153,20 +153,25 @@ class _EventFormState extends State<EventForm> {
   Widget nameFormField() {
     return Padding(
       padding: const EdgeInsets.only(top: 4, bottom: 12),
-      child: TextFormField(
-        decoration: InputDecoration(
-          labelText: 'Enter Event Name', border: OutlineInputBorder(), icon: Icon(Icons.event_note)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onSaved: (value) {
-          event.name = value;
-        },
-        validator: (value) {
-          if (value.isEmpty) {
-            return 'Please enter an event name';
-          } else {
-            return null;
-          }
-        },
+        child: TextFormField(
+          decoration: InputDecoration(
+            labelText: 'Enter Event Name', border: OutlineInputBorder(), icon: Icon(Icons.event_note)
+          ),
+          onSaved: (value) {
+            event.name = value;
+          },
+          validator: (value) {
+            if (value.isEmpty) {
+              return 'Please enter an event name';
+            } else {
+              return null;
+            }
+          },
+        ),
       ),
     );
   }
@@ -174,14 +179,19 @@ class _EventFormState extends State<EventForm> {
   Widget phoneFormField() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          labelText: 'Enter Phone Number', border: OutlineInputBorder(), icon: Icon(Icons.phone)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onSaved: (value) {
-          event.phoneNum = value;
-        },
+        child: TextFormField(
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            labelText: 'Enter Phone Number', border: OutlineInputBorder(), icon: Icon(Icons.phone)
+          ),
+          onSaved: (value) {
+            event.phoneNum = value;
+          },
+        ),
       ),
     );
   }
@@ -189,14 +199,19 @@ class _EventFormState extends State<EventForm> {
   Widget emailFormField() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          labelText: 'Enter Email', border: OutlineInputBorder(), icon: Icon(Icons.email)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onSaved: (value) {
-          event.email = value;
-        },
+        child: TextFormField(
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            labelText: 'Enter Email', border: OutlineInputBorder(), icon: Icon(Icons.email)
+          ),
+          onSaved: (value) {
+            event.email = value;
+          },
+        ),
       ),
     );
   }
@@ -204,13 +219,18 @@ class _EventFormState extends State<EventForm> {
   Widget addressFormField() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 28),
-      child: TextFormField(
-        decoration: InputDecoration(
-          labelText: 'Enter Address', border: OutlineInputBorder(), icon: Icon(Icons.location_on)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onSaved: (value) {
-          event.address = value;
-        },
+        child: TextFormField(
+          decoration: InputDecoration(
+            labelText: 'Enter Address', border: OutlineInputBorder(), icon: Icon(Icons.location_on)
+          ),
+          onSaved: (value) {
+            event.address = value;
+          },
+        ),
       ),
     );
   }
@@ -218,13 +238,18 @@ class _EventFormState extends State<EventForm> {
   Widget confirmNumFormField() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        decoration: InputDecoration(
-          labelText: 'Enter Confirmation Number', border: OutlineInputBorder(), icon: Icon(Icons.confirmation_number)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onSaved: (value) {
-          event.confirmNum = value;
-        },
+        child: TextFormField(
+          decoration: InputDecoration(
+            labelText: 'Enter Confirmation Number', border: OutlineInputBorder(), icon: Icon(Icons.confirmation_number)
+          ),
+          onSaved: (value) {
+            event.confirmNum = value;
+          },
+        ),
       ),
     );
   }
@@ -232,22 +257,27 @@ class _EventFormState extends State<EventForm> {
   Widget checkInDateFormField(Event event) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        controller: _controllerCheckIn,
-        decoration: InputDecoration(
-          labelText: 'Enter Date of Event', border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          _chooseDateIn(context, _controllerCheckIn.text, event);
-        },
-        validator: (value) {
-          if (value.isEmpty) {
-            return 'Please enter an event date';
-          } else {
-            return null;
-          }
-        },
+        child: TextFormField(
+          controller: _controllerCheckIn,
+          decoration: InputDecoration(
+            labelText: 'Enter Date of Event', border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
+          ),
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+            _chooseDateIn(context, _controllerCheckIn.text, event);
+          },
+          validator: (value) {
+            if (value.isEmpty) {
+              return 'Please enter an event date';
+            } else {
+              return null;
+            }
+          },
+        ),
       ),
     );
   }
@@ -255,15 +285,20 @@ class _EventFormState extends State<EventForm> {
   Widget timeFormField(Event event) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        controller: _controllerTimeIn,
-        decoration: InputDecoration(
-          labelText: 'Enter Time of Event', border: OutlineInputBorder(), icon: Icon(Icons.access_time)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          _chooseTimeIn(context, _controllerTimeIn.text, event);
-        },
+        child: TextFormField(
+          controller: _controllerTimeIn,
+          decoration: InputDecoration(
+            labelText: 'Enter Time of Event', border: OutlineInputBorder(), icon: Icon(Icons.access_time)
+          ),
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+            _chooseTimeIn(context, _controllerTimeIn.text, event);
+          },
+        ),
       ),
     );
   }
