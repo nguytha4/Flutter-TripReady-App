@@ -114,21 +114,26 @@ class _AccomodationFormState extends State<AccomodationForm> {
   Widget nameFormField() {
     return Padding(
       padding: const EdgeInsets.only(top: 4, bottom: 12),
-      child: TextFormField(
-        decoration: InputDecoration(
-          labelText: 'Enter Accomodation Name', 
-          border: OutlineInputBorder(), icon: Icon(Icons.home)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onSaved: (value) {
-          accomodation.name = value;
-        },
-        validator: (value) {
-          if (value.isEmpty) {
-            return 'Please enter a name for the accomodation';
-          } else {
-            return null;
-          }
-        },
+        child: TextFormField(
+          decoration: InputDecoration(
+            labelText: 'Enter Accomodation Name', 
+            border: OutlineInputBorder(), icon: Icon(Icons.home)
+          ),
+          onSaved: (value) {
+            accomodation.name = value;
+          },
+          validator: (value) {
+            if (value.isEmpty) {
+              return 'Please enter a name for the accomodation';
+            } else {
+              return null;
+            }
+          },
+        ),
       ),
     );
   }
@@ -136,15 +141,20 @@ class _AccomodationFormState extends State<AccomodationForm> {
   Widget phoneFormField() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        keyboardType: TextInputType.number,
-        decoration: InputDecoration(
-          labelText: 'Enter Phone Number', 
-          border: OutlineInputBorder(), icon: Icon(Icons.phone)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onSaved: (value) {
-          accomodation.phoneNum = value;
-        },
+        child: TextFormField(
+          keyboardType: TextInputType.number,
+          decoration: InputDecoration(
+            labelText: 'Enter Phone Number', 
+            border: OutlineInputBorder(), icon: Icon(Icons.phone)
+          ),
+          onSaved: (value) {
+            accomodation.phoneNum = value;
+          },
+        ),
       ),
     );
   }
@@ -152,15 +162,20 @@ class _AccomodationFormState extends State<AccomodationForm> {
   Widget emailFormField() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
-        decoration: InputDecoration(
-          labelText: 'Enter Email', 
-          border: OutlineInputBorder(), icon: Icon(Icons.email)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onSaved: (value) {
-          accomodation.email = value;
-        },
+        child: TextFormField(
+          keyboardType: TextInputType.emailAddress,
+          decoration: InputDecoration(
+            labelText: 'Enter Email', 
+            border: OutlineInputBorder(), icon: Icon(Icons.email)
+          ),
+          onSaved: (value) {
+            accomodation.email = value;
+          },
+        ),
       ),
     );
   }
@@ -168,14 +183,19 @@ class _AccomodationFormState extends State<AccomodationForm> {
   Widget addressFormField() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 28),
-      child: TextFormField(
-        decoration: InputDecoration(
-          labelText: 'Enter Address', 
-          border: OutlineInputBorder(), icon: Icon(Icons.location_on)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onSaved: (value) {
-          accomodation.address = value;
-        },
+        child: TextFormField(
+          decoration: InputDecoration(
+            labelText: 'Enter Address', 
+            border: OutlineInputBorder(), icon: Icon(Icons.location_on)
+          ),
+          onSaved: (value) {
+            accomodation.address = value;
+          },
+        ),
       ),
     );
   }
@@ -183,14 +203,19 @@ class _AccomodationFormState extends State<AccomodationForm> {
   Widget confirmNumFormField() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        decoration: InputDecoration(
-          labelText: 'Enter Confirmation Number', 
-          border: OutlineInputBorder(), icon: Icon(Icons.confirmation_number)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onSaved: (value) {
-          accomodation.confirmNum = value;
-        },
+        child: TextFormField(
+          decoration: InputDecoration(
+            labelText: 'Enter Confirmation Number', 
+            border: OutlineInputBorder(), icon: Icon(Icons.confirmation_number)
+          ),
+          onSaved: (value) {
+            accomodation.confirmNum = value;
+          },
+        ),
       ),
     );
   }
@@ -198,26 +223,31 @@ class _AccomodationFormState extends State<AccomodationForm> {
   Widget checkInDateFormField(Accomodation accomodation) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
-      child: TextFormField(
-        controller: _controllerCheckIn,
-        decoration: InputDecoration(
-          labelText: 'Enter Check-in Date', 
-          border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
         ),
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-          _chooseDateIn(context, _controllerCheckIn.text, accomodation);
-        },
-        onSaved: (value) {
-          accomodation.checkInDateTime = convertToDate(value);
-        },
-        validator: (value) {
-          if (value.isEmpty) {
-            return 'Please enter a check-in date';
-          } else {
-            return null;
-          }
-        },
+        child: TextFormField(
+          controller: _controllerCheckIn,
+          decoration: InputDecoration(
+            labelText: 'Enter Check-in Date', 
+            border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
+          ),
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+            _chooseDateIn(context, _controllerCheckIn.text, accomodation);
+          },
+          onSaved: (value) {
+            accomodation.checkInDateTime = convertToDate(value);
+          },
+          validator: (value) {
+            if (value.isEmpty) {
+              return 'Please enter a check-in date';
+            } else {
+              return null;
+            }
+          },
+        ),
       ),
     );
   }
@@ -225,27 +255,32 @@ class _AccomodationFormState extends State<AccomodationForm> {
   Widget checkOutDateFormField(Accomodation accomodation) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 28),
-      child: TextFormField(
-            controller: _controllerCheckOut,
-            decoration: InputDecoration(
-              labelText: 'Enter Check-out Date', 
-              border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
+        ),
+        child: TextFormField(
+              controller: _controllerCheckOut,
+              decoration: InputDecoration(
+                labelText: 'Enter Check-out Date', 
+                border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
+              ),
+              onTap: () {
+                FocusScope.of(context).requestFocus(new FocusNode());
+                _chooseDateOut(context, _controllerCheckOut.text, accomodation);
+              },
+              onSaved: (value) {
+                accomodation.checkOutDateTime = convertToDate(value);
+              },
+              validator: (value) {
+                if (value.isEmpty) {
+                  return 'Please enter a check-out date';
+                } else {
+                  return null;
+                }
+              },
             ),
-            onTap: () {
-              FocusScope.of(context).requestFocus(new FocusNode());
-              _chooseDateOut(context, _controllerCheckOut.text, accomodation);
-            },
-            onSaved: (value) {
-              accomodation.checkOutDateTime = convertToDate(value);
-            },
-            validator: (value) {
-              if (value.isEmpty) {
-                return 'Please enter a check-out date';
-              } else {
-                return null;
-              }
-            },
-          ),
+      ),
     );
   }
 

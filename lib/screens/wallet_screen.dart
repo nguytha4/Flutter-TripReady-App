@@ -32,16 +32,13 @@ class _WalletScreenState extends State<WalletScreen> {
               children: <Widget>[
                 
                 
+                // Passport ID stream
                 StreamBuilder(
                   stream: Firestore.instance.collection('passportID').orderBy('timestamp', descending: true).snapshots(),
                   builder: (content, snapshot) {
-                    if (snapshot.data == null) 
-                    {
+                    if (snapshot.data == null) {
                       return Center(child: CircularProgressIndicator(),);
-                    }
-                    
-                    else
-                    {
+                    } else {
                       return new ListView.builder(
                         itemCount: snapshot.data.documents.length,
                         itemBuilder: (context, index) {
@@ -56,6 +53,12 @@ class _WalletScreenState extends State<WalletScreen> {
                                     title: Padding(
                                       padding: const EdgeInsets.only(left: 10),
                                       child: Text('Passport / ID - ' + passportIDName,),
+                                    ),
+                                    trailing: GestureDetector(
+                                      onTap: () {
+                                        confirmDialog('passportID', snapshot, index);
+                                      },
+                                      child: Icon(Icons.more_vert)
                                     ),
                                     onTap: () {
                                       toPassportIDDetails(context, passportIDName, passportImageURL);
@@ -72,15 +75,13 @@ class _WalletScreenState extends State<WalletScreen> {
                 ),
 
 
+                // Transit stream
                 StreamBuilder(
                   stream: Firestore.instance.collection('transit').orderBy('timestamp', descending: true).snapshots(),
                   builder: (content, snapshot) {
-                    if (snapshot.data == null) 
-                    {
+                    if (snapshot.data == null) {
                       return Center(child: CircularProgressIndicator(),);
-                    }
-                    
-                    {
+                    } else {
                       return new ListView.builder(
                         itemCount: snapshot.data.documents.length,
                         itemBuilder: (context, index) {
@@ -100,6 +101,12 @@ class _WalletScreenState extends State<WalletScreen> {
                                       padding: const EdgeInsets.only(left: 10),
                                       child: Text('Transit - ' + transitName,),
                                     ),
+                                    trailing: GestureDetector(
+                                      onTap: () {
+                                        confirmDialog('transit', snapshot, index);
+                                      },
+                                      child: Icon(Icons.more_vert)
+                                    ),
                                     onTap: () {
                                       toTransitDetails(context, transitName, transitStartLocation, transitDestination, transitConfirmNum, transitDepartDateTime, transitArriveDateTime);
                                     },
@@ -114,15 +121,13 @@ class _WalletScreenState extends State<WalletScreen> {
                   },
                 ),
 
+                // Accomodation stream
                 StreamBuilder(
                   stream: Firestore.instance.collection('accomodation').orderBy('timestamp', descending: true).snapshots(),
                   builder: (content, snapshot) {
-                    if (snapshot.data == null) 
-                    {
+                    if (snapshot.data == null) {
                       return Center(child: CircularProgressIndicator(),);
-                    }
-                    
-                    {
+                    } else {
                       return new ListView.builder(
                         itemCount: snapshot.data.documents.length,
                         itemBuilder: (context, index) {
@@ -143,6 +148,12 @@ class _WalletScreenState extends State<WalletScreen> {
                                       padding: const EdgeInsets.only(left: 10),
                                       child: Text('Accomodation - ' + accomodationName,),
                                     ),
+                                    trailing: GestureDetector(
+                                      onTap: () {
+                                        confirmDialog('accomodation', snapshot, index);
+                                      },
+                                      child: Icon(Icons.more_vert)
+                                    ),
                                     onTap: () {
                                       toAccomodationDetails(context, accomodationName, accomodationPhoneNum, accomodationEmail, accomodationAddress, accomodationConfirmNum, accomodationCheckInDateTime, accomodationCheckOutDateTime);
                                     },
@@ -157,16 +168,13 @@ class _WalletScreenState extends State<WalletScreen> {
                   },
                 ),
 
-                
+                // Event stream
                 StreamBuilder(
                   stream: Firestore.instance.collection('event').orderBy('timestamp', descending: true).snapshots(),
                   builder: (content, snapshot) {
-                    if (snapshot.data == null) 
-                    {
+                    if (snapshot.data == null) {
                       return Center(child: CircularProgressIndicator(),);
-                    }
-                    
-                    {
+                    } else {
                       return new ListView.builder(
                         itemCount: snapshot.data.documents.length,
                         itemBuilder: (context, index) {
@@ -185,6 +193,12 @@ class _WalletScreenState extends State<WalletScreen> {
                                     title: Padding(
                                       padding: const EdgeInsets.only(left: 10),
                                       child: Text('Event - ' + eventName,),
+                                    ),
+                                    trailing: GestureDetector(
+                                      onTap: () {
+                                        confirmDialog('event', snapshot, index);
+                                      },
+                                      child: Icon(Icons.more_vert)
                                     ),
                                     onTap: () {
                                       toEventDetails(context, eventName, eventPhoneNum, eventEmail, eventAddress, eventConfirmNum, eventCheckInDateTime,);
@@ -209,180 +223,6 @@ class _WalletScreenState extends State<WalletScreen> {
           ),
       );
     
-    
-    // CapstoneScaffold(
-    //   title: 'Wallet Screen',
-    //   child: 
-      
-      // =================================================================================================================
-      
-      // Passport / ID
-      // StreamBuilder(
-      //       stream: Firestore.instance.collection('passportID').orderBy('timestamp', descending: true).snapshots(),
-      //       builder: (content, snapshot) {
-      //         if (!snapshot.data.documents.isEmpty) {
-      //           return new ListView.builder(
-      //             itemCount: snapshot.data.documents.length,
-      //             itemBuilder: (context, index) {
-      //               var passportIDObject = snapshot.data.documents[index];
-      //               final passportIDName = passportIDObject['name'];
-      //               final passportImageURL = passportIDObject['imageURL'];
-      //               return Column(
-      //                 children: <Widget>[
-      //                     Ink(
-      //                       color: Colors.green,
-      //                       child: ListTile(
-      //                         title: Padding(
-      //                           padding: const EdgeInsets.only(left: 10),
-      //                           child: Text('Passport / ID - ' + passportIDName,),
-      //                         ),
-      //                         onTap: () {
-      //                           toPassportIDDetails(context, passportIDName, passportImageURL);
-      //                         },
-      //                       ),
-      //                     ),
-      //                   Divider(),
-      //                 ],
-      //               );
-      //             },
-      //           );
-      //         } else {
-      //           return Center(child: CircularProgressIndicator(),);
-      //         }
-      //       },
-      //     ),
-
-          // =================================================================================================================
-
-          // Accomodation
-          // StreamBuilder(
-          //   stream: Firestore.instance.collection('accomodation').orderBy('timestamp', descending: true).snapshots(),
-          //   builder: (content, snapshot) {
-          //     if (!snapshot.data.documents.isEmpty) {
-          //       return new ListView.builder(
-          //         itemCount: snapshot.data.documents.length,
-          //         itemBuilder: (context, index) {
-          //           var accomodationObject = snapshot.data.documents[index];
-          //           final accomodationName = accomodationObject['name'];
-          //           final accomodationPhoneNum = accomodationObject['phoneNum'];
-          //           final accomodationEmail = accomodationObject['email'];
-          //           final accomodationAddress = accomodationObject['address'];
-          //           final accomodationConfirmNum = accomodationObject['confirmNum'];
-          //           final accomodationCheckInDateTime = accomodationObject['checkInDateTime'].toDate();
-          //           final accomodationCheckOutDateTime = accomodationObject['checkOutDateTime'].toDate();
-          //           return Column(
-          //             children: <Widget>[
-          //                 Ink(
-          //                   color: Colors.red,
-          //                   child: ListTile(
-          //                     title: Padding(
-          //                       padding: const EdgeInsets.only(left: 10),
-          //                       child: Text('Accomodation - ' + accomodationName,),
-          //                     ),
-          //                     onTap: () {
-          //                       toAccomodationDetails(context, accomodationName, accomodationPhoneNum, accomodationEmail, accomodationAddress, accomodationConfirmNum, accomodationCheckInDateTime, accomodationCheckOutDateTime);
-          //                     },
-          //                   ),
-          //                 ),
-          //               Divider(),
-          //             ],
-          //           );
-          //         },
-          //       );
-          //     } else {
-          //       return Center(child: CircularProgressIndicator(),);
-          //     }
-          //   },
-          // ),
-
-          // =================================================================================================================
-
-          // Event
-          // StreamBuilder(
-          //   stream: Firestore.instance.collection('event').orderBy('timestamp', descending: true).snapshots(),
-          //   builder: (content, snapshot) {
-          //     if (!snapshot.data.documents.isEmpty) {
-          //       return new ListView.builder(
-          //         itemCount: snapshot.data.documents.length,
-          //         itemBuilder: (context, index) {
-          //           var eventObject = snapshot.data.documents[index];
-          //           final eventName = eventObject['name'];
-          //           final eventPhoneNum = eventObject['phoneNum'];
-          //           final eventEmail = eventObject['email'];
-          //           final eventAddress = eventObject['address'];
-          //           final eventConfirmNum = eventObject['confirmNum'];
-          //           final eventCheckInDateTime = eventObject['startDateTime'].toDate();
-          //           return Column(
-          //             children: <Widget>[
-          //                 Ink(
-          //                   color: Colors.purple,
-          //                   child: ListTile(
-          //                     title: Padding(
-          //                       padding: const EdgeInsets.only(left: 10),
-          //                       child: Text('Event - ' + eventName,),
-          //                     ),
-          //                     onTap: () {
-          //                       toEventDetails(context, eventName, eventPhoneNum, eventEmail, eventAddress, eventConfirmNum, eventCheckInDateTime,);
-          //                     },
-          //                   ),
-          //                 ),
-          //               Divider(),
-          //             ],
-          //           );
-          //         },
-          //       );
-          //     } else {
-          //       return Center(child: CircularProgressIndicator(),);
-          //     }
-          //   },
-          // ),
-
-          // =================================================================================================================
-
-          // Transit
-          // StreamBuilder(
-          //   stream: Firestore.instance.collection('transit').orderBy('timestamp', descending: true).snapshots(),
-          //   builder: (content, snapshot) {
-          //     if (!snapshot.data.documents.isEmpty) {
-          //       return new ListView.builder(
-          //         itemCount: snapshot.data.documents.length,
-          //         itemBuilder: (context, index) {
-          //           var transitObject = snapshot.data.documents[index];
-          //           final transitName = transitObject['name'];
-          //           final transitStartLocation = transitObject['startLocation'];
-          //           final transitDestination = transitObject['destination'];
-          //           final transitConfirmNum = transitObject['confirmNum'];
-          //           final transitDepartDateTime = transitObject['departDateTime'].toDate();
-          //           final transitArriveDateTime = transitObject['arriveDateTime'].toDate();
-          //           return Column(
-          //             children: <Widget>[
-          //                 Ink(
-          //                   color: Colors.orange,
-          //                   child: ListTile(
-          //                     title: Padding(
-          //                       padding: const EdgeInsets.only(left: 10),
-          //                       child: Text('Transit - ' + transitName,),
-          //                     ),
-          //                     onTap: () {
-          //                       toTransitDetails(context, transitName, transitStartLocation, transitDestination, transitConfirmNum, transitDepartDateTime, transitArriveDateTime);
-          //                     },
-          //                   ),
-          //                 ),
-          //               Divider(),
-          //             ],
-          //           );
-          //         },
-          //       );
-          //     } else {
-          //       return Center(child: CircularProgressIndicator(),);
-          //     }
-          //   },
-          // ),
-
-          // =================================================================================================================
-
-    //   fab: fab(),
-    // );
   }
 
   // ====================================== Functions ========================================
@@ -461,6 +301,37 @@ class _WalletScreenState extends State<WalletScreen> {
       }
   }
 
+  // user defined function
+  void confirmDialog(String collection, AsyncSnapshot snapshot, int index) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text("Delete entry?"),
+          //content: new Text("Please confirm."),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Confirm"),
+              onPressed: () {
+                Firestore.instance.collection(collection).document(snapshot.data.documents[index].documentID).delete();
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void toPassportIDDetails(BuildContext context, String name, String imageURL) {
     Navigator.of(context).push(
       MaterialPageRoute(
@@ -527,7 +398,7 @@ class _WalletScreenState extends State<WalletScreen> {
           ),
         ), 
     ));
-  }
+  } 
 
   // ==================================== Widget functions ====================================
 
