@@ -1,5 +1,6 @@
 import 'package:capstone/models/activity_model.dart';
 import 'package:capstone/models/destination_model.dart';
+import 'package:capstone/widgets/capstone_scaffold.dart';
 import 'package:capstone/widgets/image_header.dart';
 import 'package:flutter/material.dart';
 
@@ -27,8 +28,9 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return CapstoneScaffold(
+      title: '${this.widget.activity.category}',
+      child: Column(
         children: [
           ImageHeader(imageUrl: widget.activity.imageUrl, label: widget.activity.name),
           buildBody(),

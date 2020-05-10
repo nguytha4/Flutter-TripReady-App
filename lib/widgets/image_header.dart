@@ -13,11 +13,11 @@ class ImageHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(30.0),
+      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30)),
       child: Stack(
         children: [
           Container(
-            height: MediaQuery.of(context).size.width,
+            height: MediaQuery.of(context).size.width - 75,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(30.0),
               boxShadow: [
@@ -34,21 +34,6 @@ class ImageHeader extends StatelessWidget {
                 image: AssetImage(imageUrl),
                 fit: BoxFit.cover,
               ),
-            ),
-          ),
-          Padding(
-            padding:
-                EdgeInsets.symmetric(horizontal: 10.0, vertical: 40.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(
-                  icon: Icon(Icons.arrow_back_ios),
-                  iconSize: 30.0,
-                  color: Colors.black,
-                  onPressed: () => Navigator.pop(context),
-                ),
-              ],
             ),
           ),
           Positioned(

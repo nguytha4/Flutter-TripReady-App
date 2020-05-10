@@ -27,8 +27,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
   @override
   Widget build(BuildContext context) {
     return CapstoneScaffold(
-      title: "",
-      hideAppBar: true,
+      title: '${this.widget.destination.country}',
       child: Column(
         children: [
           buildHeader(context),
@@ -42,13 +41,12 @@ class _DestinationScreenState extends State<DestinationScreen> {
     return Container(
       height: MediaQuery.of(context).size.width,
       child: Padding(
-        padding: const EdgeInsets.all(15.0),
+        padding: const EdgeInsets.all(30.0),
         child: GridView.count(
           crossAxisCount: 2,
           crossAxisSpacing: 15,
           mainAxisSpacing: 15,
-          physics: new NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(15.0),
+          padding: const EdgeInsets.all(10.0),
           children: [
             buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Sites / Food', Colors.green),
             buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Tips', Colors.orange),
@@ -77,6 +75,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
       child: Container(
         alignment: Alignment.center,
         decoration: buildBorder(color),
+        height: 75,
         child: Text(
           label,
           style: TextStyle(
