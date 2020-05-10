@@ -43,7 +43,7 @@ class ImageHeader extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IconButton(
-                  icon: Icon(Icons.arrow_back),
+                  icon: Icon(Icons.arrow_back_ios),
                   iconSize: 30.0,
                   color: Colors.black,
                   onPressed: () => Navigator.pop(context),
