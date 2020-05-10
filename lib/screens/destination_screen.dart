@@ -1,4 +1,3 @@
-import 'package:capstone/screens/sites_food_detail_screen.dart';
 import 'package:capstone/screens/sites_food_screen.dart';
 import 'package:capstone/widgets/capstone_scaffold.dart';
 import 'package:capstone/widgets/image_header.dart';
@@ -51,10 +50,10 @@ class _DestinationScreenState extends State<DestinationScreen> {
           physics: new NeverScrollableScrollPhysics(),
           padding: const EdgeInsets.all(15.0),
           children: [
-            buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Sites / Food'),
-            buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Tips'),
-            buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Items Checklist'),
-            buildButton((_) => WalletScreen(), 'Wallet'),
+            buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Sites / Food', Colors.green),
+            buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Tips', Colors.orange),
+            buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Items Checklist', Colors.red),
+            buildButton((_) => WalletScreen(), 'Wallet', Colors.purple),
           ],
         ),
       ),
@@ -65,7 +64,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
     return ImageHeader(imageUrl: widget.destination.imageUrl, label: widget.destination.city);
   }
 
-  Widget buildButton(WidgetBuilder screen, String label) {
+  Widget buildButton(WidgetBuilder screen, String label, Color color) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -77,7 +76,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
       },
       child: Container(
         alignment: Alignment.center,
-        decoration: buildBorder(Colors.black),
+        decoration: buildBorder(color),
         child: Text(
           label,
           style: TextStyle(
