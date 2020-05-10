@@ -24,24 +24,25 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Container(
-            height: 700.0,
-            child: CupertinoPicker(
-              magnification: 1.0,
-              backgroundColor: Colors.black87,
-              children:[
-                Text(
-                  'City Name',
-                  style: TextStyle(
-                  color: Colors.white, 
-                  fontSize: 20),
-                ),
-              ],
-            itemExtent: 30, //height of each item
-            looping: true,
-            
-            onSelectedItemChanged: (int index) {  
-              selectitem = index;
-            },
+            child: Expanded(
+                          child: CupertinoPicker(
+                magnification: 1.0,
+                backgroundColor: Colors.black87,
+                children:[
+                  Text(
+                    'City Name',
+                    style: TextStyle(
+                    color: Colors.white, 
+                    fontSize: 20),
+                  ),
+                ],
+              itemExtent: 30, //height of each item
+              looping: true,
+              
+              onSelectedItemChanged: (int index) {  
+                selectitem = index;
+              },
+              ),
             ),
           ),
           Container(
@@ -55,22 +56,14 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
               ),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CupertinoButton(
-                  child: Text('Cancel'),
-                  onPressed: () {},
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30.0,
-                    vertical: 30.0,
-                  ),
-                ),
                 CupertinoButton(
                   child: Text('Confirm'),
                   onPressed: () {},
                   padding: const EdgeInsets.symmetric(
                     horizontal: 30.0,
-                    vertical: 30.0,
+                    vertical: 40.0,
                   ),
                 )
               ],
