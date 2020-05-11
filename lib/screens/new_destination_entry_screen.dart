@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/tripready.dart';
@@ -16,6 +17,18 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
   //Navigator.popAndPushNamed(context, MainLandingScreen.routeName);
   int selectitem = 1;
 
+  Widget buildPickerItem(DocumentSnapshot snapshot)
+  {
+    var destination = Destination.fromSnapshot(snapshot);
+
+    return Text(
+          '${destination.country}: ${destination.city}',
+          style: TextStyle(
+          color: Colors.white, 
+          fontSize: 20),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     
@@ -26,24 +39,25 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
         children: [
           Container(
             child: Expanded(
-                          child: CupertinoPicker(
-                magnification: 1.0,
-                backgroundColor: Colors.black87,
-                children:[
-                  Text(
-                    'City Name',
-                    style: TextStyle(
-                    color: Colors.white, 
-                    fontSize: 20),
-                  ),
-                ],
+                child: StreamBuilder(
+                  stream: Firestore.instance.collection('destination').orderBy('country').snapshots(),
+                  builder: (context, snapshot) {
+                    return CupertinoPicker(
+                    magnification: 1.0,
+                    backgroundColor: Colors.black87,
+                    children: 
+                      (snapshot.data.documents as List<DocumentSnapshot>)
+                      .map((s) => buildPickerItem(s))
+                      .toList(),
               itemExtent: 30, //height of each item
-              looping: true,
+              looping: false,
               
               onSelectedItemChanged: (int index) {  
-                selectitem = index;
+                    selectitem = index;
               },
-              ),
+              );
+                  }
+                ),
             ),
           ),
           Container(

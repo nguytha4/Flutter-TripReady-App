@@ -16,7 +16,7 @@ class Activity {
     name = snapshot['name'];
     type = snapshot['type'];
     category = snapshot['category'];
-    startTimes  = snapshot['startTimes'];
+    startTimes  = snapshot['startTimes'].cast<String>();
     rating = snapshot['rating'];
     price = snapshot['price'];
   }

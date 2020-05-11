@@ -13,7 +13,7 @@ class DestinationList extends StatelessWidget {
         builder: (context, snapshot) {
           return ListView.builder(
             scrollDirection: Axis.vertical,
-            itemCount: destinations.length,
+            itemCount: snapshot.data.documents.length,
             itemBuilder: (BuildContext context, int index) {
 
               var snapshotItem = snapshot.data.documents[index];
