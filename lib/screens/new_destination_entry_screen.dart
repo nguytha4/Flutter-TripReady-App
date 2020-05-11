@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone/widgets/capstone_scaffold.dart';
+import 'package:capstone/tripready.dart';
+
 
 
 class NewDestinationEntryScreen extends StatefulWidget {

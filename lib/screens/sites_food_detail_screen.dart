@@ -1,7 +1,4 @@
-import 'package:capstone/models/activity_model.dart';
-import 'package:capstone/models/destination_model.dart';
-import 'package:capstone/widgets/capstone_scaffold.dart';
-import 'package:capstone/widgets/image_header.dart';
+import 'package:capstone/tripready.dart';
 import 'package:flutter/material.dart';
 
 

@@ -1,9 +1,6 @@
-import 'package:capstone/screens/sites_food_detail_screen.dart';
-import 'package:capstone/widgets/capstone_scaffold.dart';
-import 'package:capstone/widgets/sites_food_list.dart';
+import 'package:capstone/tripready.dart';
 // import 'package:flappy_search_bar/flappy_search_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone/models/destination_model.dart';
 
 class Post {
   final String title;

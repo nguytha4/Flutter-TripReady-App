@@ -1,7 +1,5 @@
-import 'package:capstone/widgets/capstone_scaffold.dart';
-import 'package:capstone/widgets/destination_list.dart';
+import 'package:capstone/tripready.dart';
 import 'package:flutter/material.dart';
-import 'new_destination_entry_screen.dart';
 
 class MainLandingScreen extends StatefulWidget {
   static const routeName = 'main_landing_screen';
