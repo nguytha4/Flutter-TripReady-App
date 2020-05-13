@@ -1,6 +1,8 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone/widgets/capstone_scaffold.dart';
+import 'package:capstone/tripready.dart';
+
 
 
 class NewDestinationEntryScreen extends StatefulWidget {
@@ -15,6 +17,18 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
   //Navigator.popAndPushNamed(context, MainLandingScreen.routeName);
   int selectitem = 1;
 
+  Widget buildPickerItem(DocumentSnapshot snapshot)
+  {
+    var destination = Destination.fromSnapshot(snapshot);
+
+    return Text(
+          '${destination.country}: ${destination.city}',
+          style: TextStyle(
+          color: Colors.white, 
+          fontSize: 20),
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     
@@ -24,24 +38,26 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Container(
-            height: 700.0,
-            child: CupertinoPicker(
-              magnification: 1.0,
-              backgroundColor: Colors.black87,
-              children:[
-                Text(
-                  'City Name',
-                  style: TextStyle(
-                  color: Colors.white, 
-                  fontSize: 20),
+            child: Expanded(
+                child: StreamBuilder(
+                  stream: Firestore.instance.collection('destination').orderBy('country').snapshots(),
+                  builder: (context, snapshot) {
+                    return CupertinoPicker(
+                    magnification: 1.0,
+                    backgroundColor: Colors.black87,
+                    children: 
+                      (snapshot.data.documents as List<DocumentSnapshot>)
+                      .map((s) => buildPickerItem(s))
+                      .toList(),
+              itemExtent: 30, //height of each item
+              looping: false,
+              
+              onSelectedItemChanged: (int index) {  
+                    selectitem = index;
+              },
+              );
+                  }
                 ),
-              ],
-            itemExtent: 30, //height of each item
-            looping: true,
-            
-            onSelectedItemChanged: (int index) {  
-              selectitem = index;
-            },
             ),
           ),
           Container(
@@ -55,22 +71,14 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
               ),
             ),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CupertinoButton(
-                  child: Text('Cancel'),
-                  onPressed: () {},
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 30.0,
-                    vertical: 30.0,
-                  ),
-                ),
                 CupertinoButton(
                   child: Text('Confirm'),
                   onPressed: () {},
                   padding: const EdgeInsets.symmetric(
                     horizontal: 30.0,
-                    vertical: 30.0,
+                    vertical: 40.0,
                   ),
                 )
               ],

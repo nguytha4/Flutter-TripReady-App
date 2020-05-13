@@ -243,7 +243,8 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
       setState(() {
         _success = true;
         _userEmail = user.email;
-        Navigator.of(context).pushNamed(MainLandingScreen.routeName);
+        Navigator.of(context).pop();
+        Navigator.of(context).popAndPushNamed(MainLandingScreen.routeName);
       });
     } else {
       setState(() {
@@ -320,7 +321,8 @@ class _GoogleSignInSectionState extends State<_GoogleSignInSection> {
       if (user != null) {
         _success = true;
         _userID = user.uid;
-        Navigator.of(context).pushNamed(MainLandingScreen.routeName);
+        Navigator.of(context).pop();
+        Navigator.of(context).popAndPushNamed(MainLandingScreen.routeName);
       } else {
         _success = false;
       }
