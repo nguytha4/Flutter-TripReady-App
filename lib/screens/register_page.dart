@@ -28,12 +28,10 @@ class RegisterPageState extends State<RegisterPage> {
   String _userEmail;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        centerTitle: true,
-      ),
-      body: Form(
+    return CapstoneScaffold(
+      title: widget.title,
+      hideDrawer: true,
+      child: Form(
         key: _formKey,
         child: SingleChildScrollView(
           child:Column(
@@ -239,9 +237,16 @@ class RegisterPageState extends State<RegisterPage> {
       print(err.toString());
     } finally {
       if (user != null) {
+        user = (await _auth.signInWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        )).user;
         setState(() {
-          _success = true;
-          _userEmail = user.email;
+          Navigator.of(context).pop();
+          Navigator.of(context).popAndPushNamed(ChecklistScreen.routeName);
+          // _success = true;
+          // _userEmail = user.email;
+
         });
       } else {
         _success = false;

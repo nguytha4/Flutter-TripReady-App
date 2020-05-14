@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:capstone/tripready.dart';
 
 class CapstoneScaffold extends StatelessWidget {
 
@@ -15,6 +16,7 @@ class CapstoneScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (hideDrawer != true) {
     return Scaffold(
       appBar: buildAppBar(),
       body: child,
@@ -29,28 +31,32 @@ class CapstoneScaffold extends StatelessWidget {
             SizedBox(
               height: 120,
               child: DrawerHeader(child: Text('Settings') )),
-            FlatButton(
+            Builder(
+              builder: (context) => FlatButton(
               child: const Text('Sign out'),
               textColor: Colors.blue,
               onPressed: () async {
+                Navigator.of(context).pop();  // hides drawer after clicking 'sign out'
                 final FirebaseUser user = await _auth.currentUser();
-                if (user == null) {
-                  Scaffold.of(context).showSnackBar(const SnackBar(
-                    content: Text('No one has signed in.'),
-                  ));
-                  return;
-                }
                 _signOut();
-
                 final String uid = user.uid;
-                Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text(uid + ' has successfully signed out.'),
-                ));
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(MainScreen.routeName, arguments: uid);
               },
-            )
+            ))
           ],)
       ),
     );
+    } else {
+      return Scaffold(
+      appBar: buildAppBar(),
+      body: child,
+      floatingActionButton: Padding(
+        padding: EdgeInsets.all(20), 
+        child: fab),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+    );
+    }
   }
 
   Widget buildAppBar()

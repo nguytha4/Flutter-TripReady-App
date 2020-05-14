@@ -1,19 +1,47 @@
 import 'package:capstone/widgets/logo.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:capstone/screens/login_screen.dart';
 import 'package:capstone/tripready.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   static const routeName = 'main_screen';
-
   @override
-  Widget build(BuildContext context) {
-    return CapstoneScaffold(
-      title: "Trip Ready",
-      child: buildMainScreen(context),
+  _MainScreenState createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  var _scaffoldKey = GlobalKey<ScaffoldState>();
+  String userId;
+  @override
+  void initState() {
+    super.initState();
   
+    Future.delayed(Duration(milliseconds: 200), () {
+      setState(() {
+            if (userId != null) {
+            _showSnackBar();
+          } 
+      });
+  
+    });
+  }
+  
+  Widget build(BuildContext context) {
+    setState(() {
+      userId = ModalRoute.of(context).settings.arguments;
+      print(userId.toString() + '1');
+    });
+    
+    return Scaffold(
+      key: _scaffoldKey,
+      appBar: AppBar(
+       title: Text("Trip Ready"),
+       centerTitle: true),
+      body: buildMainScreen(context)
     );
   }
+
   Widget buildMainScreen(BuildContext context) {
     return Column(
       children: [Logo(), Text("Trip Like Never Before", style: TextStyle(color: Colors.blue, fontSize: 30, fontFamily: 'Sans-serif', fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),), SizedBox(height: 60), SizedBox(height: 120), signInBtn(context), createAccountBtn(context)],
@@ -31,8 +59,24 @@ class MainScreen extends StatelessWidget {
     child: Text('Sign in')
   )
   );
+  }
+
+  // getUser() async {
+  //     FirebaseUser user = await FirebaseAuth.instance.currentUser();
+  //     if (user == null) {
+  //       userId = null; 
+  //     } 
+  //     setState(() {});
+  //     // print(userId);
+  // }
+
+  _showSnackBar() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Sucessfully logged out'))));
+  }
+
 }
-}
+
+
 
 Widget createAccountBtn(BuildContext context) {
   return ButtonTheme(

@@ -20,7 +20,7 @@ final GoogleSignIn _googleSignIn = GoogleSignIn();
 
 class LoginScreen extends StatefulWidget {
   static const routeName = 'login_screen';
-  final String title = 'Registration';
+  final String title = 'Sign In';
   @override
   State<StatefulWidget> createState() => LoginScreenState();
 }
@@ -28,44 +28,38 @@ class LoginScreen extends StatefulWidget {
 class LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        centerTitle: true,
-        actions: <Widget>[
-          Builder(builder: (BuildContext context) {
-            return FlatButton(
-              child: const Text('Sign out'),
-              textColor: Colors.blue,
-              onPressed: () async {
-                final FirebaseUser user = await _auth.currentUser();
-                if (user == null) {
-                  Scaffold.of(context).showSnackBar(const SnackBar(
-                    content: Text('No one has signed in.'),
-                  ));
-                  return;
-                }
-                _signOut();
+    return CapstoneScaffold(
+        title: widget.title,
+        hideDrawer: true,
+        // actions: <Widget>[
+        //   Builder(builder: (BuildContext context) {
+        //     return FlatButton(
+        //       child: const Text('Sign out'),
+        //       textColor: Colors.blue,
+        //       onPressed: () async {
+        //         final FirebaseUser user = await _auth.currentUser();
+        //         if (user == null) {
+        //           Scaffold.of(context).showSnackBar(const SnackBar(
+        //             content: Text('No one has signed in.'),
+        //           ));
+        //           return;
+        //         }
+        //         _signOut();
 
-                final String uid = user.uid;
-                Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text(uid + ' has successfully signed out.'),
-                ));
-              },
-            );
-          })
-        ],
-      ),
-      body: Builder(builder: (BuildContext context) {
+        //         final String uid = user.uid;
+        //         Scaffold.of(context).showSnackBar(SnackBar(
+        //           content: Text(uid + ' has successfully signed out.'),
+        //         ));
+        //       },
+        //     );
+        //   })
+        // ],
+      
+      child: Builder(builder: (BuildContext context) {
         return ListView(
           scrollDirection: Axis.vertical,
           children: <Widget>[
             _EmailPasswordForm(),
-            // _EmailLinkSignInSection(),
-            // _AnonymouslySignInSection(),
-            _GoogleSignInSection(),
-            // _PhoneSignInSection(Scaffold.of(context)),
-            // _OtherProvidersSignInSection(),
           ],
         );
       }),
@@ -322,7 +316,7 @@ class _GoogleSignInSectionState extends State<_GoogleSignInSection> {
         _success = true;
         _userID = user.uid;
         Navigator.of(context).pop();
-        Navigator.of(context).popAndPushNamed(MainLandingScreen.routeName);
+        Navigator.of(context).popAndPushNamed(ChecklistScreen.routeName);
       } else {
         _success = false;
       }
