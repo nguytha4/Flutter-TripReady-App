@@ -243,7 +243,7 @@ class RegisterPageState extends State<RegisterPage> {
         )).user;
         setState(() {
           Navigator.of(context).pop();
-          Navigator.of(context).popAndPushNamed(ChecklistScreen.routeName);
+          Navigator.of(context).popAndPushNamed(MainLandingScreen.routeName);
           // _success = true;
           // _userEmail = user.email;
 

@@ -31,19 +31,17 @@ class CapstoneScaffold extends StatelessWidget {
             SizedBox(
               height: 120,
               child: DrawerHeader(child: Text('Settings') )),
-            Builder(
-              builder: (context) => FlatButton(
+            FlatButton(
               child: const Text('Sign out'),
               textColor: Colors.blue,
               onPressed: () async {
                 Navigator.of(context).pop();  // hides drawer after clicking 'sign out'
-                final FirebaseUser user = await _auth.currentUser();
                 _signOut();
-                final String uid = user.uid;
+                final String uid = 'randomString';
                 Navigator.of(context).pop();
                 Navigator.of(context).pushNamed(MainScreen.routeName, arguments: uid);
               },
-            ))
+            )
           ],)
       ),
     );
