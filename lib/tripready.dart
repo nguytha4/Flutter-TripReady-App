@@ -5,6 +5,7 @@ export 'widgets/logo.dart';
 export 'screens/main_screen.dart';
 export 'screens/login_screen.dart';
 export 'screens/register_page.dart';
+export 'screens/checklist_screen.dart';
 
 export 'screens/wallet_screen.dart';
 export 'screens/passportID_form.dart';

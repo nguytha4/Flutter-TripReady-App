@@ -6,6 +6,7 @@ import 'package:capstone/widgets/logo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:capstone/tripready.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -241,6 +242,12 @@ class RegisterPageState extends State<RegisterPage> {
           email: _emailController.text.trim(),
           password: _passwordController.text.trim(),
         )).user;
+        Firestore.instance.collection('users').document(user.uid).setData({
+                      'email': _emailController.text.trim(),
+                      'password': _passwordController.text.trim(), 
+                      'date': DateTime.now(),
+                      'uid': user.uid
+                    });
         setState(() {
           Navigator.of(context).pop();
           Navigator.of(context).popAndPushNamed(MainLandingScreen.routeName);
