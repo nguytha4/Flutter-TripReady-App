@@ -26,34 +26,37 @@ class _DestinationScreenState extends State<DestinationScreen> {
   Widget build(BuildContext context) {
     return CapstoneScaffold(
       title: '${this.widget.destination.country}',
-      child: Column(
-        children: [
-          buildHeader(context),
-          buildGrid(context)
-        ],
-      ),
-    );
-  }
-
-  Container buildGrid(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.all(30.0),
-        child: GridView.count(
-          crossAxisCount: 2,
-          crossAxisSpacing: 15,
-          mainAxisSpacing: 15,
-          padding: const EdgeInsets.all(10.0),
+      child: SingleChildScrollView(
+              child: Column(
           children: [
-            buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Sites / Food', Colors.green),
-            buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Tips', Colors.orange),
-            buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Items Checklist', Colors.red),
-            buildButton((_) => WalletScreen(), 'Wallet', Colors.purple),
+            buildHeader(context),
+            buildGrid(context)
           ],
         ),
       ),
     );
+  }
+
+  Widget buildGrid(BuildContext context) {
+    return Container(
+        height: MediaQuery.of(context).size.width,
+        child: Padding(
+    padding: const EdgeInsets.all(30.0),
+    child: GridView.count(
+      physics: NeverScrollableScrollPhysics(),
+      crossAxisCount: 2,
+      crossAxisSpacing: 15,
+      mainAxisSpacing: 15,
+      padding: const EdgeInsets.all(10.0),
+      children: [
+        buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Sites / Food', Colors.green),
+        buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Tips', Colors.orange),
+        buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Items Checklist', Colors.red),
+        buildButton((_) => WalletScreen(), 'Wallet', Colors.purple),
+      ],
+    ),
+        ),
+      );
   }
 
   Widget buildHeader(BuildContext context) {
