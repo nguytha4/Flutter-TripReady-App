@@ -16,19 +16,18 @@ class _WalletScreenState extends State<WalletScreen> {
   Widget build(BuildContext context) {
     return DefaultTabController(
         length: 4,
-        child: Scaffold(
-            appBar: AppBar(
-                title: Text("Wallet Screen"),
-                centerTitle: true,
-                bottom: TabBar(
+        child: CapstoneScaffold(
+          title: 'Wallet Screen',
+          appbarChild: TabBar(
                   tabs: <Widget>[
                     Tab(icon: Icon(Icons.account_circle)),
                     Tab(icon: Icon(Icons.flight)),
                     Tab(icon: Icon(Icons.home)),
                     Tab(icon: Icon(Icons.confirmation_number)),
                   ],
-                )),
-            body: TabBarView(
+                ),
+            child: 
+            TabBarView(
               children: <Widget>[
                 
                 
@@ -219,7 +218,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
               ],
             ),
-            floatingActionButton: fab(),
+            fab: fab(),
           ),
       );
     

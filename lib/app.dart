@@ -2,6 +2,7 @@ import 'package:capstone/screens/main_landing_screen.dart';
 import 'package:capstone/screens/new_destination_entry_screen.dart';
 import 'package:capstone/screens/sites_food_detail_screen.dart';
 import 'package:capstone/screens/sites_food_screen.dart';
+import 'package:capstone/tripready.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/screens/login_screen.dart';
 import 'package:capstone/screens/register_page.dart';
@@ -23,7 +24,8 @@ class App extends StatelessWidget {
     LoginScreen.routeName: (context) => LoginScreen(),
     RegisterPage.routeName: (context) => RegisterPage(),
     MainScreen.routeName: (context) => MainScreen(),
-    WalletScreen.routeName: (context) => WalletScreen()
+    WalletScreen.routeName: (context) => WalletScreen(),
+    TipsScreen.routeName: (contexdt) => TipsScreen()
   };
 
   @override
@@ -32,10 +34,10 @@ class App extends StatelessWidget {
       title: 'Trip Ready',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primaryColor: Colors.white
+          primaryColor: Colors.blue
         ),
       routes: App.routes,
-      initialRoute: MainScreen.routeName,
+      initialRoute: TipsScreen.routeName,
     );
   }
 }

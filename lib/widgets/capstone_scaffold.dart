@@ -4,16 +4,17 @@ class CapstoneScaffold extends StatelessWidget {
 
   final String title;
   final Widget child;
+  final Widget appbarChild;
   final Widget fab;
   final bool hideAppBar;
   final bool hideDrawer;
 
-  CapstoneScaffold({Key key, this.title, this.child, this.fab, this.hideAppBar = false, this.hideDrawer = false}) : super(key: key);
+  CapstoneScaffold({Key key, this.title, this.child, this.fab, this.appbarChild, this.hideAppBar = false, this.hideDrawer = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(appbarChild),
       body: child,
       floatingActionButton: Padding(
         padding: EdgeInsets.all(20), 
@@ -22,7 +23,7 @@ class CapstoneScaffold extends StatelessWidget {
     );
   }
 
-  Widget buildAppBar()
+  Widget buildAppBar(Widget appbarChild)
   {
     if (hideAppBar)
       return null;
@@ -43,6 +44,7 @@ class CapstoneScaffold extends StatelessWidget {
                 );
               }),
           ],
+          bottom: appbarChild,
           centerTitle: true,
       );
   }
