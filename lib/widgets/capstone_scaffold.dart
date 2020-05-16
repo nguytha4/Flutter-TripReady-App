@@ -83,7 +83,7 @@ class CapstoneScaffold extends StatelessWidget {
       );
   }
 
-    // Example code for sign out.
+  // Example code for sign out.
   void _signOut() async {
     await _auth.signOut();
   }
