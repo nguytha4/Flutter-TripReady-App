@@ -8,115 +8,128 @@ class DestinationList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: StreamBuilder(
-        stream: Firestore.instance.collection('destination').orderBy('country').snapshots(),
-        builder: (context, snapshot) {
-          return ListView.builder(
-            scrollDirection: Axis.vertical,
-            itemCount: snapshot.data.documents.length,
-            itemBuilder: (BuildContext context, int index) {
+          stream: Firestore.instance
+              .collection('destination')
+              .orderBy('country')
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData && snapshot.data.documents.length > 0) {
+              return ListView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: snapshot.data.documents.length,
+                itemBuilder: (BuildContext context, int index) {
+                  var snapshotItem = snapshot.data.documents[index];
+                  var destination = Destination.fromSnapshot(snapshotItem);
 
-              var snapshotItem = snapshot.data.documents[index];
-              var destination = Destination.fromSnapshot(snapshotItem);
-
-              return buildListViewRow(context, destination);
-            },
-          );
-        }
-      ),
+                  return buildListViewRow(context, destination);
+                },
+              );
+            } else {
+              return Center(
+                  child: Column(children: [
+                Padding(
+                    child: CircularProgressIndicator(),
+                    padding: EdgeInsets.all(50)),
+                Text('No items. Please click the button below')
+              ]));
+            }
+          }),
     );
   }
 
-  GestureDetector buildListViewRow(BuildContext context, Destination destination) {
+  GestureDetector buildListViewRow(
+      BuildContext context, Destination destination) {
     return GestureDetector(
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => DestinationScreen(
-                destination: destination,
+      onTap: () => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => DestinationScreen(
+            destination: destination,
+          ),
+        ),
+      ),
+      child: Container(
+        margin: EdgeInsets.all(10.0),
+        width: 210.0,
+        child: Stack(
+          alignment: Alignment.topCenter,
+          children: [
+            Positioned(
+              bottom: 15.0,
+              child: Container(
+                height: 120.0,
+                width: 200.0,
               ),
             ),
-          ),
-          child: Container(
-            margin: EdgeInsets.all(10.0),
-            width: 210.0,
-            child: Stack(
-              alignment: Alignment.topCenter,
-              children: [
-                Positioned(
-                  bottom: 15.0,
-                  child: Container(
-                    height: 120.0,
-                    width: 200.0,
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(20.0),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    offset: Offset(0.0, 2.0),
+                    blurRadius: 6.0,
                   ),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20.0),
-                    boxShadow: [
-                      BoxShadow(
+                ],
+              ),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(20.0),
+                child: Stack(
+                  children: [
+                    Hero(
+                        tag: destination.imageUrl,
+                        child: Image(
+                          height: 180.0,
+                          width: MediaQuery.of(context).size.width,
+                          image: AssetImage(destination.imageUrl),
+                          fit: BoxFit.cover,
+                        )),
+                    Positioned(
+                      child: Container(
                         color: Colors.black26,
-                        offset: Offset(0.0, 2.0),
-                        blurRadius: 6.0,
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20.0),
-                    child: Stack(
-                      children: [
-                        Hero(
-                          tag: destination.imageUrl,
-                          child:  Image(
-                              height: 180.0,
-                              width: MediaQuery.of(context).size.width,
-                              image: AssetImage(destination.imageUrl),
-                              fit: BoxFit.cover,)),
-                        Positioned(
-                          child: Container(
-                            color: Colors.black26,
-                            width: MediaQuery.of(context).size.width,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                        width: MediaQuery.of(context).size.width,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                destination.country,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 24.0,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                              Row(
                                 children: [
+                                  Icon(
+                                    FontAwesomeIcons.locationArrow,
+                                    size: 10.0,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(width: 5.0),
                                   Text(
-                                    destination.country,
+                                    destination.city,
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 24.0,
-                                      letterSpacing: 1.2,
                                     ),
-                                  ),
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        FontAwesomeIcons.locationArrow,
-                                        size: 10.0,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(width: 5.0),
-                                      Text(
-                                        destination.city,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    ],
                                   ),
                                 ],
                               ),
-                            ),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
-                  ),
-                )
-              ],
-            ),
-          ),
-        );
+                  ],
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
   }
 }
