@@ -34,10 +34,10 @@ class App extends StatelessWidget {
       title: 'Trip Ready',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primaryColor: Colors.blue
+          primaryColor: Colors.white
         ),
       routes: App.routes,
-      initialRoute: TipsScreen.routeName,
+      initialRoute: MainScreen.routeName,
     );
   }
 }
