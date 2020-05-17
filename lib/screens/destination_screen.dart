@@ -1,9 +1,6 @@
-import 'package:capstone/screens/sites_food_detail_screen.dart';
-import 'package:capstone/screens/sites_food_screen.dart';
-import 'package:capstone/widgets/capstone_scaffold.dart';
-import 'package:capstone/widgets/image_header.dart';
+import 'package:capstone/tripready.dart';
 import 'package:flutter/material.dart';
-import 'package:capstone/models/destination_model.dart';
+
 
 import 'wallet_screen.dart';
 
@@ -28,44 +25,45 @@ class _DestinationScreenState extends State<DestinationScreen> {
   @override
   Widget build(BuildContext context) {
     return CapstoneScaffold(
-      title: "",
-      hideAppBar: true,
-      child: Column(
-        children: [
-          buildHeader(context),
-          buildGrid(context)
-        ],
-      ),
-    );
-  }
-
-  Container buildGrid(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.width,
-      child: Padding(
-        padding: const EdgeInsets.all(15.0),
-        child: GridView.count(
-          crossAxisCount: 2,
-          crossAxisSpacing: 15,
-          mainAxisSpacing: 15,
-          physics: new NeverScrollableScrollPhysics(),
-          padding: const EdgeInsets.all(15.0),
+      title: '${this.widget.destination.country}',
+      child: SingleChildScrollView(
+              child: Column(
           children: [
-            buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Sites / Food'),
-            buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Tips'),
-            buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Items Checklist'),
-            buildButton((_) => WalletScreen(), 'Wallet'),
+            buildHeader(context),
+            buildGrid(context)
           ],
         ),
       ),
     );
   }
 
+  Widget buildGrid(BuildContext context) {
+    return Container(
+        height: MediaQuery.of(context).size.width,
+        child: Padding(
+    padding: const EdgeInsets.all(30.0),
+    child: GridView.count(
+      physics: NeverScrollableScrollPhysics(),
+      crossAxisCount: 2,
+      crossAxisSpacing: 15,
+      mainAxisSpacing: 15,
+      padding: const EdgeInsets.all(10.0),
+      children: [
+        buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Sites / Food', Colors.green),
+        buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Tips', Colors.orange),
+        buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Items Checklist', Colors.red),
+        buildButton((_) => WalletScreen(), 'Wallet', Colors.purple),
+      ],
+    ),
+        ),
+      );
+  }
+
   Widget buildHeader(BuildContext context) {
     return ImageHeader(imageUrl: widget.destination.imageUrl, label: widget.destination.city);
   }
 
-  Widget buildButton(WidgetBuilder screen, String label) {
+  Widget buildButton(WidgetBuilder screen, String label, Color color) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
@@ -77,7 +75,8 @@ class _DestinationScreenState extends State<DestinationScreen> {
       },
       child: Container(
         alignment: Alignment.center,
-        decoration: buildBorder(Colors.black),
+        decoration: buildBorder(color),
+        height: 75,
         child: Text(
           label,
           style: TextStyle(
