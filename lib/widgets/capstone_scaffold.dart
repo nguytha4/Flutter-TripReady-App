@@ -31,9 +31,15 @@ class CapstoneScaffold extends StatelessWidget {
             SizedBox(
               height: 120,
               child: DrawerHeader(child: Text('Settings') )),
-            FlatButton(
+            Padding(
+              padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
+              child:RaisedButton(
+              color: Colors.red,
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(30.0)
+                ),
               child: const Text('Sign out'),
-              textColor: Colors.blue,
+              textColor: Colors.white,
               onPressed: () async {
                 Navigator.of(context).pop();  // hides drawer after clicking 'sign out'
                 _signOut();
@@ -41,7 +47,7 @@ class CapstoneScaffold extends StatelessWidget {
                 Navigator.of(context).pop();
                 Navigator.of(context).pushNamed(MainScreen.routeName, arguments: uid);
               },
-            )
+            )),
           ],)
       ),
     );
