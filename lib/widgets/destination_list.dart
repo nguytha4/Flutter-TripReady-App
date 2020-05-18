@@ -1,135 +1,96 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:capstone/tripready.dart';
 
 class DestinationList extends StatelessWidget {
+  final String planType;
+
+  const DestinationList({Key key, this.planType}) : super(key: key);
+
+  Stream<dynamic> buildQuery(uid) {
+    if (planType == PlanTypes.upcoming) {
+      return Firestore.instance
+          .collection('users')
+          .document(uid)
+          .collection('plans')
+          .where('travelDate', isGreaterThanOrEqualTo: DateTime.now())
+          .orderBy('travelDate')
+          .snapshots();
+    } else {
+      return Firestore.instance
+          .collection('users')
+          .document(uid)
+          .collection('plans')
+          .where('travelDate', isLessThan: DateTime.now())
+          .orderBy('travelDate')
+          .snapshots();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: StreamBuilder(
-          stream: Firestore.instance
-              .collection('destination')
-              .orderBy('country')
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData && snapshot.data.documents.length > 0) {
-              return ListView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: snapshot.data.documents.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var snapshotItem = snapshot.data.documents[index];
-                  var destination = Destination.fromSnapshot(snapshotItem);
+    return FutureBuilder(
+      future: AuthenticationService.currentUserId(),
+      builder: (context, userIdSnapshot) {
+        if (!userIdSnapshot.hasData) {
+          return CircularProgressIndicator();
+        }
 
-                  return buildListViewRow(context, destination);
-                },
+        return StreamBuilder(
+            stream: buildQuery(userIdSnapshot.data),
+            builder: (context, plansSnapshot) {
+              return Container(
+                child: StreamBuilder(
+                    stream: Firestore.instance
+                        .collection('destination')
+                        .orderBy('country')
+                        .snapshots(),
+                    builder: (context, destinationsSnapshot) {
+                      return buildListView(destinationsSnapshot, plansSnapshot);
+                    }),
               );
-            } else {
-              return Center(
-                  child: Column(children: [
-                Padding(
-                    child: CircularProgressIndicator(),
-                    padding: EdgeInsets.all(50)),
-                Text('No items. Please click the button below')
-              ]));
-            }
-          }),
+            });
+      },
     );
   }
 
-  GestureDetector buildListViewRow(
-      BuildContext context, Destination destination) {
-    return GestureDetector(
-      onTap: () => Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => DestinationScreen(
-            destination: destination,
-          ),
-        ),
-      ),
-      child: Container(
-        margin: EdgeInsets.all(10.0),
-        width: 210.0,
-        child: Stack(
-          alignment: Alignment.topCenter,
-          children: [
-            Positioned(
-              bottom: 15.0,
-              child: Container(
-                height: 120.0,
-                width: 200.0,
-              ),
+  Widget buildListView(
+      AsyncSnapshot destinationsSnapshot, AsyncSnapshot plansSnapshot) {
+    if (!destinationsSnapshot.hasData ||
+        destinationsSnapshot.data.documents.length <= 0) {
+      return Center(
+          child: Column(children: [
+        Padding(
+            child: CircularProgressIndicator(), padding: EdgeInsets.all(50)),
+        Text('No items. Please click the button below')
+      ]));
+    }
+
+    return ListView.builder(
+      scrollDirection: Axis.vertical,
+      itemCount: plansSnapshot.data.documents.length,
+      itemBuilder: (BuildContext context, int index) {
+
+        var planModel = PlanModel.fromSnapshot(plansSnapshot.data.documents[index]);
+
+        var destinationSnapshot = destinationsSnapshot
+          .data
+          .documents
+          .singleWhere((element) => element.documentID == planModel.destinationID);
+
+        var destination = DestinationModel.fromSnapshot(destinationSnapshot);
+
+        return PhotoListViewTile(
+          title: "${destination.city}",
+          subtitle: destination.country,
+          imageUrl: destination.imageUrl,
+          route: MaterialPageRoute(
+            builder: (_) => DestinationScreen(
+              destination: destination,
             ),
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(20.0),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    offset: Offset(0.0, 2.0),
-                    blurRadius: 6.0,
-                  ),
-                ],
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(20.0),
-                child: Stack(
-                  children: [
-                    Hero(
-                        tag: destination.imageUrl,
-                        child: Image(
-                          height: 180.0,
-                          width: MediaQuery.of(context).size.width,
-                          image: AssetImage(destination.imageUrl),
-                          fit: BoxFit.cover,
-                        )),
-                    Positioned(
-                      child: Container(
-                        color: Colors.black26,
-                        width: MediaQuery.of(context).size.width,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                destination.country,
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 24.0,
-                                  letterSpacing: 1.2,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    FontAwesomeIcons.locationArrow,
-                                    size: 10.0,
-                                    color: Colors.white,
-                                  ),
-                                  SizedBox(width: 5.0),
-                                  Text(
-                                    destination.city,
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            )
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

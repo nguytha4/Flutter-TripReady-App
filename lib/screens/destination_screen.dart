@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'wallet_screen.dart';
 
 class DestinationScreen extends StatefulWidget {
-  final Destination destination;
+  final DestinationModel destination;
 
   DestinationScreen({this.destination});
 

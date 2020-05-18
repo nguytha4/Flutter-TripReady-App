@@ -1,131 +1,98 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/tripready.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class SitesFoodList extends StatelessWidget {
-  final Destination destination;
+  final DestinationModel destination;
+  final String category;
 
-  const SitesFoodList({Key key, this.destination}) : super(key: key);
+  const SitesFoodList({Key key, this.destination, this.category})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var destinationId = destination.documentID;
+
     return Container(
-      child: StreamBuilder(
-        stream: Firestore.instance.collection('activity').orderBy('name').snapshots(),
-        builder: (context, snapshot) {
-          return ListView.builder(
-            scrollDirection: Axis.vertical,
-            itemCount: snapshot.data.documents.length,
-            itemBuilder: (BuildContext context, int index) {
+      child: FutureBuilder(
+        future: AuthenticationService.currentUserId(),
+        builder: (BuildContext context, AsyncSnapshot<String> uid) {
+          if (!uid.hasData) {
+            return CircularProgressIndicator();
+          }
 
-              var snapshotItem = snapshot.data.documents[index];
-              var activity = Activity.fromSnapshot(snapshotItem);
+          return StreamBuilder(
+              stream: Firestore.instance
+                  .collection('users')
+                  .document(uid.data)
+                  .collection('destinations')
+                  .document(destination.documentID)
+                  .collection('favorites')
+                  .snapshots(),
+              builder: (context, favoritesSnapshot) {
+                if (!favoritesSnapshot.hasData) {
+                  return CircularProgressIndicator();
+                }
 
-              return buildListViewRow(context, activity);
-            },
-          );
-        }
-      ),
-    );
-  }
+                return StreamBuilder(
+                  stream: Firestore.instance
+                      .collection('destinations')
+                      .document(destinationId)
+                      .collection('activities')
+                      .orderBy('name')
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData ||
+                        snapshot.data.documents.length == 0) {
+                      return Center(
+                          child: Column(children: [
+                        Text(
+                            'No favorites. Please favorite an activity to show it here.')
+                      ]));
+                    }
 
-  GestureDetector buildListViewRow(BuildContext context, Activity activity) {
-    return GestureDetector(
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (_) => SitesFoodDetailScreen(
-                destination: destination,
-                activity: activity,
-              ),
-            ),
-          ),
-          child: Container(
-            margin: EdgeInsets.all(10.0),
-            width: 210.0,
-            child: Stack(
-              alignment: Alignment.topCenter,
-              children: [
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20.0),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black26,
-                        offset: Offset(0.0, 2.0),
-                        blurRadius: 6.0,
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20.0),
-                    child: Stack(
-                      children: [
-                        Hero(
-                          tag: activity.imageUrl,
-                          child:  Image(
-                              height: 180.0,
-                              width: MediaQuery.of(context).size.width,
-                              image: AssetImage(activity.imageUrl),
-                              fit: BoxFit.cover,)),
-                        buildTitle(context, activity),
-                        Positioned(
-                  top: 15.0,
-                  right: 15.0,
-                  child: Icon(
-                          FontAwesomeIcons.solidHeart,
-                          size: 20.0,
-                          color: Colors.white,
-                        ),
-                      )],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-  }
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      itemCount: snapshot.data.documents.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        var snapshotItem = snapshot.data.documents[index];
+                        var activity = ActivityModel.fromSnapshot(snapshotItem);
 
-  Positioned buildTitle(BuildContext context, Activity activity) {
-    return Positioned(
-      child: Container(
-        color: Colors.black26,
-        width: MediaQuery.of(context).size.width,
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                activity.name,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24.0,
-                  letterSpacing: 1.2,
-                ),
-              ),
-              Row(
-                children: [
-                  Icon(
-                    FontAwesomeIcons.locationArrow,
-                    size: 10.0,
-                    color: Colors.white,
-                  ),
-                  SizedBox(width: 5.0),
-                  Text(
-                    activity.type,
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+                        var isFavorite = favoritesSnapshot.data.documents.any(
+                            (element) =>
+                                element.documentID == activity.documentID);
+
+                        var showTile =
+                            category == ActivityCategories.favorites &&
+                                    isFavorite ||
+                                activity.category == category;
+
+                        return Visibility(
+                          visible: showTile,
+                          child: PhotoListViewTile(
+                              title: activity.name,
+                              subtitle: activity.type,
+                              imageUrl: activity.imageUrl,
+                              showFavoriteIcon: true,
+                              isFavorite: isFavorite,
+                              onFavorite: () async {
+                                await DataService.toggleFavorite(
+                                    destination.documentID,
+                                    activity.documentID);
+                              },
+                              route: MaterialPageRoute(
+                                builder: (_) => SitesFoodDetailScreen(
+                                  destination: destination,
+                                  activity: activity,
+                                ),
+                              )),
+                        );
+                      },
+                    );
+                  },
+                );
+              });
+        },
       ),
     );
   }

@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Activity {
+class ActivityModel {
+  String documentID;
   String imageUrl;
   String name;
   String type;
@@ -9,9 +10,10 @@ class Activity {
   int rating;
   int price;
 
-  Activity({this.imageUrl, this.name, this.type, this.category, this.startTimes, this.rating, this.price});
+  ActivityModel({this.documentID, this.imageUrl, this.name, this.type, this.category, this.startTimes, this.rating, this.price});
 
-  Activity.fromSnapshot(DocumentSnapshot snapshot) {
+  ActivityModel.fromSnapshot(DocumentSnapshot snapshot) {
+    documentID = snapshot.documentID;
     imageUrl = snapshot['imageUrl'];
     name = snapshot['name'];
     type = snapshot['type'];
@@ -23,7 +25,7 @@ class Activity {
 
   Map<String, dynamic> toMap() {
     return {
-      'imgaeUrl': imageUrl,
+      'imageUrl': imageUrl,
       'name': name,
       'type': type,
       'category': category,
@@ -34,3 +36,8 @@ class Activity {
   }
 }
 
+class ActivityCategories {
+  static String sites = 'Sites';
+  static String food = 'Food';
+  static String favorites = 'Favorites';
+}
