@@ -29,67 +29,73 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
   @override
   Widget build(BuildContext context) {
     return CapstoneScaffold(
-        title: 'New Destination Entry',
-        child: StreamBuilder(
-            stream: Firestore.instance
-                .collection('destination')
-                .orderBy('country')
-                .snapshots(),
-            builder: (context, snapshot) {
-              if (!snapshot.hasData) {
-                return CircularProgressIndicator();
-              }
+      title: 'New Destination Entry',
+      child: StreamBuilder(
+          stream: Firestore.instance
+              .collection('destination')
+              .orderBy('country')
+              .snapshots(),
+          builder: (context, snapshot) {
+            if (!snapshot.hasData) {
+              return CircularProgressIndicator();
+            }
 
-              var destinations =
-                  (snapshot.data.documents as List<DocumentSnapshot>)
-                      .map((e) => DestinationModel.fromSnapshot(e))
-                      .toList();
+            var destinations =
+                (snapshot.data.documents as List<DocumentSnapshot>)
+                    .map((e) => DestinationModel.fromSnapshot(e))
+                    .toList();
 
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  Container(
-                    child: Expanded(
-                      child: Container(
-                          child: CupertinoPicker(
-                        magnification: 1.0,
-                        backgroundColor: Colors.black87,
-                        children: destinations
-                            .map((s) => buildPickerItem(s))
-                            .toList(),
-                        itemExtent: 30, //height of each item
-                        looping: false,
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Container(
+                  child: Expanded(
+                    child: Container(
+                        child: CupertinoPicker(
+                      magnification: 1.0,
+                      backgroundColor: Colors.black87,
+                      children: destinations
+                          .map((s) => buildPickerItem(s))
+                          .toList(),
+                      itemExtent: 30, //height of each item
+                      looping: false,
 
-                        onSelectedItemChanged: (int index) {
-                          var destination = DestinationModel.fromSnapshot(
-                              snapshot.data.documents[index]);
-                          planModel.destinationID = destination.documentID;
-                        },
-                      )),
-                    ),
+                      onSelectedItemChanged: (int index) {
+                        var destination = DestinationModel.fromSnapshot(
+                            snapshot.data.documents[index]);
+                        planModel.destinationID = destination.documentID;
+                      },
+                    )),
                   ),
-                  Container(
-                    child: buildDatePicker(),
-                  ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                        bottom: BorderSide(
-                          color: Colors.white,
-                          width: 0.0,
-                        ),
+                ),
+                Container(
+                  child: buildDatePicker(),
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    border: Border(
+                      bottom: BorderSide(
+                        color: Colors.white,
+                        width: 0.0,
                       ),
                     ),
-                    child: Row(
+                  ),
+                  child: SizedBox(
+                    height: 100,
+                      child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CupertinoButton(
-                          child: Text('Confirm'),
-                          onPressed: () async {
-                            await DataService.createPlan(planModel);
-                            Navigator.pop(context);
-                            Navigator.push(
+                        children:[
+                          RaisedButton(
+                            color: Colors.blue,
+                            shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(50.0)),
+                            child: Text('Confirm'),
+                            textColor: Colors.white,
+                            padding: EdgeInsets.fromLTRB(100, 0, 100, 0),
+                            onPressed: () async {
+                              await DataService.createPlan(planModel);
+                              Navigator.pop(context);
+                              Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (_) => DestinationScreen(
@@ -97,18 +103,15 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
                                             (element) =>
                                                 element.documentID ==
                                                 planModel.destinationID))));
-                          },
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 30.0,
-                            vertical: 40.0,
-                          ),
-                        )
-                      ],
-                    ),
-                  ),
+                            },
+                  )
                 ],
-              );
-            }));
+              ),
+            ),
+          ),
+        ],
+      );
+    }));
   }
 
   Widget buildDatePicker() {
