@@ -1,15 +1,13 @@
-import 'package:capstone/widgets/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:capstone/tripready.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'dart:developer';
 import 'dart:collection';
 
 class ChecklistScreen extends StatefulWidget  {
   static const routeName = 'checklist_screen';
-  final Destination destination;
+  final DestinationModel destination;
 
   ChecklistScreen({this.destination});
   @override
