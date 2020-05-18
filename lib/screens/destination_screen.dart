@@ -51,7 +51,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
       children: [
         buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Sites / Food', Colors.green),
         buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Tips', Colors.orange),
-        buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Items Checklist', Colors.red),
+        buildButton((_) => ChecklistScreen(destination: widget.destination), 'Items Checklist', Colors.red),
         buildButton((_) => WalletScreen(), 'Wallet', Colors.purple),
       ],
     ),

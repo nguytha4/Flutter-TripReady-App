@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:capstone/tripready.dart';
 
 class CapstoneScaffold extends StatelessWidget {
 
@@ -15,6 +16,7 @@ class CapstoneScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (hideDrawer != true) {
     return Scaffold(
       appBar: buildAppBar(),
       body: child,
@@ -29,28 +31,36 @@ class CapstoneScaffold extends StatelessWidget {
             SizedBox(
               height: 120,
               child: DrawerHeader(child: Text('Settings') )),
-            FlatButton(
+            Padding(
+              padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
+              child:RaisedButton(
+              color: Colors.red,
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(30.0)
+                ),
               child: const Text('Sign out'),
-              textColor: Colors.blue,
+              textColor: Colors.white,
               onPressed: () async {
-                final FirebaseUser user = await _auth.currentUser();
-                if (user == null) {
-                  Scaffold.of(context).showSnackBar(const SnackBar(
-                    content: Text('No one has signed in.'),
-                  ));
-                  return;
-                }
+                Navigator.of(context).pop();  // hides drawer after clicking 'sign out'
                 _signOut();
-
-                final String uid = user.uid;
-                Scaffold.of(context).showSnackBar(SnackBar(
-                  content: Text(uid + ' has successfully signed out.'),
-                ));
+                final String uid = 'randomString';
+                Navigator.of(context).pop();
+                Navigator.of(context).pushNamed(MainScreen.routeName, arguments: uid);
               },
-            )
+            )),
           ],)
       ),
     );
+    } else {
+      return Scaffold(
+      appBar: buildAppBar(),
+      body: child,
+      floatingActionButton: Padding(
+        padding: EdgeInsets.all(20), 
+        child: fab),
+        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+    );
+    }
   }
 
   Widget buildAppBar()
