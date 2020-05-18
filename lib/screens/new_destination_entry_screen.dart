@@ -88,7 +88,6 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
                           child: Text('Confirm'),
                           onPressed: () async {
                             await DataService.createPlan(planModel);
-
                             Navigator.pop(context);
                             Navigator.push(
                                 context,
@@ -129,57 +128,6 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
         ),
       ),
     );
-
-    // // return InputDatePickerFormField(
-    // // fieldLabelText: 'Trip Date',
-    // // firstDate: DateTime.now().subtract(Duration(days: 365)),
-    // // lastDate: DateTime.now().add(Duration(days: 365)));
-
-    // return Padding(
-    //   padding: const EdgeInsets.all(18),
-    //   child: Theme(
-    //     data: ThemeData(primaryColor: Colors.blue),
-    //     child: TextFormField(
-    //       //controller: _controllerCheckIn,
-    //       keyboardType: TextInputType.datetime,
-    //       decoration: InputDecoration(
-    //           labelText: 'Enter Travel Date',
-    //           border: OutlineInputBorder(),
-    //           icon: Icon(Icons.calendar_today)),
-    //       onTap: () {
-    //         FocusScope.of(context).requestFocus(new FocusNode());
-
-    //         //CupertinoDatePicker(onDateTimeChanged: k => planModel)
-
-    //         showDatePicker(
-    //             context: context,
-    //             initialDate: DateTime.now(),
-    //             firstDate: DateTime.parse('1900-01-01'),
-    //             lastDate: DateTime.parse('2099-01-01'));
-
-    //         //_chooseDateIn(context, _controllerCheckIn.text, accomodation);
-    //       },
-    //       onSaved: (value) {
-    //         planModel.travelDate = convertToDate(value);
-    //       },
-    //       validator: (value) {
-    //         if (value.isEmpty) {
-    //           return 'Please enter a check-in date';
-    //         } else {
-    //           return null;
-    //         }
-    //       },
-    //     ),
-    //   ),
-    // );
   }
 }
 
-// DateTime convertToDate(String input) {
-//   try {
-//     var d = new DateFormat.yMd().parseStrict(input);
-//     return d;
-//   } catch (e) {
-//     return null;
-//   }
-// }
