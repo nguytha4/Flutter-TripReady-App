@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/tripready.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class WalletScreen extends StatefulWidget {
   static const routeName = 'wallet_screen';
+  final Destination destination;
+
+  WalletScreen({this.destination});
 
   @override
   _WalletScreenState createState() => _WalletScreenState();
@@ -11,13 +15,19 @@ class WalletScreen extends StatefulWidget {
 
 class _WalletScreenState extends State<WalletScreen> {
 
+  String userId;
 
   @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
+
   Widget build(BuildContext context) {
     return DefaultTabController(
         length: 4,
         child: CapstoneScaffold(
-          title: 'Wallet Screen',
+          title: widget.destination.country + ' - Wallet',
           appbarChild: TabBar(
                   tabs: <Widget>[
                     Tab(icon: Icon(Icons.account_circle)),
@@ -33,7 +43,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 
                 // Passport ID stream
                 StreamBuilder(
-                  stream: Firestore.instance.collection('passportID').orderBy('timestamp', descending: true).snapshots(),
+                  stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('passportID').orderBy('timestamp', descending: true).snapshots(),
                   builder: (content, snapshot) {
                     if (snapshot.data == null) {
                       return Center(child: CircularProgressIndicator(),);
@@ -76,7 +86,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
                 // Transit stream
                 StreamBuilder(
-                  stream: Firestore.instance.collection('transit').orderBy('timestamp', descending: true).snapshots(),
+                  stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('transit').orderBy('timestamp', descending: true).snapshots(),
                   builder: (content, snapshot) {
                     if (snapshot.data == null) {
                       return Center(child: CircularProgressIndicator(),);
@@ -122,7 +132,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
                 // Accomodation stream
                 StreamBuilder(
-                  stream: Firestore.instance.collection('accomodation').orderBy('timestamp', descending: true).snapshots(),
+                  stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('accomodation').orderBy('timestamp', descending: true).snapshots(),
                   builder: (content, snapshot) {
                     if (snapshot.data == null) {
                       return Center(child: CircularProgressIndicator(),);
@@ -169,7 +179,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
                 // Event stream
                 StreamBuilder(
-                  stream: Firestore.instance.collection('event').orderBy('timestamp', descending: true).snapshots(),
+                  stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('event').orderBy('timestamp', descending: true).snapshots(),
                   builder: (content, snapshot) {
                     if (snapshot.data == null) {
                       return Center(child: CircularProgressIndicator(),);
@@ -228,22 +238,22 @@ class _WalletScreenState extends State<WalletScreen> {
 
   void toPassportIDForm(BuildContext context) {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => PassportIDForm()));
+          MaterialPageRoute(builder: (context) => PassportIDForm(destination: widget.destination)));
   }
 
   void toAccomodationForm(BuildContext context) {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => AccomodationForm()));
+          MaterialPageRoute(builder: (context) => AccomodationForm(destination: widget.destination)));
   }
 
   void toEventForm(BuildContext context) {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => EventForm()));
+          MaterialPageRoute(builder: (context) => EventForm(destination: widget.destination)));
   }
 
   void toTransitForm(BuildContext context) {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => TransitForm()));
+          MaterialPageRoute(builder: (context) => TransitForm(destination: widget.destination)));
   }
   
   void _asyncSimpleDialog(BuildContext context) async {
@@ -398,6 +408,12 @@ class _WalletScreenState extends State<WalletScreen> {
         ), 
     ));
   } 
+
+  getUser() async {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      userId = user.uid;
+      setState(() {});
+  }
 
   // ==================================== Widget functions ====================================
 

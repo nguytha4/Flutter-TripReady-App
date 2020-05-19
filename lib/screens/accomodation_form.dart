@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/tripready.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class AccomodationForm extends StatefulWidget {
+
+  final Destination destination;
+
+  AccomodationForm({this.destination});
+
   @override
   _AccomodationFormState createState() => _AccomodationFormState();
 }
@@ -15,11 +21,13 @@ class _AccomodationFormState extends State<AccomodationForm> {
 
   final TextEditingController _controllerCheckIn = new TextEditingController();
   final TextEditingController _controllerCheckOut = new TextEditingController();
+  String userId;
 
   @override
   void initState() {
     super.initState();
     retrieveDateAndTime();
+    getUser();
   }
 
   @override
@@ -102,11 +110,17 @@ class _AccomodationFormState extends State<AccomodationForm> {
 
   void toWalletScreen(BuildContext context) {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => WalletScreen()));
+          MaterialPageRoute(builder: (context) => WalletScreen(destination: widget.destination,)));
   }
 
   void retrieveDateAndTime() async {
     accomodation.timestamp = DateTime.now();
+  }
+
+  getUser() async {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      userId = user.uid;
+      setState(() {});
   }
 
   // ==================================== Widget functions ====================================
@@ -293,7 +307,7 @@ class _AccomodationFormState extends State<AccomodationForm> {
         if (formKey.currentState.validate()) {
             formKey.currentState.save();
 
-            Firestore.instance.collection('accomodation').add( {
+            Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('accomodation').add( {
                'timestamp': accomodation.timestamp,
                'name': accomodation.name,
                'phoneNum': accomodation.phoneNum,

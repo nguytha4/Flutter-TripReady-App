@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:capstone/tripready.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PassportIDForm extends StatefulWidget {
+  final Destination destination;
+
+  PassportIDForm({this.destination});
+
   @override
   _PassportIDFormState createState() => _PassportIDFormState();
 }
@@ -16,11 +21,13 @@ class _PassportIDFormState extends State<PassportIDForm> {
   File image;                               // To hold uploaded passport / id image
   final passportID = PassportID();          // Passport object to hold saved values
   final formKey = GlobalKey<FormState>();   // Form key to perform validation / saving
+  String userId;
 
   @override
   void initState() {
     super.initState();
     retrieveDateAndTime();
+    getUser();
   }
 
    @override
@@ -102,7 +109,13 @@ class _PassportIDFormState extends State<PassportIDForm> {
 
   void toWalletScreen(BuildContext context) {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => WalletScreen()));
+          MaterialPageRoute(builder: (context) => WalletScreen(destination: widget.destination)));
+  }
+
+  getUser() async {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      userId = user.uid;
+      setState(() {});
   }
 
   // ==================================== Widget functions ====================================
@@ -188,7 +201,7 @@ class _PassportIDFormState extends State<PassportIDForm> {
           if (formKey.currentState.validate()) {
             formKey.currentState.save();
 
-            Firestore.instance.collection('passportID').add( {
+            Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('passportID').add( {
               'timestamp': passportID.timestamp,
               'imageURL': passportID.imageURL,
               'name': passportID.name,

@@ -1,43 +1,49 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/tripready.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TipsScreen extends StatefulWidget {
   static const routeName = 'tips_screen';
+  final Destination destination;
+
+  TipsScreen({this.destination});
   @override
   _TipsScreenState createState() => _TipsScreenState();
 }
 
 class _TipsScreenState extends State<TipsScreen> {
+  String userId;
+  String category;
+  String subcat;
+  final formKey = GlobalKey<FormState>();   // Form key to perform validation / saving
+  //final Entry entry = Entry();
+
   @override
+  void initState() {
+    super.initState();
+    getUser();
+  }
   Widget build(BuildContext context) {
     return CapstoneScaffold(
-      title: 'Tips Screen',
+      title: widget.destination.country + ' - Tips',
       child: 
 
       StreamBuilder(
-        stream: Firestore.instance.collection('tips').snapshots(),
+        stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').snapshots(),
         builder: (content, snapshot) {
           if (snapshot.data == null) {
             return Center(child: CircularProgressIndicator(),);
           } else {
             return new ListView.builder(
-              itemCount: snapshot.data.documents.length,   // 3
+              itemCount: snapshot.data.documents.length,
               itemBuilder: (context, index) {
+                final docID = snapshot.data.documents[index].documentID;
                 var tipsObject = snapshot.data.documents[index];
-                final tipsCategoryName = tipsObject['name'];
+                final tipsCategoryName = tipsObject['category'];
                 final tipsSubcatNames = tipsObject['subcat'];
 
-                // print(tipsSubcatNames);
-                // print(tipsSubcatNames[0]);
-                // print(tipsSubcatNames[1]);
-                // var entryTest = Entry(tipsSubcatNames[0]);
-                // print(entryTest.title);
-
                 List<Entry> tipsSubcats = List<Entry>();
-                // tipsSubcats.add(entryTest);
-
-                // print(tipsSubcats);
 
                 var i = 0;
                 while (i < tipsSubcatNames.length) {
@@ -53,30 +59,7 @@ class _TipsScreenState extends State<TipsScreen> {
 
                 return Column(
                   children: <Widget>[
-
-                    // Build out an entry
-                    //    string
-                    //    List<Entry>
-
-                      //Placeholder(),
-                      EntryItem(tipsCategory),
-
-
-
-                      // Ink(
-                      //   color: Colors.green,
-                      //   child: ListTile(
-                      //     title: Padding(
-                      //       padding: const EdgeInsets.only(left: 10),
-                      //       child: Text('Tips - ' + tipsCategory,),
-                      //     ),
-                      //     onTap: () {
-                      //       //toPassportIDDetails(context, passportIDName, passportImageURL);
-                      //     },
-                      //   ),
-                      // ),
-
-
+                      _buildTiles(tipsCategory, docID),
                   ],
                 );
               },
@@ -84,12 +67,6 @@ class _TipsScreenState extends State<TipsScreen> {
           } 
         },
       ),
-      
-      // ListView.builder(
-      //     itemBuilder: (BuildContext context, int index) =>
-      //         EntryItem(data[index]),
-      //     itemCount: data.length,
-      //   ),
 
       fab: fab(),
     );
@@ -109,29 +86,141 @@ class _TipsScreenState extends State<TipsScreen> {
 
   // ========================================= Functions ==========================================
 
-  // user defined function
   void confirmDialog() {
-    // flutter defined function
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        // return object of type Dialog
         return AlertDialog(
-          //title: new Text("Enter a category:"),
-          content: TextFormField(
-          decoration: InputDecoration(
-            labelText: 'Enter a category:',
+          content: Theme(
+            data: ThemeData(
+                primaryColor: Colors.blue
+              ),
+            child: Form(
+              key: formKey,
+              child: TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Enter a category:',
+                ),
+                onSaved: (value) {
+                  category = value;
+                },
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter a category';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+            ),
           ),
-          onSaved: (value) {
-            //transit.confirmNum = value;
-          },
-        ),
-          //new Text("Please confirm."),
           actions: <Widget>[
-            // usually buttons at the bottom of the dialog
             new FlatButton(
               child: new Text("Confirm"),
               onPressed: () {
+                if (formKey.currentState.validate()) {
+                   formKey.currentState.save();
+
+                   Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').add( {
+                      'category': category,
+                      'subcat' : [],
+                   });
+
+                   Navigator.of(context).pop();
+                }
+
+                
+              },
+            ),
+            new FlatButton(
+              child: new Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void confirmDialog2(String docID) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          content: Theme(
+            data: ThemeData(
+                primaryColor: Colors.blue
+              ),
+            child: Form(
+              key: formKey,
+              child: TextFormField(
+                decoration: InputDecoration(
+                  labelText: 'Enter a tip:',
+                ),
+                onSaved: (value) {
+                  subcat = value;
+                },
+                validator: (value) {
+                  if (value.isEmpty) {
+                    return 'Please enter a tip';
+                  } else {
+                    return null;
+                  }
+                },
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Confirm"),
+              onPressed: () {
+                if (formKey.currentState.validate()) {
+                   formKey.currentState.save();
+
+                  List<String> subcats = List<String>();
+                  subcats.add(subcat);
+
+
+                   Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
+                      'subcat' : FieldValue.arrayUnion(subcats),
+                   });
+
+                   Navigator.of(context).pop();
+                }
+
+                
+              },
+            ),
+            new FlatButton(
+              child: new Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void deleteEntry() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Delete entry?"),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Confirm"),
+              onPressed: () {
+                List<String> subcats = List<String>();
+
+
+                // Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
+                //   'subcat' : FieldValue.arrayRemove(subcats),
+                // });
                 Navigator.of(context).pop();
               },
             ),
@@ -147,83 +236,77 @@ class _TipsScreenState extends State<TipsScreen> {
     );
   }
 
+  getUser() async {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      userId = user.uid;
+      setState(() {});
+  }
+
   // ==================================================================================================
 
-} 
-
-// ==================================================================================================
-
-
-// One entry in the multilevel list displayed by this app.
-class Entry {
-  Entry(this.title, [this.children = const <Entry>[]]);
-
-  final String title;
-  final List<Entry> children;
-}
-
-
-// Displays one Entry. If the entry has children then it's displayed
-// with an ExpansionTile.
-class EntryItem extends StatelessWidget {
-  const EntryItem(this.entry);
-
-  final Entry entry;
-
-  Widget _buildTiles(Entry root) {
-    if (root.children.isEmpty) return ListTile(title: Text(root.title));
+  Widget _buildTiles(Entry root, String docID) {
+    if (root.children.isEmpty) {
+      return ListTile(
+        title: Text(root.title), 
+        trailing: GestureDetector(
+          onTap: () {
+            confirmDialog2(docID);
+          },
+          child: Icon(Icons.add)),
+      ); 
+    }
     return ExpansionTile(
       key: PageStorageKey<Entry>(root),
       title: Text(root.title),
-      children: root.children.map(_buildTiles).toList(),
+      children: 
+      // ListView.builder(
+      //   itemCount: 4,
+      //   itemBuilder: (content, index) {
+      //     return Column(
+      //       children: <Widget>[
+      //         ListTile(
+                
+      //         ),
+      //       ],
+      //     );
+      //   },
+      // ),
+      //root.children.map(_buildTilesChildren).toList(),
+      [_buildTilesChildren2(root),],
+      trailing: GestureDetector(
+        onTap: () {
+          confirmDialog2(docID);
+        },
+        child: Icon(Icons.add)
+      ),
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return _buildTiles(entry);
+  // Widget _buildTilesChildren(Entry root) {
+  //   return ListTile(title: Padding(
+  //     padding: const EdgeInsets.only(left: 20.0),
+  //     child: Text(root.title),
+  //   ),
+  //   onLongPress: () {
+  //     deleteEntry();
+  //   },
+  //   );
+  // }
+
+  Widget _buildTilesChildren2(Entry root,) {
+    return ListView.builder(
+      scrollDirection: Axis.vertical,
+      shrinkWrap: true,
+      key: PageStorageKey('myscrollable'),
+      itemCount: root.children.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Padding(
+            padding: const EdgeInsets.only(left: 20.0),
+            child: Text(root.children[index].title),
+          ),
+        );
+      },
+    );
   }
-}
-
-
-// The entire multilevel list displayed by this app.
-final List<Entry> data = <Entry>[
-  Entry(
-    'Chapter A',
-    <Entry>[
-      Entry(
-        'Section A0',
-        <Entry>[
-          Entry('Item A0.1'),
-          Entry('Item A0.2'),
-          Entry('Item A0.3'),
-        ],
-      ),
-      Entry('Section A1'),
-      Entry('Section A2'),
-    ],
-  ),
-  Entry(
-    'Chapter B',
-    <Entry>[
-      Entry('Section B0'),
-      Entry('Section B1'),
-    ],
-  ),
-  Entry(
-    'Chapter C',
-    <Entry>[
-      Entry('Section C0'),
-      Entry('Section C1'),
-      Entry(
-        'Section C2',
-        <Entry>[
-          Entry('Item C2.0'),
-          Entry('Item C2.1'),
-          Entry('Item C2.2'),
-          Entry('Item C2.3'),
-        ],
-      ),
-    ],
-  ),
-];
+} 

@@ -20,6 +20,7 @@ export 'models/passportID.dart';
 export 'models/accomodation.dart';
 export 'models/event.dart';
 export 'models/transit.dart';
+export 'models/entry_model.dart';
 
 export 'models/activity_model.dart';
 export 'models/destination_model.dart';

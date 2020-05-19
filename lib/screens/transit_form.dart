@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/tripready.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 class TransitForm extends StatefulWidget {
+
+  final Destination destination;
+
+  TransitForm({this.destination});
+
   @override
   _TransitFormState createState() => _TransitFormState();
 }
@@ -13,6 +19,7 @@ class _TransitFormState extends State<TransitForm> {
   
 final formKey = GlobalKey<FormState>();   // Form key to perform validation / saving
 final transit = Transit();                // Transit object to save form values
+String userId;
 
   final TextEditingController _controllerDepartDate = new TextEditingController();
   final TextEditingController _controllerDepartTime = new TextEditingController();
@@ -23,6 +30,7 @@ final transit = Transit();                // Transit object to save form values
   void initState() {
     super.initState();
     retrieveDateAndTime();
+    getUser();
   }
 
   @override
@@ -221,11 +229,17 @@ final transit = Transit();                // Transit object to save form values
 
   void toWalletScreen(BuildContext context) {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => WalletScreen()));
+          MaterialPageRoute(builder: (context) => WalletScreen(destination: widget.destination)));
   }
 
   void retrieveDateAndTime() async {
     transit.timestamp = DateTime.now();
+  }
+
+  getUser() async {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      userId = user.uid;
+      setState(() {});
   }
 
   // ==================================== Widget functions ====================================
@@ -421,7 +435,7 @@ final transit = Transit();                // Transit object to save form values
         if (formKey.currentState.validate()) {
             formKey.currentState.save();
 
-            Firestore.instance.collection('transit').add( {
+            Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('transit').add( {
                'timestamp': transit.timestamp,
                'name': transit.name,
                'startLocation': transit.startLocation,
