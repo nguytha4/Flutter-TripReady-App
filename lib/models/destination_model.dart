@@ -1,15 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Destination {
+class DestinationModel {
   String documentID;
   String imageUrl;
   String city;
   String country;
   String description;
   
-  Destination({this.imageUrl, this.city, this.country, this.description, this.documentID});
+  DestinationModel({this.imageUrl, this.city, this.country, this.description, this.documentID});
 
-  Destination.fromSnapshot(DocumentSnapshot snapshot) {
+  DestinationModel.fromSnapshot(DocumentSnapshot snapshot) {
     documentID = snapshot.documentID;
     imageUrl = snapshot['imageUrl'];
     city = snapshot['city'];
@@ -19,7 +19,6 @@ class Destination {
 
   Map<String, dynamic> toMap() {
     return {
-      'documentID' : documentID,
       'imageUrl': imageUrl,
       'city': city,
       'country': country,

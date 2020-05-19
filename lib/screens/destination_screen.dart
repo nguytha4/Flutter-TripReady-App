@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'wallet_screen.dart';
 
 class DestinationScreen extends StatefulWidget {
-  final Destination destination;
+  final DestinationModel destination;
 
   DestinationScreen({this.destination});
 
@@ -50,9 +50,9 @@ class _DestinationScreenState extends State<DestinationScreen> {
       padding: const EdgeInsets.all(10.0),
       children: [
         buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Sites / Food', Colors.green),
-        buildButton((_) => TipsScreen(destination:widget.destination), 'Tips', Colors.orange),
-        buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Items Checklist', Colors.red),
-        buildButton((_) => WalletScreen(destination:widget.destination,), 'Wallet', Colors.purple),
+        buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Tips', Colors.orange),
+        buildButton((_) => ChecklistScreen(destination: widget.destination), 'Items Checklist', Colors.red),
+        buildButton((_) => WalletScreen(), 'Wallet', Colors.purple),
       ],
     ),
         ),

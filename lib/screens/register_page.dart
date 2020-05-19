@@ -6,6 +6,7 @@ import 'package:capstone/widgets/logo.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:capstone/tripready.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -28,12 +29,10 @@ class RegisterPageState extends State<RegisterPage> {
   String _userEmail;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        centerTitle: true,
-      ),
-      body: Form(
+    return CapstoneScaffold(
+      title: widget.title,
+      hideDrawer: true,
+      child: Form(
         key: _formKey,
         child: SingleChildScrollView(
           child:Column(
@@ -239,9 +238,22 @@ class RegisterPageState extends State<RegisterPage> {
       print(err.toString());
     } finally {
       if (user != null) {
+        user = (await _auth.signInWithEmailAndPassword(
+          email: _emailController.text.trim(),
+          password: _passwordController.text.trim(),
+        )).user;
+        Firestore.instance.collection('users').document(user.uid).setData({
+                      'email': _emailController.text.trim(),
+                      'password': _passwordController.text.trim(), 
+                      'date': DateTime.now(),
+                      'uid': user.uid
+                    });
         setState(() {
-          _success = true;
-          _userEmail = user.email;
+          Navigator.of(context).pop();
+          Navigator.of(context).popAndPushNamed(MainLandingScreen.routeName);
+          // _success = true;
+          // _userEmail = user.email;
+
         });
       } else {
         _success = false;
