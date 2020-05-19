@@ -20,10 +20,12 @@ export 'screens/transit_form.dart';
 export 'screens/event_form.dart';
 export 'screens/accomodation_form.dart';
 export 'screens/transit_details.dart';
+export 'screens/tips_screen.dart';
 export 'models/passportID.dart';
 export 'models/accomodation.dart';
 export 'models/event.dart';
 export 'models/transit.dart';
+export 'models/entry_model.dart';
 
 export 'models/activity_model.dart';
 export 'models/destination_model.dart';

@@ -6,19 +6,20 @@ class CapstoneScaffold extends StatelessWidget {
 
   final String title;
   final Widget child;
+  final Widget appbarChild;
   final Widget fab;
   final bool hideAppBar;
   final bool hideDrawer;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  CapstoneScaffold({Key key, this.title, this.child, this.fab, this.hideAppBar = false, this.hideDrawer = false}) : super(key: key);
+  CapstoneScaffold({Key key, this.title, this.child, this.appbarChild, this.fab, this.hideAppBar = false, this.hideDrawer = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (hideDrawer != true) {
     return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(appbarChild),
       body: child,
       floatingActionButton: Padding(
         padding: EdgeInsets.all(20), 
@@ -53,7 +54,7 @@ class CapstoneScaffold extends StatelessWidget {
     );
     } else {
       return Scaffold(
-      appBar: buildAppBar(),
+      appBar: buildAppBar(appbarChild),
       body: child,
       floatingActionButton: Padding(
         padding: EdgeInsets.all(20), 
@@ -63,7 +64,7 @@ class CapstoneScaffold extends StatelessWidget {
     }
   }
 
-  Widget buildAppBar()
+  Widget buildAppBar(Widget appbarChild)
   {
     if (hideAppBar)
       return null;
@@ -84,7 +85,7 @@ class CapstoneScaffold extends StatelessWidget {
                 );
               }),
           ],
-          
+          bottom: appbarChild,
           centerTitle: true,
       );
   }

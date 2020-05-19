@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:capstone/tripready.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:intl/intl.dart';
 
 
 class EventForm extends StatefulWidget {
+
+  final DestinationModel destination;
+
+  EventForm({this.destination});
+
   @override
   _EventFormState createState() => _EventFormState();
 }
@@ -13,6 +19,7 @@ class _EventFormState extends State<EventForm> {
   
   final formKey = GlobalKey<FormState>();   // Form key to perform validation / saving
   final event = Event();                    // Event object to save form values
+  String userId;
 
   final TextEditingController _controllerCheckIn = new TextEditingController();
   final TextEditingController _controllerTimeIn = new TextEditingController();
@@ -21,6 +28,7 @@ class _EventFormState extends State<EventForm> {
   void initState() {
     super.initState();
     retrieveDateAndTime();
+    getUser();
   }
 
   @override
@@ -141,11 +149,17 @@ class _EventFormState extends State<EventForm> {
 
   void toWalletScreen(BuildContext context) {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => WalletScreen()));
+          MaterialPageRoute(builder: (context) => WalletScreen(destination: widget.destination,)));
   }
 
   void retrieveDateAndTime() async {
     event.timestamp = DateTime.now();
+  }
+
+  getUser() async {
+      FirebaseUser user = await FirebaseAuth.instance.currentUser();
+      userId = user.uid;
+      setState(() {});
   }
 
   // ==================================== Widget functions ====================================
@@ -312,7 +326,7 @@ class _EventFormState extends State<EventForm> {
         if (formKey.currentState.validate()) {
             formKey.currentState.save();
 
-            Firestore.instance.collection('event').add( {
+            Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('event').add( {
                'timestamp': event.timestamp,
                'name': event.name,
                'phoneNum': event.phoneNum,
