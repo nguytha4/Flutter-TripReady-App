@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TipsScreen extends StatefulWidget {
   static const routeName = 'tips_screen';
-  final Destination destination;
+  final DestinationModel destination;
 
   TipsScreen({this.destination});
   @override

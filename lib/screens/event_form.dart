@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 
 class EventForm extends StatefulWidget {
 
-  final Destination destination;
+  final DestinationModel destination;
 
   EventForm({this.destination});
 

@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 class AccomodationForm extends StatefulWidget {
 
-  final Destination destination;
+  final DestinationModel destination;
 
   AccomodationForm({this.destination});
 

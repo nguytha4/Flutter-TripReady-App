@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class WalletScreen extends StatefulWidget {
   static const routeName = 'wallet_screen';
-  final Destination destination;
+  final DestinationModel destination;
 
   WalletScreen({this.destination});
 

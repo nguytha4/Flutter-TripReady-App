@@ -17,7 +17,8 @@ class App extends StatelessWidget {
     RegisterPage.routeName: (context) => RegisterPage(),
     MainScreen.routeName: (context) => MainScreen(),
     WalletScreen.routeName: (context) => WalletScreen(),
-    ChecklistScreen.routeName: (context) => ChecklistScreen()
+    ChecklistScreen.routeName: (context) => ChecklistScreen(),
+    TipsScreen.routeName: (context) => TipsScreen(),
   };
 
   @override

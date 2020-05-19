@@ -8,7 +8,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PassportIDForm extends StatefulWidget {
-  final Destination destination;
+  final DestinationModel destination;
 
   PassportIDForm({this.destination});
 

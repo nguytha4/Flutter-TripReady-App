@@ -6,7 +6,7 @@ import 'package:intl/intl.dart';
 
 class TransitForm extends StatefulWidget {
 
-  final Destination destination;
+  final DestinationModel destination;
 
   TransitForm({this.destination});
 
