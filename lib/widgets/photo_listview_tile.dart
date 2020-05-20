@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:capstone/tripready.dart';
 
 class PhotoListViewTile extends StatelessWidget {
   const PhotoListViewTile(
@@ -55,7 +56,7 @@ class PhotoListViewTile extends StatelessWidget {
                         child: Image(
                           height: 180.0,
                           width: MediaQuery.of(context).size.width,
-                          image: AssetImage(imageUrl),
+                          image: ImageService.buildAssetImage(imageUrl),
                           fit: BoxFit.cover,
                         )),
                     PhotoListViewTileTitle(

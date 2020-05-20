@@ -2,6 +2,7 @@ export 'app.dart';
 
 export 'services/authentication_service.dart';
 export 'services/data_service.dart';
+export 'services/image_service.dart';
 
 export 'widgets/capstone_scaffold.dart';
 

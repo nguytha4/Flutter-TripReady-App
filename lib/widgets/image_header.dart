@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:capstone/tripready.dart';
 
 class ImageHeader extends StatelessWidget {
   const ImageHeader({
@@ -31,7 +32,7 @@ class ImageHeader extends StatelessWidget {
             child: Hero(
               tag: imageUrl,
               child: Image(
-                image: AssetImage(imageUrl),
+                image: ImageService.buildAssetImage(imageUrl),
                 fit: BoxFit.cover,
               ),
             ),
