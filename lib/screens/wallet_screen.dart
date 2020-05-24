@@ -36,7 +36,8 @@ class _WalletScreenState extends State<WalletScreen> {
                     Tab(icon: Icon(Icons.confirmation_number)),
                   ],
                 ),
-            child: 
+          backButtonFunction: () => toDestinationScreen(context),
+          child: 
             TabBarView(
               children: <Widget>[
                 
@@ -254,6 +255,11 @@ class _WalletScreenState extends State<WalletScreen> {
   void toTransitForm(BuildContext context) {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => TransitForm(destination: widget.destination)));
+  }
+
+  void toDestinationScreen(BuildContext context) {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => DestinationScreen(destination: widget.destination)));
   }
   
   void _asyncSimpleDialog(BuildContext context) async {

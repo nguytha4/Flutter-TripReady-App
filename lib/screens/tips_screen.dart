@@ -26,7 +26,7 @@ class _TipsScreenState extends State<TipsScreen> {
   }
   Widget build(BuildContext context) {
     return CapstoneScaffold(
-      title: widget.destination.country + ' - Tips',
+      title: widget.destination.city + ' - Tips',
       child: 
 
       StreamBuilder(
@@ -62,6 +62,12 @@ class _TipsScreenState extends State<TipsScreen> {
                       _buildTiles(tipsCategory, docID),
                   ],
                 );
+
+
+
+
+
+
               },
             );
           } 
@@ -205,7 +211,7 @@ class _TipsScreenState extends State<TipsScreen> {
     );
   }
 
-  void deleteEntry() {
+  void deleteEntry(String docID, String tipName) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -214,13 +220,42 @@ class _TipsScreenState extends State<TipsScreen> {
           actions: <Widget>[
             new FlatButton(
               child: new Text("Confirm"),
-              onPressed: () {
+              onPressed: () {                
+                print(docID);
+                print(tipName);
                 List<String> subcats = List<String>();
+                subcats.add(tipName);
 
+                Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
+                  'subcat' : FieldValue.arrayRemove(subcats),
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 
-                // Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
-                //   'subcat' : FieldValue.arrayRemove(subcats),
-                // });
+  void deleteCategory(String docID) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Delete entry?"),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Confirm"),
+              onPressed: () {                
+
+                Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).delete();
                 Navigator.of(context).pop();
               },
             ),
@@ -255,31 +290,59 @@ class _TipsScreenState extends State<TipsScreen> {
           child: Icon(Icons.add)),
       ); 
     }
-    return ExpansionTile(
+    return Dismissible(
+      key: Key(UniqueKey().toString()),
+      onDismissed: (direction) {
+        setState(() {
+          deleteCategory(docID);
+        });
+      },
+      background: Container(color: Colors.red),
+      child: ExpansionTile(
       key: PageStorageKey<Entry>(root),
       title: Text(root.title),
-      children: 
-      // ListView.builder(
-      //   itemCount: 4,
-      //   itemBuilder: (content, index) {
-      //     return Column(
-      //       children: <Widget>[
-      //         ListTile(
-                
-      //         ),
-      //       ],
-      //     );
-      //   },
-      // ),
-      //root.children.map(_buildTilesChildren).toList(),
-      [_buildTilesChildren2(root),],
+      children: [_buildTilesChildren2(root, docID),],
       trailing: GestureDetector(
         onTap: () {
           confirmDialog2(docID);
         },
         child: Icon(Icons.add)
       ),
-    );
+    ),
+
+            
+        );
+    
+    
+    // ExpansionTile(
+    //   key: PageStorageKey<Entry>(root),
+    //   title: Text(root.title),
+    //   children: 
+    //   // ListView.builder(
+    //   //   itemCount: 4,
+    //   //   itemBuilder: (content, index) {
+    //   //     return Column(
+    //   //       children: <Widget>[
+    //   //         ListTile(
+                
+    //   //         ),
+    //   //       ],
+    //   //     );
+    //   //   },
+    //   // ),
+    //   //root.children.map(_buildTilesChildren).toList(),
+    //   [_buildTilesChildren2(root, docID),],
+    //   trailing: GestureDetector(
+    //     onTap: () {
+    //       confirmDialog2(docID);
+    //     },
+    //     child: Icon(Icons.add)
+    //   ),
+    // );
+
+
+
+
   }
 
   // Widget _buildTilesChildren(Entry root) {
@@ -293,18 +356,27 @@ class _TipsScreenState extends State<TipsScreen> {
   //   );
   // }
 
-  Widget _buildTilesChildren2(Entry root,) {
+  Widget _buildTilesChildren2(Entry root, String docID) {
     return ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       key: PageStorageKey('myscrollable'),
       itemCount: root.children.length,
       itemBuilder: (context, index) {
-        return ListTile(
-          title: Padding(
-            padding: const EdgeInsets.only(left: 20.0),
-            child: Text(root.children[index].title),
-          ),
+        return Dismissible(
+            key: Key(UniqueKey().toString()),
+            onDismissed: (direction) {
+              setState(() {
+                deleteEntry(docID, root.children[index].title);
+              });
+            },
+            background: Container(color: Colors.red),
+            child: ListTile(
+              title: Padding(
+                padding: const EdgeInsets.only(left: 20.0),
+                child: Text(root.children[index].title),
+              ),
+            ),
         );
       },
     );
