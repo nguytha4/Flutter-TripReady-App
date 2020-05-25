@@ -67,15 +67,8 @@ class _WalletScreenState extends State<WalletScreen> {
                                       padding: const EdgeInsets.only(left: 10),
                                       child: Text(passportIDName + '\'s passport / ID'),
                                     ),
-                                    trailing: GestureDetector(
-                                      onTap: () {
-                                        confirmDialog('passportID', snapshot, index);
-                                      },
-                                      child: Icon(Icons.more_vert)
-                                    ),
-                                    onTap: () {
-                                      toPassportIDDetails(context, passportIDName, passportImageURL);
-                                    },
+                                    onTap: () => toPassportIDDetails(context, passportIDName, passportImageURL),
+                                    onLongPress: () => deleteEntryDialog('passportID', snapshot, index),
                                   ),
                                 ),
                               Divider(),
@@ -116,17 +109,10 @@ class _WalletScreenState extends State<WalletScreen> {
                                     ),
                                     subtitle: Padding(
                                       padding: const EdgeInsets.only(left: 10),
-                                      child: Text(DateFormat('MMMM dd, hh:mm aa').format(transitDepartDateTime)),
+                                      child: Text('Departs at ' + DateFormat('MMMM dd, hh:mm aa').format(transitDepartDateTime)),
                                     ),
-                                    trailing: GestureDetector(
-                                      onTap: () {
-                                        confirmDialog('transit', snapshot, index);
-                                      },
-                                      child: Icon(Icons.more_vert)
-                                    ),
-                                    onTap: () {
-                                      toTransitDetails(context, transitName, transitStartLocation, transitDestination, transitConfirmNum, transitDepartDateTime, transitArriveDateTime);
-                                    },
+                                    onTap: () => toTransitDetails(context, transitName, transitStartLocation, transitDestination, transitConfirmNum, transitDepartDateTime, transitArriveDateTime),
+                                    onLongPress: () => deleteEntryDialog('transit', snapshot, index),
                                   ),
                                 ),
                               Divider(),
@@ -167,17 +153,10 @@ class _WalletScreenState extends State<WalletScreen> {
                                     ),
                                     subtitle: Padding(
                                       padding: const EdgeInsets.only(left: 10),
-                                      child: Text(DateFormat('MMMM dd, hh:mm aa').format(accomodationCheckInDateTime)),
+                                      child: Text('Check-in at ' + DateFormat('MMMM dd, hh:mm aa').format(accomodationCheckInDateTime)),
                                     ),
-                                    trailing: GestureDetector(
-                                      onTap: () {
-                                        confirmDialog('accomodation', snapshot, index);
-                                      },
-                                      child: Icon(Icons.more_vert)
-                                    ),
-                                    onTap: () {
-                                      toAccomodationDetails(context, accomodationName, accomodationPhoneNum, accomodationEmail, accomodationAddress, accomodationConfirmNum, accomodationCheckInDateTime, accomodationCheckOutDateTime);
-                                    },
+                                    onTap: () => toAccomodationDetails(context, accomodationName, accomodationPhoneNum, accomodationEmail, accomodationAddress, accomodationConfirmNum, accomodationCheckInDateTime, accomodationCheckOutDateTime),
+                                    onLongPress: () => deleteEntryDialog('accomodation', snapshot, index),
                                   ),
                                 ),
                               Divider(),
@@ -217,17 +196,10 @@ class _WalletScreenState extends State<WalletScreen> {
                                     ),
                                     subtitle: Padding(
                                       padding: const EdgeInsets.only(left: 10),
-                                      child: Text(DateFormat('MMMM dd, hh:mm aa').format(eventCheckInDateTime)),
+                                      child: Text('Starts at ' + DateFormat('MMMM dd, hh:mm aa').format(eventCheckInDateTime)),
                                     ),
-                                    trailing: GestureDetector(
-                                      onTap: () {
-                                        confirmDialog('event', snapshot, index);
-                                      },
-                                      child: Icon(Icons.more_vert)
-                                    ),
-                                    onTap: () {
-                                      toEventDetails(context, eventName, eventPhoneNum, eventEmail, eventAddress, eventConfirmNum, eventCheckInDateTime,);
-                                    },
+                                    onTap: () => toEventDetails(context, eventName, eventPhoneNum, eventEmail, eventAddress, eventConfirmNum, eventCheckInDateTime),
+                                    onLongPress: () => deleteEntryDialog('event', snapshot, index),
                                   ),
                                 ),
                               Divider(),
@@ -238,10 +210,6 @@ class _WalletScreenState extends State<WalletScreen> {
                     } 
                   },
                 ),
-                
-
-                
-
               ],
             ),
             fab: speedDialFab(),
@@ -345,7 +313,7 @@ class _WalletScreenState extends State<WalletScreen> {
     ));
   } 
 
-  void confirmDialog(String collection, AsyncSnapshot snapshot, int index) {
+  void deleteEntryDialog(String collection, AsyncSnapshot snapshot, int index) {
     showDialog(
       context: context,
       builder: (BuildContext context) {

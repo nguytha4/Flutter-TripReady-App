@@ -15,9 +15,8 @@ class TipsScreen extends StatefulWidget {
 class _TipsScreenState extends State<TipsScreen> {
   String userId;
   String category;
-  String subcat;
-  final formKey = GlobalKey<FormState>();   // Form key to perform validation / saving
-  //final Entry entry = Entry();
+  String tip;
+  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -41,58 +40,40 @@ class _TipsScreenState extends State<TipsScreen> {
                 final docID = snapshot.data.documents[index].documentID;
                 var tipsObject = snapshot.data.documents[index];
                 final tipsCategoryName = tipsObject['category'];
-                final tipsSubcatNames = tipsObject['subcat'];
+                final tipsNames = tipsObject['tips'];
 
-                List<Entry> tipsSubcats = List<Entry>();
+                List<Entry> tipsList = List<Entry>();
 
                 var i = 0;
-                while (i < tipsSubcatNames.length) {
-                  var tipsSubcatName = Entry(tipsSubcatNames[i]);
-                  tipsSubcats.add(tipsSubcatName);
+                while (i < tipsNames.length) {
+                  var tipName = Entry(tipsNames[i]);
+                  tipsList.add(tipName);
                   i++;
                 }
 
                 Entry tipsCategory = Entry(
                   tipsCategoryName,
-                  tipsSubcats,
+                  tipsList,
                 );
 
                 return Column(
                   children: <Widget>[
-                      _buildTiles(tipsCategory, docID),
+                      _buildCategoryTiles(tipsCategory, docID),
                   ],
                 );
-
-
-
-
-
-
               },
             );
           } 
         },
       ),
-
       fab: fab(),
-    );
-  }
-
-  // ====================================== Widget Functions ======================================
-
-  Widget fab() {
-    return FloatingActionButton(
-      child: Icon(Icons.add),
-      backgroundColor: Colors.blue,
-      onPressed: () {
-        confirmDialog();
-      } 
     );
   }
 
   // ========================================= Functions ==========================================
 
-  void confirmDialog() {
+  // Dialog that appears when user adds a category
+  void addCategoryDialog() {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -129,13 +110,10 @@ class _TipsScreenState extends State<TipsScreen> {
 
                    Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').add( {
                       'category': category,
-                      'subcat' : [],
+                      'tips' : [],
                    });
-
                    Navigator.of(context).pop();
                 }
-
-                
               },
             ),
             new FlatButton(
@@ -150,7 +128,8 @@ class _TipsScreenState extends State<TipsScreen> {
     );
   }
 
-  void confirmDialog2(String docID) {
+  // Dialog that appears when user adds a tip under a category
+  void addTipDialog(String docID) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -166,7 +145,7 @@ class _TipsScreenState extends State<TipsScreen> {
                   labelText: 'Enter a tip:',
                 ),
                 onSaved: (value) {
-                  subcat = value;
+                  tip = value;
                 },
                 validator: (value) {
                   if (value.isEmpty) {
@@ -185,18 +164,15 @@ class _TipsScreenState extends State<TipsScreen> {
                 if (formKey.currentState.validate()) {
                    formKey.currentState.save();
 
-                  List<String> subcats = List<String>();
-                  subcats.add(subcat);
-
+                  List<String> tipsList = List<String>();
+                  tipsList.add(tip);
 
                    Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
-                      'subcat' : FieldValue.arrayUnion(subcats),
+                      'tips' : FieldValue.arrayUnion(tipsList),
                    });
 
                    Navigator.of(context).pop();
-                }
-
-                
+                }                
               },
             ),
             new FlatButton(
@@ -211,39 +187,7 @@ class _TipsScreenState extends State<TipsScreen> {
     );
   }
 
-  void deleteEntry(String docID, String tipName) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text("Delete entry?"),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("Confirm"),
-              onPressed: () {                
-                print(docID);
-                print(tipName);
-                List<String> subcats = List<String>();
-                subcats.add(tipName);
-
-                Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
-                  'subcat' : FieldValue.arrayRemove(subcats),
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-            new FlatButton(
-              child: new Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
+  // Dialog that appears when user tries to delete a category
   void deleteCategory(String docID) {
     showDialog(
       context: context,
@@ -271,114 +215,131 @@ class _TipsScreenState extends State<TipsScreen> {
     );
   }
 
+  // Dialog that appears when user tries to delete a tip
+  void deleteTip(String docID, String tipName) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Delete entry?"),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Confirm"),
+              onPressed: () {      
+
+                List<String> tipsList = List<String>();
+                tipsList.add(tipName);
+
+                Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
+                  'tips' : FieldValue.arrayRemove(tipsList),
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   getUser() async {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       userId = user.uid;
       setState(() {});
   }
 
-  // ==================================================================================================
+  // ==================================== Widget functions ====================================
 
-  Widget _buildTiles(Entry root, String docID) {
+  // Build tiles that represent categories
+  Widget _buildCategoryTiles(Entry root, String docID) {
     if (root.children.isEmpty) {
       return ListTile(
         title: Text(root.title), 
         trailing: GestureDetector(
-          onTap: () {
-            confirmDialog2(docID);
-          },
-          child: Icon(Icons.add)),
+          onTap: () => addTipDialog(docID),
+          child: Icon(Icons.add),
+        ),
+        onLongPress: () => deleteCategory(docID),
       ); 
-    }
-    return Dismissible(
-      key: Key(UniqueKey().toString()),
-      onDismissed: (direction) {
-        setState(() {
-          deleteCategory(docID);
-        });
-      },
-      background: Container(color: Colors.red),
-      child: ExpansionTile(
-      key: PageStorageKey<Entry>(root),
-      title: Text(root.title),
-      children: [_buildTilesChildren2(root, docID),],
-      trailing: GestureDetector(
-        onTap: () {
-          confirmDialog2(docID);
-        },
-        child: Icon(Icons.add)
-      ),
-    ),
-
-            
-        );
+    } return GestureDetector(
+        onLongPress: () => deleteCategory(docID),
+        child: ExpansionTile(
+        key: PageStorageKey<Entry>(root),
+        title: Text(root.title),
+        children: [_buildTipsTiles(root, docID),],
+        trailing: GestureDetector(
+            onTap: () => addTipDialog(docID),
+            child: Icon(Icons.add)
+          ),
+        ),
+    );
     
-    
-    // ExpansionTile(
+    // Dismissible(
+    //   key: Key(UniqueKey().toString()),
+    //   onDismissed: (direction) {
+    //     setState( () => deleteCategory(docID));
+    //   },
+    //   background: Container(color: Colors.red),
+    //   child: ExpansionTile(
     //   key: PageStorageKey<Entry>(root),
     //   title: Text(root.title),
-    //   children: 
-    //   // ListView.builder(
-    //   //   itemCount: 4,
-    //   //   itemBuilder: (content, index) {
-    //   //     return Column(
-    //   //       children: <Widget>[
-    //   //         ListTile(
-                
-    //   //         ),
-    //   //       ],
-    //   //     );
-    //   //   },
-    //   // ),
-    //   //root.children.map(_buildTilesChildren).toList(),
-    //   [_buildTilesChildren2(root, docID),],
+    //   children: [_buildTipsTiles(root, docID),],
     //   trailing: GestureDetector(
-    //     onTap: () {
-    //       confirmDialog2(docID);
-    //     },
-    //     child: Icon(Icons.add)
+    //       onTap: () {
+    //         addTipDialog(docID);
+    //       },
+    //       child: Icon(Icons.add)
+    //     ),
     //   ),
     // );
-
-
-
-
   }
 
-  // Widget _buildTilesChildren(Entry root) {
-  //   return ListTile(title: Padding(
-  //     padding: const EdgeInsets.only(left: 20.0),
-  //     child: Text(root.title),
-  //   ),
-  //   onLongPress: () {
-  //     deleteEntry();
-  //   },
-  //   );
-  // }
-
-  Widget _buildTilesChildren2(Entry root, String docID) {
+  // Build the tiles that represent the tips in each category
+  Widget _buildTipsTiles(Entry root, String docID) {
     return ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
       key: PageStorageKey('myscrollable'),
       itemCount: root.children.length,
       itemBuilder: (context, index) {
-        return Dismissible(
-            key: Key(UniqueKey().toString()),
-            onDismissed: (direction) {
-              setState(() {
-                deleteEntry(docID, root.children[index].title);
-              });
-            },
-            background: Container(color: Colors.red),
-            child: ListTile(
+        return ListTile(
               title: Padding(
                 padding: const EdgeInsets.only(left: 20.0),
                 child: Text(root.children[index].title),
               ),
-            ),
-        );
+              onLongPress: () => deleteTip(docID, root.children[index].title),
+            );
+        
+        // Dismissible(
+        //     key: Key(UniqueKey().toString()),
+        //     onDismissed: (direction) {
+        //       setState( () => deleteTip(docID, root.children[index].title));
+        //     },
+        //     background: Container(color: Colors.red),
+        //     child: ListTile(
+        //       title: Padding(
+        //         padding: const EdgeInsets.only(left: 20.0),
+        //         child: Text(root.children[index].title),
+        //       ),
+        //     ),
+        // );
+
       },
     );
   }
+
+    Widget fab() {
+    return FloatingActionButton(
+      child: Icon(Icons.add),
+      backgroundColor: Colors.blue,
+      onPressed: () => addCategoryDialog()
+    );
+  }
+
 } 
