@@ -16,16 +16,20 @@ class _AccomodationDetailsState extends State<AccomodationDetails> {
 
     return CapstoneScaffold(
       title: 'Accomodation Details',
-      child: Column(
-        children: <Widget>[
-          accomodationLine("Name", accomodation.name, Colors.purple, Icons.home),
-          accomodationLine("Phone Number", accomodation.phoneNum, Colors.green, Icons.phone),
-          accomodationLine("Email", accomodation.email, Colors.blue, Icons.email),
-          accomodationLine("Address", accomodation.address, Colors.red, Icons.location_on),
-          accomodationLine("Confirmation Number", accomodation.confirmNum, Colors.brown, Icons.confirmation_number),
-          accomodationLine("Check-in Date", DateFormat('MM-dd-yyyy').format(accomodation.checkInDateTime), Colors.blue, Icons.calendar_today),
-          accomodationLine("Check-out Date", DateFormat('MM-dd-yyyy').format(accomodation.checkOutDateTime), Colors.red, Icons.calendar_today),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
+            accomodationLine("Name", accomodation.name, Colors.purple, Icons.home),
+            accomodationLine("Phone Number", accomodation.phoneNum, Colors.green, Icons.phone),
+            accomodationLine("Email", accomodation.email, Colors.blue, Icons.email),
+            accomodationLine("Address", accomodation.address, Colors.red, Icons.location_on),
+            accomodationLine("Confirmation Number", accomodation.confirmNum, Colors.brown, Icons.confirmation_number),
+            accomodationLine("Check-in Date", DateFormat('MM-dd-yyyy').format(accomodation.checkInDateTime), Colors.blue, Icons.calendar_today),
+            accomodationLine("Check-in Time", DateFormat('hh:mm aa').format(accomodation.checkInDateTime), Colors.red, Icons.access_time),
+            accomodationLine("Check-out Date", DateFormat('MM-dd-yyyy').format(accomodation.checkOutDateTime), Colors.blue, Icons.calendar_today),
+            accomodationLine("Check-out Time", DateFormat('hh:mm aa').format(accomodation.checkOutDateTime), Colors.red, Icons.access_time),
+          ],
+        ),
       ),
     );
   }

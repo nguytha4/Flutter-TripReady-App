@@ -11,10 +11,11 @@ class CapstoneScaffold extends StatelessWidget {
   final bool hideAppBar;
   final bool hideDrawer;
   final Function backButtonFunction;
+  final bool specialBackButton;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  CapstoneScaffold({Key key, this.title, this.child, this.appbarChild, this.fab, this.hideAppBar = false, this.hideDrawer = false, this.backButtonFunction}) : super(key: key);
+  CapstoneScaffold({Key key, this.title, this.child, this.appbarChild, this.fab, this.hideAppBar = false, this.hideDrawer = false, this.backButtonFunction, this.specialBackButton = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -76,14 +77,27 @@ class CapstoneScaffold extends StatelessWidget {
           centerTitle: true,
       );
 
-    return AppBar(
+    if (specialBackButton) 
+      return AppBar(
           title: Text(title),
           leading: IconButton(
             icon: Icon(Icons.arrow_back),
-            onPressed: () {
-              backButtonFunction();
-            },
+            onPressed: () => backButtonFunction()
           ),
+          actions: [
+              Builder(builder: (context) {
+                return IconButton (
+                icon: Icon(Icons.dehaze),
+                onPressed: () => Scaffold.of(context).openEndDrawer()
+                );
+              }),
+          ],
+          bottom: appbarChild,
+          centerTitle: true,
+      );
+
+    return AppBar(
+          title: Text(title),
           actions: [
               Builder(builder: (context) {
                 return IconButton (

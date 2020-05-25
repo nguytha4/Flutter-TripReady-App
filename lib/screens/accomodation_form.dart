@@ -19,8 +19,11 @@ class _AccomodationFormState extends State<AccomodationForm> {
   final formKey = GlobalKey<FormState>();   // Form key to perform validation / saving
   final accomodation = Accomodation();      // Accomodation object to save form values
 
-  final TextEditingController _controllerCheckIn = new TextEditingController();
-  final TextEditingController _controllerCheckOut = new TextEditingController();
+  final TextEditingController _controllerCheckInDate = new TextEditingController();
+  final TextEditingController _controllerCheckOutDate = new TextEditingController();
+  final TextEditingController _controllerCheckInTime = new TextEditingController();
+  final TextEditingController _controllerCheckOutTime = new TextEditingController();
+
   String userId;
 
   @override
@@ -47,7 +50,9 @@ class _AccomodationFormState extends State<AccomodationForm> {
                   addressFormField(),
                   confirmNumFormField(),
                   checkInDateFormField(accomodation),
+                  checkInTimeFormField(accomodation),
                   checkOutDateFormField(accomodation),
+                  checkOutTimeFormField(accomodation),
                   saveButton(),
                 ],
               ),
@@ -75,10 +80,21 @@ class _AccomodationFormState extends State<AccomodationForm> {
 
     if (result == null) return;
 
+    var checkInTime = TimeOfDay.fromDateTime(result);
+
+    if (accomodation.checkInDateTime != null)
+    {
+      checkInTime = TimeOfDay.fromDateTime(accomodation.checkInDateTime);
+    }
+
+    accomodation.checkInDateTime = new DateTime(result.year, result.month, result.day, checkInTime.hour, checkInTime.minute);
+
     setState(() {
-      _controllerCheckIn.text = new DateFormat.yMd().format(result);
+      _controllerCheckInDate.text = new DateFormat.yMd().format(result);
     });
   }
+
+  // ========================================================================================================
 
   Future _chooseDateOut(BuildContext context, String initialDateString, Accomodation accomodation) async {
     var now = new DateTime.now();
@@ -93,10 +109,99 @@ class _AccomodationFormState extends State<AccomodationForm> {
 
     if (result == null) return;
 
+    var checkOutTime = TimeOfDay.fromDateTime(result);
+
+    if (accomodation.checkOutDateTime != null)
+    {
+      checkOutTime = TimeOfDay.fromDateTime(accomodation.checkOutDateTime);
+    }
+
+    accomodation.checkOutDateTime = new DateTime(result.year, result.month, result.day, checkOutTime.hour, checkOutTime.minute);
+
     setState(() {
-      _controllerCheckOut.text = new DateFormat.yMd().format(result);
+      _controllerCheckOutDate.text = new DateFormat.yMd().format(result);
     });
   }
+
+  // ========================================================================================================
+
+  Future _chooseTimeIn(BuildContext context, String initialTimeString, Accomodation accomodation) async { 
+
+    var hour = 00;
+    var minute = 00;
+
+    if (initialTimeString != "") {
+
+      var time = initialTimeString.split(" ")[0];
+      var ampm = initialTimeString.split(" ")[1];
+
+      hour = int.parse(time.split(":")[0]);
+      minute = int.parse(time.split(":")[1]);
+
+      if (ampm == "PM") {
+        hour += 12;
+      }
+    }
+
+    var result = await showTimePicker(
+      context: context, 
+      initialTime: TimeOfDay(hour: hour, minute: minute)
+    );
+
+    if (result == null) return;
+
+    if (accomodation.checkInDateTime == null) {
+      final now = DateTime.now();
+      accomodation.checkInDateTime = new DateTime(now.year, now.month, now.day, result.hour, result.minute);
+    }
+
+    accomodation.checkInDateTime = new DateTime(accomodation.checkInDateTime.year, accomodation.checkInDateTime.month, accomodation.checkInDateTime.day, result.hour, result.minute);
+
+    setState(() {
+      _controllerCheckInTime.text = formatTimeOfDay(result);
+    });
+  }
+
+  // ========================================================================================================
+
+  Future _chooseTimeOut(BuildContext context, String initialTimeString, Accomodation accomodation) async { 
+
+    var hour = 00;
+    var minute = 00;
+
+    if (initialTimeString != "") {
+
+      var time = initialTimeString.split(" ")[0];
+      var ampm = initialTimeString.split(" ")[1];
+
+      hour = int.parse(time.split(":")[0]);
+      minute = int.parse(time.split(":")[1]);
+
+      if (ampm == "PM") {
+        hour += 12;
+      }
+    }
+
+    var result = await showTimePicker(
+      context: context, 
+      initialTime: TimeOfDay(hour: hour, minute: minute)
+    );
+
+    if (result == null) return;
+
+    if (accomodation.checkOutDateTime == null) {
+      final now = DateTime.now();
+      accomodation.checkOutDateTime = new DateTime(now.year, now.month, now.day, result.hour, result.minute);
+    }
+
+    accomodation.checkOutDateTime = new DateTime(accomodation.checkOutDateTime.year, accomodation.checkOutDateTime.month, accomodation.checkOutDateTime.day, result.hour, result.minute);
+
+    setState(() {
+      _controllerCheckOutTime.text = formatTimeOfDay(result);
+    });
+  }
+
+  // ========================================================================================================
 
   DateTime convertToDate(String input) {
     try 
@@ -107,6 +212,16 @@ class _AccomodationFormState extends State<AccomodationForm> {
       return null;
     }    
   }
+
+  // ========================================================================================================
+
+  // https://alvinalexander.com/source-code/flutter-function-convert-timeofday-tostring-formatted/
+  String formatTimeOfDay(TimeOfDay tod) {
+    final now = new DateTime.now();
+    final dt = DateTime(now.year, now.month, now.day, tod.hour, tod.minute);
+    final format = DateFormat.jm(); 
+    return format.format(dt);
+}
 
   void toWalletScreen(BuildContext context) {
         Navigator.of(context).push(
@@ -196,7 +311,7 @@ class _AccomodationFormState extends State<AccomodationForm> {
 
   Widget addressFormField() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 28),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Theme(
         data: ThemeData(
           primaryColor: Colors.blue
@@ -216,7 +331,7 @@ class _AccomodationFormState extends State<AccomodationForm> {
 
   Widget confirmNumFormField() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 12),
+      padding: const EdgeInsets.only(bottom: 28),
       child: Theme(
         data: ThemeData(
           primaryColor: Colors.blue
@@ -242,18 +357,18 @@ class _AccomodationFormState extends State<AccomodationForm> {
           primaryColor: Colors.blue
         ),
         child: TextFormField(
-          controller: _controllerCheckIn,
+          controller: _controllerCheckInDate,
           decoration: InputDecoration(
             labelText: 'Enter Check-in Date', 
             border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
           ),
           onTap: () {
             FocusScope.of(context).requestFocus(new FocusNode());
-            _chooseDateIn(context, _controllerCheckIn.text, accomodation);
+            _chooseDateIn(context, _controllerCheckInDate.text, accomodation);
           },
-          onSaved: (value) {
-            accomodation.checkInDateTime = convertToDate(value);
-          },
+          // onSaved: (value) {
+          //   accomodation.checkInDateTime = convertToDate(value);
+          // },
           validator: (value) {
             if (value.isEmpty) {
               return 'Please enter a check-in date';
@@ -266,26 +381,47 @@ class _AccomodationFormState extends State<AccomodationForm> {
     );
   }
 
-  Widget checkOutDateFormField(Accomodation accomodation) {
+  Widget checkInTimeFormField(Accomodation accomodation) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 28),
+      padding: const EdgeInsets.only(bottom: 12),
       child: Theme(
         data: ThemeData(
           primaryColor: Colors.blue
         ),
         child: TextFormField(
-              controller: _controllerCheckOut,
+          controller: _controllerCheckInTime,
+          decoration: InputDecoration(
+            labelText: 'Enter Check-in Time', border: OutlineInputBorder(), icon: Icon(Icons.access_time)
+          ),
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+            _chooseTimeIn(context, _controllerCheckInTime.text, accomodation);
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget checkOutDateFormField(Accomodation accomodation) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
+        ),
+        child: TextFormField(
+              controller: _controllerCheckOutDate,
               decoration: InputDecoration(
                 labelText: 'Enter Check-out Date', 
                 border: OutlineInputBorder(), icon: Icon(Icons.calendar_today)
               ),
               onTap: () {
                 FocusScope.of(context).requestFocus(new FocusNode());
-                _chooseDateOut(context, _controllerCheckOut.text, accomodation);
+                _chooseDateOut(context, _controllerCheckOutDate.text, accomodation);
               },
-              onSaved: (value) {
-                accomodation.checkOutDateTime = convertToDate(value);
-              },
+              // onSaved: (value) {
+              //   accomodation.checkOutDateTime = convertToDate(value);
+              // },
               validator: (value) {
                 if (value.isEmpty) {
                   return 'Please enter a check-out date';
@@ -294,6 +430,27 @@ class _AccomodationFormState extends State<AccomodationForm> {
                 }
               },
             ),
+      ),
+    );
+  }
+
+  Widget checkOutTimeFormField(Accomodation accomodation) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 28),
+      child: Theme(
+        data: ThemeData(
+          primaryColor: Colors.blue
+        ),
+        child: TextFormField(
+          controller: _controllerCheckOutTime,
+          decoration: InputDecoration(
+            labelText: 'Enter Check-out Time', border: OutlineInputBorder(), icon: Icon(Icons.access_time)
+          ),
+          onTap: () {
+            FocusScope.of(context).requestFocus(new FocusNode());
+            _chooseTimeOut(context, _controllerCheckOutTime.text, accomodation);
+          },
+        ),
       ),
     );
   }
