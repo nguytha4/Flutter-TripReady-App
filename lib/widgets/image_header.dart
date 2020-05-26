@@ -34,6 +34,7 @@ class ImageHeader extends StatelessWidget {
               tag: UniqueKey(),
               child: Image(
                 image: ImageService.buildAssetImage(imageUrl),
+                width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
               ),
             ),
