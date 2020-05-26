@@ -84,7 +84,7 @@ class DestinationList extends StatelessWidget {
           title: "${destination.city}",
           subtitle: destination.country,
           imageUrl: destination.imageUrl,
-          route: MaterialPageRoute(
+          routeBuilder: () => MaterialPageRoute(
             builder: (_) => DestinationScreen(
               destination: destination,
             ),

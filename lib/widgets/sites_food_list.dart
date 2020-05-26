@@ -86,7 +86,7 @@ class SitesFoodList extends StatelessWidget {
                                     destination.documentID,
                                     activity.documentID);
                               },
-                              route: MaterialPageRoute(
+                              routeBuilder: () => MaterialPageRoute(
                                 builder: (_) => SitesFoodDetailScreen(
                                   destination: destination,
                                   activity: activity,
