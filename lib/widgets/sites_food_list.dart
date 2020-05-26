@@ -5,8 +5,9 @@ import 'package:capstone/tripready.dart';
 class SitesFoodList extends StatelessWidget {
   final DestinationModel destination;
   final String category;
+  final String searchText;
 
-  const SitesFoodList({Key key, this.destination, this.category})
+  const SitesFoodList({Key key, this.destination, this.category, this.searchText})
       : super(key: key);
 
   @override
@@ -66,6 +67,11 @@ class SitesFoodList extends StatelessWidget {
                             category == ActivityCategories.favorites &&
                                     isFavorite ||
                                 activity.category == category;
+
+                        // filter the results
+                        if (searchText != null && searchText.isNotEmpty) {
+                          showTile = showTile && activity.name.toLowerCase().contains(searchText.toLowerCase());
+                        }
 
                         return Visibility(
                           visible: showTile,
