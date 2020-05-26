@@ -57,7 +57,8 @@ class DestinationList extends StatelessWidget {
   Widget buildListView(
       AsyncSnapshot destinationsSnapshot, AsyncSnapshot plansSnapshot) {
     if (!destinationsSnapshot.hasData ||
-        destinationsSnapshot.data.documents.length <= 0) {
+        destinationsSnapshot.data.documents.length <= 0 ||
+        !plansSnapshot.hasData) {
       return Center(
           child: Column(children: [
         Padding(
