@@ -99,6 +99,7 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
                                 planModel.destinationID = destinations.first.documentID;
                               }
 
+                              // select today's date by default
                               if (planModel.travelDate == null) {
                                 planModel.travelDate = _dateTime;
                               }
