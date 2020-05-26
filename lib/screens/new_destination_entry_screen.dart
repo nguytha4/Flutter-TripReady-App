@@ -32,7 +32,7 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
       title: 'New Destination Entry',
       child: StreamBuilder(
           stream: Firestore.instance
-              .collection('destination')
+              .collection('destinations')
               .orderBy('country')
               .snapshots(),
           builder: (context, snapshot) {
