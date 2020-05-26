@@ -42,7 +42,7 @@ class DestinationList extends StatelessWidget {
               return Container(
                 child: StreamBuilder(
                     stream: Firestore.instance
-                        .collection('destination')
+                        .collection('destinations')
                         .orderBy('country')
                         .snapshots(),
                     builder: (context, destinationsSnapshot) {
