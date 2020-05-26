@@ -21,9 +21,18 @@ class SitesFoodScreen extends StatefulWidget {
 class _SitesFoodScreenState extends State<SitesFoodScreen> {
   List<bool> isSelected;
 
+  TextEditingController controller = TextEditingController();
+  String searchText;
+
   @override
   void initState() {
     isSelected = [true, false, false];
+    controller.addListener(() { 
+      setState(() {
+        searchText = controller.text;
+      });
+    });
+
     super.initState();
   }
 
@@ -73,13 +82,15 @@ class _SitesFoodScreenState extends State<SitesFoodScreen> {
           Padding(
             padding: const EdgeInsets.all(20.0),
             child: TextField(
-                decoration: new InputDecoration(labelText: "Search something")),
+              controller: controller,
+              decoration: new InputDecoration(labelText: "Search something")),
           ),
           SizedBox(height: 10.0),
           Expanded(
               child: SitesFoodList(
-            destination: this.widget.destination,
-            category: determineCategory(),
+                destination: this.widget.destination,
+                category: determineCategory(),
+                searchText: searchText,
           )),
         ],
       ),

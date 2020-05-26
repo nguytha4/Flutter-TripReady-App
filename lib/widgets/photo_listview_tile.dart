@@ -8,7 +8,7 @@ class PhotoListViewTile extends StatelessWidget {
       @required this.title,
       @required this.subtitle,
       @required this.imageUrl,
-      @required this.route,
+      @required this.routeBuilder,
       this.showFavoriteIcon = false,
       this.isFavorite = false,
       this.onFavorite})
@@ -17,7 +17,7 @@ class PhotoListViewTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final String imageUrl;
-  final Route route;
+  final Route Function() routeBuilder;
   final bool showFavoriteIcon;
   final bool isFavorite;
   final Function onFavorite;
@@ -27,7 +27,7 @@ class PhotoListViewTile extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
-        route,
+        routeBuilder(),
       ),
       child: Container(
         margin: EdgeInsets.all(10.0),
