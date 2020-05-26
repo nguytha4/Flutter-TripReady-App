@@ -93,6 +93,17 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
                             textColor: Colors.white,
                             padding: EdgeInsets.fromLTRB(100, 0, 100, 0),
                             onPressed: () async {
+                              
+                              // select the first entry by default
+                              if (planModel.destinationID == null) {
+                                planModel.destinationID = destinations.first.documentID;
+                              }
+
+                              // select today's date by default
+                              if (planModel.travelDate == null) {
+                                planModel.travelDate = _dateTime;
+                              }
+
                               await DataService.createPlan(planModel);
                               Navigator.pop(context);
                               Navigator.push(
