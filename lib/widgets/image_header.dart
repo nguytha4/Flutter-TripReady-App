@@ -30,7 +30,7 @@ class ImageHeader extends StatelessWidget {
               ],
             ),
             child: Hero(
-              tag: imageUrl,
+              tag: UniqueKey(),
               child: Image(
                 image: ImageService.buildAssetImage(imageUrl),
                 fit: BoxFit.cover,

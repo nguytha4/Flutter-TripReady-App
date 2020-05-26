@@ -52,7 +52,7 @@ class PhotoListViewTile extends StatelessWidget {
                 child: Stack(
                   children: [
                     Hero(
-                        tag: imageUrl,
+                        tag: UniqueKey(),
                         child: Image(
                           height: 180.0,
                           width: MediaQuery.of(context).size.width,
