@@ -106,14 +106,6 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
 
                               await DataService.createPlan(planModel);
                               Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => DestinationScreen(
-                                        destination: destinations.singleWhere(
-                                            (element) =>
-                                                element.documentID ==
-                                                planModel.destinationID))));
                             },
                   )
                 ],
