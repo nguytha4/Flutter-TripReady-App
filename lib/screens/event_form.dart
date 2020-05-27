@@ -336,7 +336,7 @@ class _EventFormState extends State<EventForm> {
                'startDateTime': event.startDateTime,
             });
 
-            toWalletScreen(context);
+            Navigator.pop(context);
          }
       },
    );

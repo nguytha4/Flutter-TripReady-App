@@ -445,7 +445,7 @@ String userId;
                'arriveDateTime': transit.arriveDateTime,
             });
 
-            toWalletScreen(context);
+            Navigator.pop(context);
          }
       },
    );

@@ -207,7 +207,7 @@ class _PassportIDFormState extends State<PassportIDForm> {
               'name': passportID.name,
             });
 
-            toWalletScreen(context);
+            Navigator.pop(context);
           }
         },
       ),

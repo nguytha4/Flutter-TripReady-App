@@ -38,8 +38,6 @@ class _WalletScreenState extends State<WalletScreen> {
                     Tab(icon: Icon(Icons.confirmation_number)),
                   ],
                 ),
-          backButtonFunction: () => toDestinationScreen(context),
-          specialBackButton: true,
           child: 
             TabBarView(
               children: <Widget>[
