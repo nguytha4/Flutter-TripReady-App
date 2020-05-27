@@ -475,7 +475,7 @@ class _AccomodationFormState extends State<AccomodationForm> {
                'checkOutDateTime': accomodation.checkOutDateTime,
             });
 
-            toWalletScreen(context);
+            Navigator.pop(context);
          }
       },
    );
