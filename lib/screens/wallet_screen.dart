@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:capstone/tripready.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
+import 'package:intl/intl.dart';
 
 class WalletScreen extends StatefulWidget {
   static const routeName = 'wallet_screen';
@@ -36,7 +38,9 @@ class _WalletScreenState extends State<WalletScreen> {
                     Tab(icon: Icon(Icons.confirmation_number)),
                   ],
                 ),
-            child: 
+          backButtonFunction: () => toDestinationScreen(context),
+          specialBackButton: true,
+          child: 
             TabBarView(
               children: <Widget>[
                 
@@ -61,17 +65,10 @@ class _WalletScreenState extends State<WalletScreen> {
                                   child: ListTile(
                                     title: Padding(
                                       padding: const EdgeInsets.only(left: 10),
-                                      child: Text('Passport / ID - ' + passportIDName,),
+                                      child: Text(passportIDName + '\'s passport / ID'),
                                     ),
-                                    trailing: GestureDetector(
-                                      onTap: () {
-                                        confirmDialog('passportID', snapshot, index);
-                                      },
-                                      child: Icon(Icons.more_vert)
-                                    ),
-                                    onTap: () {
-                                      toPassportIDDetails(context, passportIDName, passportImageURL);
-                                    },
+                                    onTap: () => toPassportIDDetails(context, passportIDName, passportImageURL),
+                                    onLongPress: () => deleteEntryDialog('passportID', snapshot, index),
                                   ),
                                 ),
                               Divider(),
@@ -86,7 +83,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
                 // Transit stream
                 StreamBuilder(
-                  stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('transit').orderBy('timestamp', descending: true).snapshots(),
+                  stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('transit').orderBy('departDateTime', descending: false).snapshots(),
                   builder: (content, snapshot) {
                     if (snapshot.data == null) {
                       return Center(child: CircularProgressIndicator(),);
@@ -108,17 +105,14 @@ class _WalletScreenState extends State<WalletScreen> {
                                   child: ListTile(
                                     title: Padding(
                                       padding: const EdgeInsets.only(left: 10),
-                                      child: Text('Transit - ' + transitName,),
+                                      child: Text(transitName),
                                     ),
-                                    trailing: GestureDetector(
-                                      onTap: () {
-                                        confirmDialog('transit', snapshot, index);
-                                      },
-                                      child: Icon(Icons.more_vert)
+                                    subtitle: Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: Text('Departs at ' + DateFormat('MMMM dd, hh:mm aa').format(transitDepartDateTime)),
                                     ),
-                                    onTap: () {
-                                      toTransitDetails(context, transitName, transitStartLocation, transitDestination, transitConfirmNum, transitDepartDateTime, transitArriveDateTime);
-                                    },
+                                    onTap: () => toTransitDetails(context, transitName, transitStartLocation, transitDestination, transitConfirmNum, transitDepartDateTime, transitArriveDateTime),
+                                    onLongPress: () => deleteEntryDialog('transit', snapshot, index),
                                   ),
                                 ),
                               Divider(),
@@ -132,7 +126,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
                 // Accomodation stream
                 StreamBuilder(
-                  stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('accomodation').orderBy('timestamp', descending: true).snapshots(),
+                  stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('accomodation').orderBy('checkInDateTime', descending: false).snapshots(),
                   builder: (content, snapshot) {
                     if (snapshot.data == null) {
                       return Center(child: CircularProgressIndicator(),);
@@ -155,17 +149,14 @@ class _WalletScreenState extends State<WalletScreen> {
                                   child: ListTile(
                                     title: Padding(
                                       padding: const EdgeInsets.only(left: 10),
-                                      child: Text('Accomodation - ' + accomodationName,),
+                                      child: Text(accomodationName),
                                     ),
-                                    trailing: GestureDetector(
-                                      onTap: () {
-                                        confirmDialog('accomodation', snapshot, index);
-                                      },
-                                      child: Icon(Icons.more_vert)
+                                    subtitle: Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: Text('Check-in at ' + DateFormat('MMMM dd, hh:mm aa').format(accomodationCheckInDateTime)),
                                     ),
-                                    onTap: () {
-                                      toAccomodationDetails(context, accomodationName, accomodationPhoneNum, accomodationEmail, accomodationAddress, accomodationConfirmNum, accomodationCheckInDateTime, accomodationCheckOutDateTime);
-                                    },
+                                    onTap: () => toAccomodationDetails(context, accomodationName, accomodationPhoneNum, accomodationEmail, accomodationAddress, accomodationConfirmNum, accomodationCheckInDateTime, accomodationCheckOutDateTime),
+                                    onLongPress: () => deleteEntryDialog('accomodation', snapshot, index),
                                   ),
                                 ),
                               Divider(),
@@ -179,7 +170,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
                 // Event stream
                 StreamBuilder(
-                  stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('event').orderBy('timestamp', descending: true).snapshots(),
+                  stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('event').orderBy('startDateTime', descending: false).snapshots(),
                   builder: (content, snapshot) {
                     if (snapshot.data == null) {
                       return Center(child: CircularProgressIndicator(),);
@@ -197,21 +188,18 @@ class _WalletScreenState extends State<WalletScreen> {
                           return Column(
                             children: <Widget>[
                                 Ink(
-                                  color: Colors.purple,
+                                  color: Colors.blue,
                                   child: ListTile(
                                     title: Padding(
                                       padding: const EdgeInsets.only(left: 10),
-                                      child: Text('Event - ' + eventName,),
+                                      child: Text(eventName),
                                     ),
-                                    trailing: GestureDetector(
-                                      onTap: () {
-                                        confirmDialog('event', snapshot, index);
-                                      },
-                                      child: Icon(Icons.more_vert)
+                                    subtitle: Padding(
+                                      padding: const EdgeInsets.only(left: 10),
+                                      child: Text('Starts at ' + DateFormat('MMMM dd, hh:mm aa').format(eventCheckInDateTime)),
                                     ),
-                                    onTap: () {
-                                      toEventDetails(context, eventName, eventPhoneNum, eventEmail, eventAddress, eventConfirmNum, eventCheckInDateTime,);
-                                    },
+                                    onTap: () => toEventDetails(context, eventName, eventPhoneNum, eventEmail, eventAddress, eventConfirmNum, eventCheckInDateTime),
+                                    onLongPress: () => deleteEntryDialog('event', snapshot, index),
                                   ),
                                 ),
                               Divider(),
@@ -222,13 +210,9 @@ class _WalletScreenState extends State<WalletScreen> {
                     } 
                   },
                 ),
-                
-
-                
-
               ],
             ),
-            fab: fab(),
+            fab: speedDialFab(),
           ),
       );
     
@@ -255,90 +239,10 @@ class _WalletScreenState extends State<WalletScreen> {
         Navigator.of(context).push(
           MaterialPageRoute(builder: (context) => TransitForm(destination: widget.destination)));
   }
-  
-  void _asyncSimpleDialog(BuildContext context) async {
-    final selectedValue = await showDialog<int>(
-        context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return SimpleDialog(
-            title: const Text('Select category:'),
-            children: <Widget>[
-              SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context, 1);
-                },
-                child: const Text('Passport / ID'),
-              ),
-              SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context, 2);
-                },
-                child: const Text('Accomodation'),
-              ),
-              SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context, 3);
-                },
-                child: const Text('Transit'),
-              ),
-              SimpleDialogOption(
-                onPressed: () {
-                  Navigator.pop(context, 4);
-                },
-                child: const Text('Event'),
-              ),
-            ],
-          );
-        }
-      );
 
-      if (selectedValue == 1) {
-        toPassportIDForm(context);
-      }
-
-      if (selectedValue == 2) {
-        toAccomodationForm(context);
-      }
-
-      if (selectedValue == 3) {
-        toTransitForm(context);
-      }
-
-      if (selectedValue == 4) {
-        toEventForm(context);
-      }
-  }
-
-  // user defined function
-  void confirmDialog(String collection, AsyncSnapshot snapshot, int index) {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text("Delete entry?"),
-          //content: new Text("Please confirm."),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Confirm"),
-              onPressed: () {
-                Firestore.instance.collection(collection).document(snapshot.data.documents[index].documentID).delete();
-                Navigator.of(context).pop();
-              },
-            ),
-            new FlatButton(
-              child: new Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
+  void toDestinationScreen(BuildContext context) {
+        Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => DestinationScreen(destination: widget.destination)));
   }
 
   void toPassportIDDetails(BuildContext context, String name, String imageURL) {
@@ -409,6 +313,32 @@ class _WalletScreenState extends State<WalletScreen> {
     ));
   } 
 
+  void deleteEntryDialog(String collection, AsyncSnapshot snapshot, int index) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: new Text("Delete entry?"),
+          actions: <Widget>[
+            new FlatButton(
+              child: new Text("Confirm"),
+              onPressed: () {
+                Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection(collection).document(snapshot.data.documents[index].documentID).delete();
+                Navigator.of(context).pop();
+              },
+            ),
+            new FlatButton(
+              child: new Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   getUser() async {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       userId = user.uid;
@@ -417,11 +347,42 @@ class _WalletScreenState extends State<WalletScreen> {
 
   // ==================================== Widget functions ====================================
 
-  Widget fab() {
-    return FloatingActionButton(
-      child: Icon(Icons.add),
-      backgroundColor: Colors.blue,
-      onPressed: () => _asyncSimpleDialog(context),
+  Widget speedDialFab() {
+    return SpeedDial(
+      animatedIcon: AnimatedIcons.menu_close,
+      animatedIconTheme: IconThemeData(size: 22.0),
+      visible: true,
+      curve: Curves.bounceIn,
+      children: [
+        // Passport / ID
+        SpeedDialChild(
+          child: Icon(Icons.account_circle),
+          backgroundColor: Colors.green,
+          label: 'Passport / ID',
+          onTap: () => toPassportIDForm(context),
+        ),
+        // Transit
+        SpeedDialChild(
+          child: Icon(Icons.flight),
+          backgroundColor: Colors.orange,
+          label: 'Transit',
+          onTap: () => toTransitForm(context),
+        ),
+        // Accomodation
+        SpeedDialChild(
+          child: Icon(Icons.home),
+          backgroundColor: Colors.red,
+          label: 'Accomodation',
+          onTap: () => toAccomodationForm(context),
+        ),
+        // Event
+        SpeedDialChild(
+          child: Icon(Icons.confirmation_number),
+          backgroundColor: Colors.blue,
+          label: 'Event',
+          onTap: () => toEventForm(context),
+        ),
+      ],
     );
   }
 

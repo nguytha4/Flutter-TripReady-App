@@ -10,16 +10,18 @@ class CapstoneScaffold extends StatelessWidget {
   final Widget fab;
   final bool hideAppBar;
   final bool hideDrawer;
+  final Function backButtonFunction;
+  final bool specialBackButton;
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  CapstoneScaffold({Key key, this.title, this.child, this.appbarChild, this.fab, this.hideAppBar = false, this.hideDrawer = false}) : super(key: key);
+  CapstoneScaffold({Key key, this.title, this.child, this.appbarChild, this.fab, this.hideAppBar = false, this.hideDrawer = false, this.backButtonFunction, this.specialBackButton = false}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     if (hideDrawer != true) {
     return Scaffold(
-      appBar: buildAppBar(appbarChild),
+      appBar: buildAppBar(appbarChild, backButtonFunction: backButtonFunction,),
       body: child,
       floatingActionButton: Padding(
         padding: EdgeInsets.all(20), 
@@ -54,7 +56,7 @@ class CapstoneScaffold extends StatelessWidget {
     );
     } else {
       return Scaffold(
-      appBar: buildAppBar(appbarChild),
+      appBar: buildAppBar(appbarChild, backButtonFunction: backButtonFunction),
       body: child,
       floatingActionButton: Padding(
         padding: EdgeInsets.all(20), 
@@ -64,7 +66,7 @@ class CapstoneScaffold extends StatelessWidget {
     }
   }
 
-  Widget buildAppBar(Widget appbarChild)
+  Widget buildAppBar(Widget appbarChild, {Function backButtonFunction})
   {
     if (hideAppBar)
       return null;
@@ -72,6 +74,25 @@ class CapstoneScaffold extends StatelessWidget {
     if (hideDrawer)
       return AppBar(
           title: Text(title),
+          centerTitle: true,
+      );
+
+    if (specialBackButton) 
+      return AppBar(
+          title: Text(title),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => backButtonFunction()
+          ),
+          actions: [
+              Builder(builder: (context) {
+                return IconButton (
+                icon: Icon(Icons.dehaze),
+                onPressed: () => Scaffold.of(context).openEndDrawer()
+                );
+              }),
+          ],
+          bottom: appbarChild,
           centerTitle: true,
       );
 
