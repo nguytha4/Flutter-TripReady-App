@@ -1,5 +1,4 @@
 import 'package:capstone/tripready.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class SitesFoodDetailScreen extends StatefulWidget {
@@ -29,8 +28,7 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
       title: '${this.widget.activity.category}',
       child: Column(
         children: [
-          ImageHeader(
-              imageUrl: widget.activity.imageUrl, label: widget.activity.name),
+          ImageHeader(imageUrl: widget.activity.imageUrl, label: ''),
           buildBody(),
         ],
       ),
@@ -39,30 +37,7 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
 
   Widget buildBody() {
     return Expanded(
-      child: StreamBuilder(
-          stream: Firestore.instance
-              .collection('activity')
-              .orderBy('name')
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (snapshot.hasData && snapshot.data.documents.length > 0) {
-              return ListView.builder(
-                padding: EdgeInsets.only(top: 10.0, bottom: 15.0),
-                itemCount: snapshot.data.documents.length,
-                itemBuilder: (BuildContext context, int index) {
-                  var snapshotItem = snapshot.data.documents[index];
-                  var activity = ActivityModel.fromSnapshot(snapshotItem);
-
-                  return buildStack(activity, context);
-                },
-              );
-            } else {
-              return Center(
-                  child: Column(children: [
-                Text('No items. Please click the button below')
-              ]));
-            }
-          }),
+      child: buildStack(this.widget.activity, context),
     );
   }
 
@@ -70,7 +45,7 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
     return Stack(
       children: [
         Container(
-          margin: EdgeInsets.fromLTRB(40.0, 5.0, 20.0, 5.0),
+          margin: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
           height: 170.0,
           width: double.infinity,
           decoration: BoxDecoration(
@@ -78,7 +53,7 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
             borderRadius: BorderRadius.circular(20.0),
           ),
           child: Padding(
-            padding: EdgeInsets.fromLTRB(100.0, 20.0, 20.0, 20.0),
+            padding: EdgeInsets.all(20.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -156,21 +131,6 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
                   ],
                 )
               ],
-            ),
-          ),
-        ),
-        Positioned(
-          left: 20.0,
-          top: 15.0,
-          bottom: 15.0,
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(20.0),
-            child: Image(
-              width: 110.0,
-              image: AssetImage(
-                activity.imageUrl,
-              ),
-              fit: BoxFit.cover,
             ),
           ),
         ),

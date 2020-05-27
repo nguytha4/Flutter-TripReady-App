@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:capstone/tripready.dart';
 
 class ImageHeader extends StatelessWidget {
   const ImageHeader({
@@ -13,7 +14,8 @@ class ImageHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.only(bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30)),
+      borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(30), bottomRight: Radius.circular(30)),
       child: Stack(
         children: [
           Container(
@@ -29,32 +31,36 @@ class ImageHeader extends StatelessWidget {
               ],
             ),
             child: Hero(
-              tag: imageUrl,
+              tag: UniqueKey(),
               child: Image(
-                image: AssetImage(imageUrl),
+                image: ImageService.buildAssetImage(imageUrl),
+                width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          Positioned(
-            bottom: 0.0,
-            child: Container(
-              color: Colors.black45,
-              width: MediaQuery.of(context).size.width,
-              child: Padding(
-                padding: const EdgeInsets.all(15.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      label,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 35.0,
-                        letterSpacing: 1.2,
+          Visibility(
+            visible: label != null && label.length > 0,
+            child: Positioned(
+              bottom: 0.0,
+              child: Container(
+                color: Colors.black45,
+                width: MediaQuery.of(context).size.width,
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 35.0,
+                          letterSpacing: 1.2,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

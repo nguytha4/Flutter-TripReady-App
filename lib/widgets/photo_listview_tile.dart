@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:capstone/tripready.dart';
 
 class PhotoListViewTile extends StatelessWidget {
   const PhotoListViewTile(
@@ -7,7 +8,7 @@ class PhotoListViewTile extends StatelessWidget {
       @required this.title,
       @required this.subtitle,
       @required this.imageUrl,
-      @required this.route,
+      @required this.routeBuilder,
       this.showFavoriteIcon = false,
       this.isFavorite = false,
       this.onFavorite})
@@ -16,7 +17,7 @@ class PhotoListViewTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final String imageUrl;
-  final Route route;
+  final Route Function() routeBuilder;
   final bool showFavoriteIcon;
   final bool isFavorite;
   final Function onFavorite;
@@ -26,7 +27,7 @@ class PhotoListViewTile extends StatelessWidget {
     return GestureDetector(
       onTap: () => Navigator.push(
         context,
-        route,
+        routeBuilder(),
       ),
       child: Container(
         margin: EdgeInsets.all(10.0),
@@ -51,11 +52,11 @@ class PhotoListViewTile extends StatelessWidget {
                 child: Stack(
                   children: [
                     Hero(
-                        tag: imageUrl,
+                        tag: UniqueKey(),
                         child: Image(
                           height: 180.0,
                           width: MediaQuery.of(context).size.width,
-                          image: AssetImage(imageUrl),
+                          image: ImageService.buildAssetImage(imageUrl),
                           fit: BoxFit.cover,
                         )),
                     PhotoListViewTileTitle(
