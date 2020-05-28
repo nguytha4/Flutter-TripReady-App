@@ -10,6 +10,41 @@ class SitesFoodList extends StatelessWidget {
   const SitesFoodList({Key key, this.destination, this.category, this.searchText})
       : super(key: key);
 
+
+  List<ActivityModel> buildActivityList(List<DocumentSnapshot> allActivities, 
+    List<DocumentSnapshot> favoriteActivities,
+    String category,
+    String searchText)
+  {
+    List<ActivityModel> activities = List<ActivityModel>();
+
+    for (var snapshotItem in allActivities)
+    {
+        var activity = ActivityModel.fromSnapshot(snapshotItem);
+
+        var isFavorite = favoriteActivities.any(
+            (element) =>
+                element.documentID == activity.documentID);
+
+        var showTile =
+            category == ActivityCategories.favorites &&
+                    isFavorite ||
+                activity.category == category;
+
+        // filter the results
+        if (searchText != null && searchText.isNotEmpty) {
+          showTile = showTile && activity.name.toLowerCase().contains(searchText.toLowerCase());
+        }
+
+        if (showTile) {
+          activities.add(activity);
+        }
+    }
+
+    return activities;
+  }
+
+
   @override
   Widget build(BuildContext context) {
     var destinationId = destination.documentID;
@@ -52,47 +87,34 @@ class SitesFoodList extends StatelessWidget {
                       ]));
                     }
 
+                    var activities = buildActivityList(snapshot.data.documents, 
+                      favoritesSnapshot.data.documents, 
+                      category, 
+                      searchText);
+
                     return ListView.builder(
                       scrollDirection: Axis.vertical,
-                      itemCount: snapshot.data.documents.length,
+                      itemCount: activities.length,
                       itemBuilder: (BuildContext context, int index) {
-                        var snapshotItem = snapshot.data.documents[index];
-                        var activity = ActivityModel.fromSnapshot(snapshotItem);
+                        var activity = activities[index];
 
-                        var isFavorite = favoritesSnapshot.data.documents.any(
-                            (element) =>
-                                element.documentID == activity.documentID);
-
-                        var showTile =
-                            category == ActivityCategories.favorites &&
-                                    isFavorite ||
-                                activity.category == category;
-
-                        // filter the results
-                        if (searchText != null && searchText.isNotEmpty) {
-                          showTile = showTile && activity.name.toLowerCase().contains(searchText.toLowerCase());
-                        }
-
-                        return Visibility(
-                          visible: showTile,
-                          child: PhotoListViewTile(
-                              title: activity.name,
-                              subtitle: activity.type,
-                              imageUrl: activity.imageUrl,
-                              showFavoriteIcon: true,
-                              isFavorite: isFavorite,
-                              onFavorite: () async {
-                                await DataService.toggleFavorite(
-                                    destination.documentID,
-                                    activity.documentID);
-                              },
-                              routeBuilder: () => MaterialPageRoute(
-                                builder: (_) => SitesFoodDetailScreen(
-                                  destination: destination,
-                                  activity: activity,
-                                ),
-                              )),
-                        );
+                        return PhotoListViewTile(
+                            title: activity.name,
+                            subtitle: activity.type,
+                            imageUrl: activity.imageUrl,
+                            showFavoriteIcon: true,
+                            isFavorite: favoritesSnapshot.data.documents.any((element) => element.documentID == activity.documentID),
+                            onFavorite: () async {
+                              await DataService.toggleFavorite(
+                                  destination.documentID,
+                                  activity.documentID);
+                            },
+                            routeBuilder: () => MaterialPageRoute(
+                              builder: (_) => SitesFoodDetailScreen(
+                                destination: destination,
+                                activity: activity,
+                              ),
+                            ));
                       },
                     );
                   },
