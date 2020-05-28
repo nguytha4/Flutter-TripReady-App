@@ -33,7 +33,7 @@ class SitesFoodList extends StatelessWidget {
       return activities;
     } else {
       return activities.where((activity) =>
-          activity.name.toLowerCase().contains(searchText.toLowerCase()));
+          activity.name.toLowerCase().contains(searchText.toLowerCase())).toList();
     }
   }
 
