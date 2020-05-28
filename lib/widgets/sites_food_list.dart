@@ -7,43 +7,35 @@ class SitesFoodList extends StatelessWidget {
   final String category;
   final String searchText;
 
-  const SitesFoodList({Key key, this.destination, this.category, this.searchText})
+  const SitesFoodList(
+      {Key key, this.destination, this.category, this.searchText})
       : super(key: key);
 
-
-  List<ActivityModel> buildActivityList(List<DocumentSnapshot> allActivities, 
-    List<DocumentSnapshot> favoriteActivities,
-    String category,
-    String searchText)
-  {
+  List<ActivityModel> buildActivityList(
+      List<ActivityModel> allActivities,
+      List<String> favoriteIds,
+      String category,
+      String searchText) {
     List<ActivityModel> activities = List<ActivityModel>();
 
-    for (var snapshotItem in allActivities)
-    {
-        var activity = ActivityModel.fromSnapshot(snapshotItem);
-
-        var isFavorite = favoriteActivities.any(
-            (element) =>
-                element.documentID == activity.documentID);
-
-        var showTile =
-            category == ActivityCategories.favorites &&
-                    isFavorite ||
-                activity.category == category;
-
-        // filter the results
-        if (searchText != null && searchText.isNotEmpty) {
-          showTile = showTile && activity.name.toLowerCase().contains(searchText.toLowerCase());
-        }
-
-        if (showTile) {
-          activities.add(activity);
-        }
+    // build full tab
+    if (category == ActivityCategories.favorites) {
+      for (var id in favoriteIds) {
+        activities.add(allActivities.singleWhere((element) => element.documentID == id));
+      }
+    } else {
+      activities.addAll(
+          allActivities.where((activity) => activity.category == category));
     }
 
-    return activities;
+    // filter results for this tab
+    if (searchText == null || searchText.isEmpty) {
+      return activities;
+    } else {
+      return activities.where((activity) =>
+          activity.name.toLowerCase().contains(searchText.toLowerCase()));
+    }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -70,6 +62,11 @@ class SitesFoodList extends StatelessWidget {
                   return CircularProgressIndicator();
                 }
 
+                List<String> favoriteIds =
+                    (favoritesSnapshot.data.documents as List<DocumentSnapshot>)
+                        .map((snapshotItem) => snapshotItem.documentID)
+                        .toList();
+
                 return StreamBuilder(
                   stream: Firestore.instance
                       .collection('destinations')
@@ -87,10 +84,12 @@ class SitesFoodList extends StatelessWidget {
                       ]));
                     }
 
-                    var activities = buildActivityList(snapshot.data.documents, 
-                      favoritesSnapshot.data.documents, 
-                      category, 
-                      searchText);
+                    List<ActivityModel> allActivities = (snapshot.data.documents as List<DocumentSnapshot>)
+                        .map((snapshotItem) => ActivityModel.fromSnapshot(snapshotItem))
+                        .toList();
+
+                    var activities = buildActivityList(allActivities,
+                        favoriteIds, category, searchText);
 
                     return ListView.builder(
                       scrollDirection: Axis.vertical,
@@ -103,18 +102,17 @@ class SitesFoodList extends StatelessWidget {
                             subtitle: activity.type,
                             imageUrl: activity.imageUrl,
                             showFavoriteIcon: true,
-                            isFavorite: favoritesSnapshot.data.documents.any((element) => element.documentID == activity.documentID),
+                            isFavorite: favoriteIds.any((f) => f == activity.documentID),
                             onFavorite: () async {
                               await DataService.toggleFavorite(
-                                  destination.documentID,
-                                  activity.documentID);
+                                  destination.documentID, activity.documentID);
                             },
                             routeBuilder: () => MaterialPageRoute(
-                              builder: (_) => SitesFoodDetailScreen(
-                                destination: destination,
-                                activity: activity,
-                              ),
-                            ));
+                                  builder: (_) => SitesFoodDetailScreen(
+                                    destination: destination,
+                                    activity: activity,
+                                  ),
+                                ));
                       },
                     );
                   },
