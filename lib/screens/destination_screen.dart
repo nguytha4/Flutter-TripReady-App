@@ -1,7 +1,6 @@
 import 'package:capstone/tripready.dart';
 import 'package:flutter/material.dart';
 
-
 import 'wallet_screen.dart';
 
 class DestinationScreen extends StatefulWidget {
@@ -14,11 +13,21 @@ class DestinationScreen extends StatefulWidget {
 }
 
 class _DestinationScreenState extends State<DestinationScreen> {
-  Decoration buildBorder(Color color) {
+  final _roundedLeft = BorderRadius.only(topLeft: Radius.circular(25), bottomLeft: Radius.circular(25));
+  final _roundedRight = BorderRadius.only(topRight: Radius.circular(25), bottomRight: Radius.circular(25));
+
+  Decoration buildContainerDecoration(Color color, BorderRadius borderRadius) {
     return BoxDecoration(
-        border: Border.all(
       color: color,
-      width: 3.0,
+      boxShadow: [BoxShadow(
+        color: Colors.grey.withOpacity(0.5),
+        spreadRadius: 5,
+        blurRadius: 7,
+        offset: Offset(0, 3))],
+      borderRadius: borderRadius,
+      border: Border.all(
+        color: color,
+        width: 3.0,
     ));
   }
 
@@ -27,60 +36,86 @@ class _DestinationScreenState extends State<DestinationScreen> {
     return CapstoneScaffold(
       title: '${this.widget.destination.country}',
       child: SingleChildScrollView(
-              child: Column(
-          children: [
-            buildHeader(context),
-            buildGrid(context)
+        child: Column(
+          children: [buildHeader(context), buildColumn(context)],
+        ),
+      ),
+    );
+  }
+
+  Widget buildColumn(BuildContext context) {
+    double paddingValue = MediaQuery.of(context).size.width * 0.15;
+
+    var padRight = EdgeInsets.fromLTRB(0.0, 0.0, paddingValue, 18.0);
+    var padLeft = EdgeInsets.fromLTRB(paddingValue, 0.0, 0, 18.0);
+
+    return Container(
+      child: Padding(
+        padding: const EdgeInsets.only(top: 18),
+        child: Column(
+          children:[
+            Padding(
+              padding: padRight,
+              child: buildButton(
+                  (_) => SitesFoodScreen(destination: widget.destination),
+                  'Sites / Food',
+                  Colors.blue,
+                  _roundedRight),
+            ),
+            Padding(
+              padding: padLeft,
+              child: buildButton(
+                  (_) => TipsScreen(destination: widget.destination),
+                  'Tips',
+                  Colors.red,
+                  _roundedLeft),
+            ),
+            Padding(
+              padding: padRight,
+              child: buildButton(
+                  (_) => ChecklistScreen(destination: widget.destination),
+                  'Items Checklist',
+                  Colors.orange,
+                  _roundedRight),
+            ),
+            Padding(
+              padding: padLeft,
+              child: buildButton(
+                  (_) => WalletScreen(
+                        destination: widget.destination,
+                      ),
+                  'Wallet',
+                  Colors.green,
+                  _roundedLeft),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Widget buildGrid(BuildContext context) {
-    return Container(
-        height: MediaQuery.of(context).size.width,
-        child: Padding(
-    padding: const EdgeInsets.all(30.0),
-    child: GridView.count(
-      physics: NeverScrollableScrollPhysics(),
-      crossAxisCount: 2,
-      crossAxisSpacing: 15,
-      mainAxisSpacing: 15,
-      padding: const EdgeInsets.all(10.0),
-      children: [
-        buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Sites / Food', Colors.green),
-        buildButton((_) => TipsScreen(destination:widget.destination), 'Tips', Colors.orange),
-        buildButton((_) => ChecklistScreen(destination: widget.destination), 'Items Checklist', Colors.red),
-        buildButton((_) => WalletScreen(destination: widget.destination,), 'Wallet', Colors.purple),
-      ],
-    ),
-        ),
-      );
-  }
-
   Widget buildHeader(BuildContext context) {
-    return ImageHeader(imageUrl: widget.destination.imageUrl, label: widget.destination.city);
+    return ImageHeader(
+        imageUrl: widget.destination.imageUrl, label: widget.destination.city);
   }
 
-  Widget buildButton(WidgetBuilder screen, String label, Color color) {
+  Widget buildButton(WidgetBuilder screen, String label, Color color, BorderRadius borderRadius) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: screen,
-              ));
-        //return Navigator.pushNamed(context, routeName);
+            context,
+            MaterialPageRoute(
+              builder: screen,
+            ));
       },
       child: Container(
         alignment: Alignment.center,
-        decoration: buildBorder(color),
+        decoration: buildContainerDecoration(color, borderRadius),
         height: 75,
         child: Text(
           label,
           style: TextStyle(
-            color: Colors.black,
+            color: Colors.white,
             fontWeight: FontWeight.w700,
             fontSize: 15.0,
             letterSpacing: 1.2,
@@ -90,4 +125,3 @@ class _DestinationScreenState extends State<DestinationScreen> {
     );
   }
 }
-

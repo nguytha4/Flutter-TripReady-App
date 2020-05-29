@@ -80,7 +80,7 @@ class CapstoneScaffold extends StatelessWidget {
           actions: [
               Builder(builder: (context) {
                 return IconButton (
-                icon: Icon(Icons.dehaze),
+                icon: Icon(Icons.settings),
                 onPressed: () => Scaffold.of(context).openEndDrawer()
                 );
               }),
