@@ -59,7 +59,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
               child: buildButton(
                   (_) => SitesFoodScreen(destination: widget.destination),
                   'Sites / Food',
-                  Colors.blue,
+                  Color(0xff7A66F1),
                   _roundedRight),
             ),
             Padding(
@@ -67,7 +67,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
               child: buildButton(
                   (_) => TipsScreen(destination: widget.destination),
                   'Tips',
-                  Colors.red,
+                  Color(0xffFFB805),
                   _roundedLeft),
             ),
             Padding(
@@ -75,7 +75,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
               child: buildButton(
                   (_) => ChecklistScreen(destination: widget.destination),
                   'Items Checklist',
-                  Colors.orange,
+                  Color(0xff2E5FEC),
                   _roundedRight),
             ),
             Padding(
@@ -85,7 +85,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
                         destination: widget.destination,
                       ),
                   'Wallet',
-                  Colors.green,
+                  Color(0xff2CCCB5),
                   _roundedLeft),
             ),
           ],
