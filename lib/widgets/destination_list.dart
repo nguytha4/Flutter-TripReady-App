@@ -88,6 +88,7 @@ class DestinationList extends StatelessWidget {
           routeBuilder: () => MaterialPageRoute(
             builder: (_) => DestinationScreen(
               destination: destination,
+              plan: planModel,
             ),
           ),
         );
