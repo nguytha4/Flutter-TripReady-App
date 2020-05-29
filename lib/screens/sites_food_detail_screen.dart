@@ -22,6 +22,14 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
     return Text(stars);
   }
 
+Text _buildRatingDollars(int price) {
+    String dollars = '';
+    for (int i = 0; i < price; i++) {
+      dollars += '💲';
+    }
+    dollars.trim();
+    return Text(dollars);
+  } 
   @override
   Widget build(BuildContext context) {
     return CapstoneScaffold(
@@ -76,19 +84,7 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
                     ),
                     Column(
                       children: [
-                        Text(
-                          '\$${activity.price}',
-                          style: TextStyle(
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Text(
-                          'per pax',
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        ),
+                        _buildRatingDollars(activity.price),
                       ],
                     ),
                   ],
@@ -99,6 +95,7 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
                     color: Colors.grey,
                   ),
                 ),
+                SizedBox(height: 10.0),
                 _buildRatingStars(activity.rating),
                 SizedBox(height: 10.0),
                 Row(
