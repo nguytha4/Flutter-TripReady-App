@@ -19,7 +19,7 @@ class ActivityModel {
     type = snapshot['type'];
     category = snapshot['category'];
     startTimes  = snapshot['startTimes']?.cast<String>() ?? List<String>();
-    rating = snapshot['rating'];
+    rating = double.parse(snapshot['rating'].toString());
     price = snapshot['price'];
   }
 

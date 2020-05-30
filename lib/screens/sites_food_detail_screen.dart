@@ -54,7 +54,6 @@ Text _buildRatingDollars(int price) {
       children: [
         Container(
           margin: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
-          height: 170.0,
           width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -63,7 +62,7 @@ Text _buildRatingDollars(int price) {
           child: Padding(
             padding: EdgeInsets.all(20.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
