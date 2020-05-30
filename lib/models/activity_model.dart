@@ -7,7 +7,7 @@ class ActivityModel {
   String type;
   String category;
   List<String> startTimes;
-  int rating;
+  double rating;
   int price;
 
   ActivityModel({this.documentID, this.imageUrl, this.name, this.type, this.category, this.startTimes, this.rating, this.price});

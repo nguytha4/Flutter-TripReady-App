@@ -96,7 +96,8 @@ Text _buildRatingDollars(int price) {
                   ),
                 ),
                 SizedBox(height: 10.0),
-                _buildRatingStars(activity.rating),
+                //_buildRatingStars(activity.rating),
+                AverageRating(rating: activity.rating),
                 SizedBox(height: 10.0),
                 Row(
                   children: [
