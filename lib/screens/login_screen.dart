@@ -113,6 +113,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
               primaryColor: Colors.blue
             ),
             child:TextFormField(
+            autofocus: true,
             style: TextStyle(fontSize: 13),
             controller: _emailController,
             decoration: new InputDecoration(
@@ -152,7 +153,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
               primaryColor: Colors.blue
             ),
             child:TextFormField(
-            autofocus: true,
+
             obscureText: true,
             style: TextStyle(fontSize: 13),
             controller: _passwordController,

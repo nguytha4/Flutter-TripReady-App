@@ -8,8 +8,9 @@ import 'dart:collection';
 class ChecklistScreen extends StatefulWidget  {
   static const routeName = 'checklist_screen';
   final DestinationModel destination;
+  final PlanModel planModel;
 
-  ChecklistScreen({this.destination});
+  ChecklistScreen({this.destination, this.planModel});
   @override
   _ChecklistScreenState createState() => _ChecklistScreenState();
 }
@@ -20,7 +21,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
   String userId;
   List crowd_source;
   LinkedHashMap sortedMap;
-  var doc;
+  DocumentSnapshot doc;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   @override
   void initState() {
@@ -32,32 +33,25 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
   }
 
   Widget build(BuildContext context) {
-    // getSourcedDrawer();
-    // print(userId);
-    // print(doc);
-    Map docData = doc.data;
-  if (docData != null) {
-    // print(docData);
-    List mapKeys = doc.data.keys.toList(growable: false);
-    List mapVals = doc.data.values.toList();
-    
-    // print(mapKeys);
-    
-    var sortedKeys = mapKeys..sort((k1, k2) => doc.data[k1].compareTo(doc.data[k2]));
+  // if (doc.exists) {
+  //   Map docData = doc.data;
+  //   List mapKeys = doc.data.keys.toList(growable: false);
+  //   List mapVals = doc.data.values.toList();
+        
+  //   var sortedKeys = mapKeys..sort((k1, k2) => doc.data[k1].compareTo(doc.data[k2]));
 
-    if (sortedKeys.length < 5) {
-      crowd_source = List.from(sortedKeys.reversed).sublist(0,sortedKeys.length);
-    } else {
-      crowd_source = List.from(sortedKeys.reversed).sublist(0,5);
-    }
+  //   if (sortedKeys.length < 5) {
+  //     crowd_source = List.from(sortedKeys.reversed).sublist(0,sortedKeys.length);
+  //   } else {
+  //     crowd_source = List.from(sortedKeys.reversed).sublist(0,5);
+  //   }
 
-     sortedMap = LinkedHashMap
-      .fromIterable(crowd_source, key: (k) => k, value: (k) => docData[k]);
-  } else {
-    crowd_source = [];
-    sortedMap = Map();
-  }
-    // print(sortedMap["currency"]);
+  //    sortedMap = LinkedHashMap
+  //     .fromIterable(crowd_source, key: (k) => k, value: (k) => docData[k]);
+  // } else {
+  //   crowd_source = [];
+  //   sortedMap = Map();
+  // }
     return Scaffold(
       appBar: AppBar(
           title: Text("Checklist"),
@@ -122,7 +116,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
   }
 
   Widget showSourcedDrawer() {
-    if (crowd_source.length == 0 || crowd_source == null) {
+    if (crowd_source == null ||crowd_source.length == 0 ) {
       return Column(
         children: [SizedBox(height:30), Center(child:Text("No data found."))]);
     } else {
@@ -156,7 +150,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
               setState(() {
                  _removeFromCrowdSource(_data[index]['title']);
                 _data.removeAt(index);
-                Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').document(_id).updateData({
+                Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').document(_id).updateData({
                     'children': _data
                   });  
               });
@@ -171,7 +165,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
               onChanged: (bool value) {
                 setState(() {
                   _data[index]['checked'] = value;
-                  Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').document(_id).updateData({
+                  Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').document(_id).updateData({
                     'children': _data,
                   });
                 });
@@ -190,7 +184,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
 
   Widget buildPanels() {
        return StreamBuilder(
-          stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').snapshots(),
+          stream: Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').snapshots(),
           builder: (content, snapshot) {
             if (snapshot.hasData && snapshot.data.documents.length != 0) {
                return ListView.builder(
@@ -206,7 +200,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
         createDeleteDialog(context).then((val) {
           if (val != null) {
           setState(() {
-            Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').document(_id).delete();
+            Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').document(_id).delete();
             // _removeFromCrowdSource(_data['title']);
           });
         }});
@@ -217,7 +211,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
                 onChanged: (bool value) {
                   setState(() {
                     
-                  Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').document(_id).updateData({
+                  Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').document(_id).updateData({
                     'checked': value,
                   });                    
                   });
@@ -241,7 +235,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
                       };
                       var _data2 = List.from(_data['children']);
                       _data2.add(c);
-                      Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').document(_id).updateData({
+                      Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').document(_id).updateData({
                       'children': _data2
                       }); 
                     });
@@ -265,64 +259,6 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
             }
             });
   }
-//   Widget fab() {
-
-//  return SpeedDial(
-//           animatedIcon: AnimatedIcons.menu_close,
-//           animatedIconTheme: IconThemeData(size: 22),
-//           backgroundColor: Color(0xFF2196F3),
-//           visible: true,
-//           curve: Curves.bounceIn,
-//           children: [
-//                 // FAB 1
-//                 SpeedDialChild(
-//                 child: Icon(Icons.add),
-//                 backgroundColor: Color(0xFF2196F3),
-//                 onTap: () {    
-//                   createAlertDialogFAB(context).then((val) {
-//                   if (val != null) {
-//                   setState(() {
-//                     // _addToCrowdSource(val);
-//                     Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').add({
-//                               'title': val,
-//                               'checked': false,
-//                               'date': DateTime.now(),
-//                               'children': []
-//                             });          
-//                   });
-//                 }});
-//                  },
-//                 label: 'Add Entry',
-//                 labelStyle: TextStyle(
-//                     fontWeight: FontWeight.w500,
-//                     color: Colors.white,
-//                     fontSize: 16.0),
-//                 labelBackgroundColor: Color(0xFF2196F3)),
-//                 // FAB 2
-//                 SpeedDialChild(
-//                 child: Icon(Icons.people),
-//                 backgroundColor: Color(0xFF2196F3),
-//                 onTap: () {
-//                    setState(() {
-//                     //  List user_checklist = [];
-//                     //  var user_document=Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').getDocuments().then((QuerySnapshot snapshot) {
-//                     //   snapshot.documents.forEach((element) {print('${element.data['title']}');
-//                     //   user_checklist.add(element.data['title'].toLowerCase().trim());
-//                     //   });
-//                     //   _getCrowdSource(user_checklist);
-//                     // });
-                      
-//                    });
-//                 },
-//                 label: 'Crowd Source',
-//                 labelStyle: TextStyle(
-//                     fontWeight: FontWeight.w500,
-//                     color: Colors.white,
-//                     fontSize: 16.0),
-//                 labelBackgroundColor: Color(0xFF2196F3))
-//           ],
-//         );
-//   }
 
 Widget fab() {
     return FloatingActionButton(
@@ -332,7 +268,7 @@ Widget fab() {
         createAlertDialogFAB(context).then((val) {
           if (val != null) {
           setState(() {
-            Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').add({
+            Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').add({
                       'title': val,
                       'checked': false,
                       'date': DateTime.now(),
@@ -345,7 +281,7 @@ Widget fab() {
   }
 
   void _addToCrowdSource(String val) {
-    print(val);
+    // print(val);
     var document = Firestore.instance.collection('destinations').document(this.widget.destination.documentID).collection('checklist_sourced').document('checklist_sourced')
     .get().then((DocumentSnapshot) {
       
@@ -378,7 +314,6 @@ Widget fab() {
       var global_checklist_entry = val.toLowerCase().trim();
       if (DocumentSnapshot.data != null) {
       var num_entry = DocumentSnapshot.data[global_checklist_entry];
-      //log('name: $global_checklist_entry\n num_entry: $num_entry');
       if (num_entry != null) {
         if (num_entry - 1 == 0) {
           Firestore.instance.collection('destinations').document(this.widget.destination.documentID).collection('checklist_sourced').document('checklist_sourced').updateData({
@@ -401,7 +336,27 @@ Widget fab() {
     .get();
 
     doc = document;
-    setState(() {});
+    setState(() {
+    if (doc.exists) {
+    Map docData = doc.data;
+    List mapKeys = doc.data.keys.toList(growable: false);
+    List mapVals = doc.data.values.toList();
+        
+    var sortedKeys = mapKeys..sort((k1, k2) => doc.data[k1].compareTo(doc.data[k2]));
+
+    if (sortedKeys.length < 5) {
+      crowd_source = List.from(sortedKeys.reversed).sublist(0,sortedKeys.length);
+    } else {
+      crowd_source = List.from(sortedKeys.reversed).sublist(0,5);
+    }
+
+     sortedMap = LinkedHashMap
+      .fromIterable(crowd_source, key: (k) => k, value: (k) => docData[k]);
+  } else {
+    crowd_source = [];
+    sortedMap = Map();
+  }
+    });
   }
   
 
@@ -435,8 +390,8 @@ Widget fab() {
                       };
                    var _data2 = List.from(_data['children']);
                    _data2.add(c);
-                   print(_data2);
-                   Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').document(_id).updateData({
+                  //  print(_data2);
+                   Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').document(_id).updateData({
                       'children': _data2
                       }); 
                  });
