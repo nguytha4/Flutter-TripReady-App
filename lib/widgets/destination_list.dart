@@ -81,13 +81,6 @@ class DestinationList extends StatelessWidget {
 
         var destination = DestinationModel.fromSnapshot(destinationSnapshot);
 
-        var planSnapshot = plansSnapshot
-          .data
-          .documents
-          .singleWhere((element) => element.documentID == planModel.documentID);
-
-        var plan = PlanModel.fromSnapshot(planSnapshot);
-
         return PhotoListViewTile(
           title: "${destination.city}",
           subtitle: destination.country,
@@ -95,7 +88,7 @@ class DestinationList extends StatelessWidget {
           routeBuilder: () => MaterialPageRoute(
             builder: (_) => DestinationScreen(
               destination: destination,
-              plan: plan,
+              plan: planModel,
             ),
           ),
         );

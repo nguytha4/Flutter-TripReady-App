@@ -7,8 +7,35 @@ class SitesFoodList extends StatelessWidget {
   final String category;
   final String searchText;
 
-  const SitesFoodList({Key key, this.destination, this.category, this.searchText})
+  const SitesFoodList(
+      {Key key, this.destination, this.category, this.searchText})
       : super(key: key);
+
+  List<ActivityModel> buildActivityList(
+      List<ActivityModel> allActivities,
+      List<String> favoriteIds,
+      String category,
+      String searchText) {
+    List<ActivityModel> activities = List<ActivityModel>();
+
+    // build full tab
+    if (category == ActivityCategories.favorites) {
+      for (var id in favoriteIds) {
+        activities.add(allActivities.singleWhere((element) => element.documentID == id));
+      }
+    } else {
+      activities.addAll(
+          allActivities.where((activity) => activity.category == category));
+    }
+
+    // filter results for this tab
+    if (searchText == null || searchText.isEmpty) {
+      return activities;
+    } else {
+      return activities.where((activity) =>
+          activity.name.toLowerCase().contains(searchText.toLowerCase())).toList();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +62,11 @@ class SitesFoodList extends StatelessWidget {
                   return CircularProgressIndicator();
                 }
 
+                List<String> favoriteIds =
+                    (favoritesSnapshot.data.documents as List<DocumentSnapshot>)
+                        .map((snapshotItem) => snapshotItem.documentID)
+                        .toList();
+
                 return StreamBuilder(
                   stream: Firestore.instance
                       .collection('destinations')
@@ -52,47 +84,35 @@ class SitesFoodList extends StatelessWidget {
                       ]));
                     }
 
+                    List<ActivityModel> allActivities = (snapshot.data.documents as List<DocumentSnapshot>)
+                        .map((snapshotItem) => ActivityModel.fromSnapshot(snapshotItem))
+                        .toList();
+
+                    var activities = buildActivityList(allActivities,
+                        favoriteIds, category, searchText);
+
                     return ListView.builder(
                       scrollDirection: Axis.vertical,
-                      itemCount: snapshot.data.documents.length,
+                      itemCount: activities.length,
                       itemBuilder: (BuildContext context, int index) {
-                        var snapshotItem = snapshot.data.documents[index];
-                        var activity = ActivityModel.fromSnapshot(snapshotItem);
+                        var activity = activities[index];
 
-                        var isFavorite = favoritesSnapshot.data.documents.any(
-                            (element) =>
-                                element.documentID == activity.documentID);
-
-                        var showTile =
-                            category == ActivityCategories.favorites &&
-                                    isFavorite ||
-                                activity.category == category;
-
-                        // filter the results
-                        if (searchText != null && searchText.isNotEmpty) {
-                          showTile = showTile && activity.name.toLowerCase().contains(searchText.toLowerCase());
-                        }
-
-                        return Visibility(
-                          visible: showTile,
-                          child: PhotoListViewTile(
-                              title: activity.name,
-                              subtitle: activity.type,
-                              imageUrl: activity.imageUrl,
-                              showFavoriteIcon: true,
-                              isFavorite: isFavorite,
-                              onFavorite: () async {
-                                await DataService.toggleFavorite(
-                                    destination.documentID,
-                                    activity.documentID);
-                              },
-                              routeBuilder: () => MaterialPageRoute(
-                                builder: (_) => SitesFoodDetailScreen(
-                                  destination: destination,
-                                  activity: activity,
-                                ),
-                              )),
-                        );
+                        return PhotoListViewTile(
+                            title: activity.name,
+                            subtitle: activity.type,
+                            imageUrl: activity.imageUrl,
+                            showFavoriteIcon: true,
+                            isFavorite: favoriteIds.any((f) => f == activity.documentID),
+                            onFavorite: () async {
+                              await DataService.toggleFavorite(
+                                  destination.documentID, activity.documentID);
+                            },
+                            routeBuilder: () => MaterialPageRoute(
+                                  builder: (_) => SitesFoodDetailScreen(
+                                    destination: destination,
+                                    activity: activity,
+                                  ),
+                                ));
                       },
                     );
                   },
