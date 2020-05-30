@@ -378,7 +378,7 @@ Widget fab() {
       var global_checklist_entry = val.toLowerCase().trim();
       if (DocumentSnapshot.data != null) {
       var num_entry = DocumentSnapshot.data[global_checklist_entry];
-      log('name: $global_checklist_entry\n num_entry: $num_entry');
+      //log('name: $global_checklist_entry\n num_entry: $num_entry');
       if (num_entry != null) {
         if (num_entry - 1 == 0) {
           Firestore.instance.collection('destinations').document(this.widget.destination.documentID).collection('checklist_sourced').document('checklist_sourced').updateData({

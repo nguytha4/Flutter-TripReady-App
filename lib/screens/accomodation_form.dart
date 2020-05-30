@@ -7,8 +7,9 @@ import 'package:intl/intl.dart';
 class AccomodationForm extends StatefulWidget {
 
   final DestinationModel destination;
+  final PlanModel plan;
 
-  AccomodationForm({this.destination});
+  AccomodationForm({this.destination, this.plan});
 
   @override
   _AccomodationFormState createState() => _AccomodationFormState();
@@ -464,7 +465,7 @@ class _AccomodationFormState extends State<AccomodationForm> {
         if (formKey.currentState.validate()) {
             formKey.currentState.save();
 
-            Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('accomodation').add( {
+            Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.plan.documentID).collection('accomodation').add( {
                'timestamp': accomodation.timestamp,
                'name': accomodation.name,
                'phoneNum': accomodation.phoneNum,
