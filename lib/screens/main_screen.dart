@@ -30,7 +30,6 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     setState(() {
       userId = ModalRoute.of(context).settings.arguments;
-      print(userId.toString() + '1');
     });
     
     return Scaffold(

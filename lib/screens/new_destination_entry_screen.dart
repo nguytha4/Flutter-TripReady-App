@@ -126,7 +126,6 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
           initialDateTime: _dateTime,
           mode: CupertinoDatePickerMode.date,
           onDateTimeChanged: (dateTime) {
-            print(dateTime);
             setState(() {
               planModel.travelDate = dateTime;
             });
