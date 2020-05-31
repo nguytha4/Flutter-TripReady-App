@@ -33,25 +33,6 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
   }
 
   Widget build(BuildContext context) {
-  // if (doc.exists) {
-  //   Map docData = doc.data;
-  //   List mapKeys = doc.data.keys.toList(growable: false);
-  //   List mapVals = doc.data.values.toList();
-        
-  //   var sortedKeys = mapKeys..sort((k1, k2) => doc.data[k1].compareTo(doc.data[k2]));
-
-  //   if (sortedKeys.length < 5) {
-  //     crowd_source = List.from(sortedKeys.reversed).sublist(0,sortedKeys.length);
-  //   } else {
-  //     crowd_source = List.from(sortedKeys.reversed).sublist(0,5);
-  //   }
-
-  //    sortedMap = LinkedHashMap
-  //     .fromIterable(crowd_source, key: (k) => k, value: (k) => docData[k]);
-  // } else {
-  //   crowd_source = [];
-  //   sortedMap = Map();
-  // }
     return Scaffold(
       appBar: AppBar(
           title: Text("Checklist"),
