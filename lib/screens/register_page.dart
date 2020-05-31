@@ -3,7 +3,6 @@
 // found in the LICENSE file.
 
 import 'package:capstone/widgets/logo.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -23,7 +22,7 @@ class RegisterPageState extends State<RegisterPage> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
-  String error_text = 'Registration failed';
+  String errorText = 'Registration failed';
   String _userPassword;
   bool _success;
   String _userEmail;
@@ -65,7 +64,7 @@ class RegisterPageState extends State<RegisterPage> {
                   ? ''
                   : (_success
                       ? 'Successfully registered ' + _userEmail
-                      : error_text)),
+                      : errorText)),
             )
           ],
         ),
@@ -222,14 +221,14 @@ class RegisterPageState extends State<RegisterPage> {
       password: _passwordController.text.trim(),
     )).user;
     } catch(err) {
-      String err_string = err.toString();
-      if (err_string.contains('ERROR_EMAIL_ALREADY_IN_USE')) {
+      String errString = err.toString();
+      if (errString.contains('ERROR_EMAIL_ALREADY_IN_USE')) {
         setState(() {
-          error_text = "Error: Email already in use";
+          errorText = "Error: Email already in use";
         });
-      } else if (err_string.contains('ERROR_WEAK_PASSWORD')) {
+      } else if (errString.contains('ERROR_WEAK_PASSWORD')) {
         setState(() {
-          error_text = "Error: Password must be at least 6 characters";
+          errorText = "Error: Password must be at least 6 characters";
         });
       }
       print(err.toString());

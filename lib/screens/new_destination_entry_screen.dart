@@ -14,6 +14,7 @@ class NewDestinationEntryScreen extends StatefulWidget {
 class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
   DestinationModel selectedDestination;
   DateTime selectedTravelDate;
+  DateTime selectedReturnDate;
 
   DateTime _dateTime = DateTime.now();
 
@@ -29,74 +30,88 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
   @override
   Widget build(BuildContext context) {
     return CapstoneScaffold(
-      title: 'New Destination Entry',
-      child: StreamBuilder(
-          stream: Firestore.instance
-              .collection('destinations')
-              .orderBy('country')
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return CircularProgressIndicator();
-            }
+        title: 'New Destination Entry',
+        child: StreamBuilder(
+            stream: Firestore.instance
+                .collection('destinations')
+                .orderBy('country')
+                .snapshots(),
+            builder: (context, snapshot) {
+              if (!snapshot.hasData) {
+                return CircularProgressIndicator();
+              }
 
-            var destinations =
-                (snapshot.data.documents as List<DocumentSnapshot>)
-                    .map((e) => DestinationModel.fromSnapshot(e))
-                    .toList();
+              var destinations =
+                  (snapshot.data.documents as List<DocumentSnapshot>)
+                      .map((e) => DestinationModel.fromSnapshot(e))
+                      .toList();
 
-            return Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  child: Expanded(
-                    child: Container(
-                        child: CupertinoPicker(
-                      magnification: 1.0,
-                      backgroundColor: Colors.black87,
-                      children: destinations
-                          .map((s) => buildPickerItem(s))
-                          .toList(),
-                      itemExtent: 30, //height of each item
-                      looping: false,
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    child: Expanded(
+                      child: Container(
+                          child: CupertinoPicker(
+                        magnification: 1.0,
+                        backgroundColor: Colors.black87,
+                        children: destinations
+                            .map((s) => buildPickerItem(s))
+                            .toList(),
+                        itemExtent: 30, //height of each item
+                        looping: false,
 
-                      onSelectedItemChanged: (int index) {
-                        var destination = DestinationModel.fromSnapshot(
-                            snapshot.data.documents[index]);
-                        planModel.destinationID = destination.documentID;
-                      },
-                    )),
-                  ),
-                ),
-                Container(
-                  child: buildDatePicker(),
-                ),
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border(
-                      bottom: BorderSide(
-                        color: Colors.white,
-                        width: 0.0,
-                      ),
+                        onSelectedItemChanged: (int index) {
+                          var destination = DestinationModel.fromSnapshot(
+                              snapshot.data.documents[index]);
+                          planModel.destinationID = destination.documentID;
+                        },
+                      )),
                     ),
                   ),
-                  child: SizedBox(
-                    height: 100,
+                  Text('Departure Date:'),
+                  Container(
+                    child: buildDatePicker((dateTime) {
+                      setState(() {
+                        planModel.travelDate = dateTime;
+                      });
+                    }),
+                  ),
+                  Text('Return Date:'),
+                  Container(
+                    child: buildDatePicker((dateTime) {
+                      setState(() {
+                        planModel.returnDate = dateTime;
+                      });
+                    }),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                        bottom: BorderSide(
+                          color: Colors.white,
+                          width: 0.0,
+                        ),
+                      ),
+                    ),
+                    child: SizedBox(
+                      height: 100,
                       child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                        children:[
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
                           RaisedButton(
                             color: Colors.blue,
-                            shape: RoundedRectangleBorder(borderRadius: new BorderRadius.circular(50.0)),
+                            shape: RoundedRectangleBorder(
+                                borderRadius: new BorderRadius.circular(50.0)),
                             child: Text('Confirm'),
                             textColor: Colors.white,
                             padding: EdgeInsets.fromLTRB(100, 0, 100, 0),
                             onPressed: () async {
-                              
                               // select the first entry by default
                               if (planModel.destinationID == null) {
-                                planModel.destinationID = destinations.first.documentID;
+                                planModel.destinationID =
+                                    destinations.first.documentID;
                               }
 
                               // select today's date by default
@@ -104,20 +119,25 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
                                 planModel.travelDate = _dateTime;
                               }
 
+                              // select today's date by default
+                              if (planModel.returnDate == null) {
+                                planModel.returnDate = _dateTime;
+                              }
+
                               await DataService.createPlan(planModel);
                               Navigator.pop(context);
                             },
-                  )
+                          )
+                        ],
+                      ),
+                    ),
+                  ),
                 ],
-              ),
-            ),
-          ),
-        ],
-      );
-    }));
+              );
+            }));
   }
 
-  Widget buildDatePicker() {
+  Widget buildDatePicker(void Function(DateTime) onDateTimeChanged) {
     return Padding(
       padding: const EdgeInsets.all(18),
       child: SizedBox(
@@ -125,14 +145,9 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
         child: CupertinoDatePicker(
           initialDateTime: _dateTime,
           mode: CupertinoDatePickerMode.date,
-          onDateTimeChanged: (dateTime) {
-            setState(() {
-              planModel.travelDate = dateTime;
-            });
-          },
+          onDateTimeChanged: onDateTimeChanged,
         ),
       ),
     );
   }
 }
-

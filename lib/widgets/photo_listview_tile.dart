@@ -1,7 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:capstone/tripready.dart';
 
 class PhotoListViewTile extends StatelessWidget {
   const PhotoListViewTile(
@@ -10,6 +9,7 @@ class PhotoListViewTile extends StatelessWidget {
       @required this.subtitle,
       @required this.imageUrl,
       @required this.routeBuilder,
+      this.datetitle,
       this.showFavoriteIcon = false,
       this.isFavorite = false,
       this.onFavorite})
@@ -17,6 +17,7 @@ class PhotoListViewTile extends StatelessWidget {
 
   final String title;
   final String subtitle;
+  final String datetitle;
   final String imageUrl;
   final Route Function() routeBuilder;
   final bool showFavoriteIcon;
@@ -65,7 +66,7 @@ class PhotoListViewTile extends StatelessWidget {
                           fit: BoxFit.cover,
                         )),
                     PhotoListViewTileTitle(
-                        context: context, title: title, subtitle: subtitle),
+                        context: context, title: title, subtitle: subtitle, datetitle: datetitle,),
                     Visibility(
                       visible: showFavoriteIcon,
                       child: Positioned(
@@ -98,11 +99,13 @@ class PhotoListViewTileTitle extends StatelessWidget {
     @required this.context,
     @required this.title,
     @required this.subtitle,
+    @required this.datetitle,
   }) : super(key: key);
 
   final BuildContext context;
   final String title;
   final String subtitle;
+  final String datetitle;
 
   @override
   Widget build(BuildContext context) {
@@ -115,13 +118,21 @@ class PhotoListViewTileTitle extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                title,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24.0,
-                  letterSpacing: 1.2,
-                ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Text(
+                    title,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 24.0,
+                      letterSpacing: 1.2,
+                    ),
+                  ),
+                  Visibility(
+                    visible: datetitle != null && datetitle.length > 0,
+                    child: Text(datetitle ?? '', style: TextStyle(color: Colors.white, fontSize: 12),)),
+                ],
               ),
               Row(
                 children: [

@@ -84,6 +84,7 @@ class DestinationList extends StatelessWidget {
         return PhotoListViewTile(
           title: "${destination.city}",
           subtitle: destination.country,
+          datetitle: '${planModel.travelDateString} - ${planModel.returnDateString}',
           imageUrl: destination.imageUrl,
           routeBuilder: () => MaterialPageRoute(
             builder: (_) => DestinationScreen(
