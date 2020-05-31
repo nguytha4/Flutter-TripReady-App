@@ -2,21 +2,16 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:io';
-import 'package:capstone/widgets/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
+// import 'package:google_sign_in/google_sign_in.dart';
 import 'package:capstone/tripready.dart';
-
-
 
 // import 'package:google_sign_in/google_sign_in.dart';
 // import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 final FirebaseAuth _auth = FirebaseAuth.instance;
-final GoogleSignIn _googleSignIn = GoogleSignIn();
+// final GoogleSignIn _googleSignIn = GoogleSignIn();
 
 class LoginScreen extends StatefulWidget {
   static const routeName = 'login_screen';
@@ -43,9 +38,9 @@ class LoginScreenState extends State<LoginScreen> {
   }
 
   // Example code for sign out.
-  void _signOut() async {
-    await _auth.signOut();
-  }
+  // void _signOut() async {
+  //   await _auth.signOut();
+  // }
 }
 
 class _EmailPasswordForm extends StatefulWidget {
@@ -58,7 +53,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _success;
-  String _userEmail;
+  //String _userEmail;
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -212,7 +207,7 @@ class _EmailPasswordFormState extends State<_EmailPasswordForm> {
     if (user != null) {
       setState(() {
         _success = true;
-        _userEmail = user.email;
+        //_userEmail = user.email;
         Navigator.of(context).pop();
         Navigator.of(context).popAndPushNamed(MainLandingScreen.routeName);
       });
