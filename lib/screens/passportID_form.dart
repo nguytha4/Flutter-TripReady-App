@@ -9,8 +9,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class PassportIDForm extends StatefulWidget {
   final DestinationModel destination;
+  final PlanModel plan;
 
-  PassportIDForm({this.destination});
+  PassportIDForm({this.destination, this.plan});
 
   @override
   _PassportIDFormState createState() => _PassportIDFormState();
@@ -201,7 +202,7 @@ class _PassportIDFormState extends State<PassportIDForm> {
           if (formKey.currentState.validate()) {
             formKey.currentState.save();
 
-            Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('passportID').add( {
+            Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.plan.documentID).collection('passportID').add( {
               'timestamp': passportID.timestamp,
               'imageURL': passportID.imageURL,
               'name': passportID.name,

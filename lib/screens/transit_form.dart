@@ -7,8 +7,9 @@ import 'package:intl/intl.dart';
 class TransitForm extends StatefulWidget {
 
   final DestinationModel destination;
+  final PlanModel plan;
 
-  TransitForm({this.destination});
+  TransitForm({this.destination, this.plan});
 
   @override
   _TransitFormState createState() => _TransitFormState();
@@ -435,7 +436,7 @@ String userId;
         if (formKey.currentState.validate()) {
             formKey.currentState.save();
 
-            Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('transit').add( {
+            Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.plan.documentID).collection('transit').add( {
                'timestamp': transit.timestamp,
                'name': transit.name,
                'startLocation': transit.startLocation,

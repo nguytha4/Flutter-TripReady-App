@@ -16,17 +16,19 @@ class _TransitDetailsState extends State<TransitDetails> {
 
     return CapstoneScaffold(
       title: 'Transit Details',
-      child: Column(
-        children: <Widget>[
-          transitLine("Name", transit.name, Colors.purple, Icons.flight),
-          transitLine("Start Location", transit.startLocation, Colors.blue, Icons.my_location),
-          transitLine("Destination", transit.destination, Colors.red, Icons.location_on),
-          transitLine("Confirmation Number", transit.confirmNum, Colors.brown, Icons.confirmation_number),
-          transitLine("Departure Date", DateFormat('MM-dd-yyyy').format(transit.departDateTime), Colors.blue, Icons.calendar_today),
-          transitLine("Departure Time", DateFormat('hh:mm aa').format(transit.departDateTime), Colors.red, Icons.access_time),
-          transitLine("Arrival Date", DateFormat('MM-dd-yyyy').format(transit.arriveDateTime), Colors.blue, Icons.calendar_today),
-          transitLine("Arrival Time", DateFormat('hh:mm aa').format(transit.arriveDateTime), Colors.red, Icons.access_time),
-        ],
+      child: SingleChildScrollView(
+          child: Column(
+          children: <Widget>[
+            transitLine("Name", transit.name, Colors.purple, Icons.flight),
+            transitLine("Start Location", transit.startLocation, Colors.blue, Icons.my_location),
+            transitLine("Destination", transit.destination, Colors.red, Icons.location_on),
+            transitLine("Confirmation Number", transit.confirmNum, Colors.brown, Icons.confirmation_number),
+            transitLine("Departure Date", DateFormat('MM-dd-yyyy').format(transit.departDateTime), Colors.blue, Icons.calendar_today),
+            transitLine("Departure Time", DateFormat('hh:mm aa').format(transit.departDateTime), Colors.red, Icons.access_time),
+            transitLine("Arrival Date", DateFormat('MM-dd-yyyy').format(transit.arriveDateTime), Colors.blue, Icons.calendar_today),
+            transitLine("Arrival Time", DateFormat('hh:mm aa').format(transit.arriveDateTime), Colors.red, Icons.access_time),
+          ],
+        ),
       ),
     );
   }

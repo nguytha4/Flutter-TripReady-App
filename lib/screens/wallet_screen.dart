@@ -8,8 +8,9 @@ import 'package:intl/intl.dart';
 class WalletScreen extends StatefulWidget {
   static const routeName = 'wallet_screen';
   final DestinationModel destination;
+  final PlanModel plan;
 
-  WalletScreen({this.destination});
+  WalletScreen({this.destination, this.plan});
 
   @override
   _WalletScreenState createState() => _WalletScreenState();
@@ -45,7 +46,7 @@ class _WalletScreenState extends State<WalletScreen> {
                 
                 // Passport ID stream
                 StreamBuilder(
-                  stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('passportID').orderBy('timestamp', descending: true).snapshots(),
+                  stream: Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.plan.documentID).collection('passportID').orderBy('timestamp', descending: true).snapshots(),
                   builder: (content, snapshot) {
                     if (snapshot.data == null) {
                       return Center(child: CircularProgressIndicator(),);
@@ -81,7 +82,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
                 // Transit stream
                 StreamBuilder(
-                  stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('transit').orderBy('departDateTime', descending: false).snapshots(),
+                  stream: Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.plan.documentID).collection('transit').orderBy('departDateTime', descending: false).snapshots(),
                   builder: (content, snapshot) {
                     if (snapshot.data == null) {
                       return Center(child: CircularProgressIndicator(),);
@@ -124,7 +125,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
                 // Accomodation stream
                 StreamBuilder(
-                  stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('accomodation').orderBy('checkInDateTime', descending: false).snapshots(),
+                  stream: Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.plan.documentID).collection('accomodation').orderBy('checkInDateTime', descending: false).snapshots(),
                   builder: (content, snapshot) {
                     if (snapshot.data == null) {
                       return Center(child: CircularProgressIndicator(),);
@@ -168,7 +169,7 @@ class _WalletScreenState extends State<WalletScreen> {
 
                 // Event stream
                 StreamBuilder(
-                  stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('event').orderBy('startDateTime', descending: false).snapshots(),
+                  stream: Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.plan.documentID).collection('event').orderBy('startDateTime', descending: false).snapshots(),
                   builder: (content, snapshot) {
                     if (snapshot.data == null) {
                       return Center(child: CircularProgressIndicator(),);
@@ -220,27 +221,22 @@ class _WalletScreenState extends State<WalletScreen> {
 
   void toPassportIDForm(BuildContext context) {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => PassportIDForm(destination: widget.destination)));
+          MaterialPageRoute(builder: (context) => PassportIDForm(destination: widget.destination, plan: widget.plan)));
   }
 
   void toAccomodationForm(BuildContext context) {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => AccomodationForm(destination: widget.destination)));
+          MaterialPageRoute(builder: (context) => AccomodationForm(destination: widget.destination, plan: widget.plan)));
   }
 
   void toEventForm(BuildContext context) {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => EventForm(destination: widget.destination)));
+          MaterialPageRoute(builder: (context) => EventForm(destination: widget.destination, plan: widget.plan)));
   }
 
   void toTransitForm(BuildContext context) {
         Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => TransitForm(destination: widget.destination)));
-  }
-
-  void toDestinationScreen(BuildContext context) {
-        Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => DestinationScreen(destination: widget.destination)));
+          MaterialPageRoute(builder: (context) => TransitForm(destination: widget.destination, plan: widget.plan)));
   }
 
   void toPassportIDDetails(BuildContext context, String name, String imageURL) {
@@ -321,7 +317,7 @@ class _WalletScreenState extends State<WalletScreen> {
             new FlatButton(
               child: new Text("Confirm"),
               onPressed: () {
-                Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection(collection).document(snapshot.data.documents[index].documentID).delete();
+                Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.plan.documentID).collection(collection).document(snapshot.data.documents[index].documentID).delete();
                 Navigator.of(context).pop();
               },
             ),
