@@ -6,9 +6,8 @@ import 'wallet_screen.dart';
 
 class DestinationScreen extends StatefulWidget {
   final DestinationModel destination;
-  final PlanModel planModel;
   
-  DestinationScreen({this.destination, this.planModel});
+  DestinationScreen({this.destination});
 
   @override
   _DestinationScreenState createState() => _DestinationScreenState();
@@ -52,7 +51,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
       children: [
         buildButton((_) => SitesFoodScreen(destination:widget.destination), 'Sites / Food', Colors.green),
         buildButton((_) => TipsScreen(destination:widget.destination), 'Tips', Colors.orange),
-        buildButton((_) => ChecklistScreen(destination: widget.destination, planModel: widget.planModel), 'Items Checklist', Colors.red),
+        buildButton((_) => ChecklistScreen(destination: widget.destination, planModel: widget.plan), 'Items Checklist', Colors.red),
         buildButton((_) => WalletScreen(destination: widget.destination), 'Wallet', Colors.purple),
       ],
     ),
