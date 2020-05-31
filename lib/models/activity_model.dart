@@ -8,6 +8,7 @@ class ActivityModel {
   String category;
   List<String> startTimes;
   double rating;
+  int ratingCount;
   int price;
 
   ActivityModel({this.documentID, this.imageUrl, this.name, this.type, this.category, this.startTimes, this.rating, this.price});
@@ -20,6 +21,7 @@ class ActivityModel {
     category = snapshot['category'];
     startTimes  = snapshot['startTimes']?.cast<String>() ?? List<String>();
     rating = double.parse(snapshot['rating'].toString());
+    ratingCount = snapshot['ratingCount'] ?? 0;
     price = snapshot['price'];
   }
 
@@ -31,6 +33,7 @@ class ActivityModel {
       'category': category,
       'startTimes': startTimes,
       'rating': rating,
+      'ratingCount': ratingCount,
       'price': price
     };
   }

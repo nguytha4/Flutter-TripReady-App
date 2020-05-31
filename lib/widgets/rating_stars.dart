@@ -31,7 +31,7 @@ class AverageRating extends StatelessWidget {
           ),
           SizedBox(height: 5),
           Text(
-            "$rating",
+            "${rating.toStringAsFixed(1)}",
             style: TextStyle(
               fontSize: 12,
               fontWeight: FontWeight.bold,

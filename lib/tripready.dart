@@ -27,7 +27,7 @@ export 'models/activity_model.dart';
 export 'models/destination_model.dart';
 export 'models/plan_model.dart';
 export 'models/favorite_model.dart';
-export 'models/star_model.dart';
+export 'models/user_activity_model.dart';
 export 'screens/main_landing_screen.dart';
 export 'screens/destination_screen.dart';
 export 'screens/new_destination_entry_screen.dart';

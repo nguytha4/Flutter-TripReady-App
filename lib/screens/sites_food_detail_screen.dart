@@ -24,12 +24,13 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
             children: [
               AverageRating(rating: widget.activity.rating),
               RatingBar(
-                initialRating: 3,
+                //initialRating: 3,
                 itemCount: 5,
+                allowHalfRating: true,
                 itemBuilder: (context, _) =>
                     Icon(Icons.star, color: Colors.amber),
-                onRatingUpdate: (rating) {
-                  print(rating);
+                onRatingUpdate: (rating) async {
+                  await DataService.addRating(this.widget.destination.documentID, this.widget.activity.documentID, rating);
                 },
               )
             ],
