@@ -5,11 +5,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:collection';
 
 class TipsScreen extends StatefulWidget {
-  static const routeName = 'tips_screen';
-  final DestinationModel destination;
-  final PlanModel plan;
 
-  TipsScreen({this.destination, this.plan});
+  static const routeName = 'tips_screen';
+
+  final DestinationModel destination;
+
+  TipsScreen({this.destination});
   @override
   _TipsScreenState createState() => _TipsScreenState();
 }
@@ -23,7 +24,7 @@ class _TipsScreenState extends State<TipsScreen> {
 
   List crowd_source;
   LinkedHashMap sortedMap;
-  var doc;
+  DocumentSnapshot doc;
 
   @override
   void initState() {
@@ -33,41 +34,12 @@ class _TipsScreenState extends State<TipsScreen> {
   }
   Widget build(BuildContext context) {
 
-    // =================================================================================
-  
-
-Map docData = doc.data;
-  if (docData != null) {
-    // print(docData);
-    List mapKeys = doc.data.keys.toList(growable: false);
-    List mapVals = doc.data.values.toList();
-    
-    // print(mapKeys);
-    
-    var sortedKeys = mapKeys..sort((k1, k2) => doc.data[k1].compareTo(doc.data[k2]));
-
-    if (sortedKeys.length < 5) {
-      crowd_source = List.from(sortedKeys.reversed).sublist(0,sortedKeys.length);
-    } else {
-      crowd_source = List.from(sortedKeys.reversed).sublist(0,5);
-    }
-
-     sortedMap = LinkedHashMap
-      .fromIterable(crowd_source, key: (k) => k, value: (k) => docData[k]);
-  } else {
-    crowd_source = [];
-    sortedMap = Map();
-  }
-
-  // =================================================================================
-
-
     return CapstoneScaffold(
       title: widget.destination.city + ' - Tips',
       child: 
 
       StreamBuilder(
-        stream: Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.plan.documentID).collection('tips').snapshots(),
+        stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').orderBy('category', descending: false).snapshots(),
         builder: (content, snapshot) {
           if (snapshot.data == null) {
             return Center(child: CircularProgressIndicator(),);
@@ -147,7 +119,7 @@ Map docData = doc.data;
                 if (formKey.currentState.validate()) {
                    formKey.currentState.save();
 
-                   Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.plan.documentID).collection('tips').add( {
+                   Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').add( {
                       'category': category,
                       'tips' : [],
                    });
@@ -168,7 +140,7 @@ Map docData = doc.data;
   }
 
   // Dialog that appears when user adds a tip under a category
-  void addTipDialog(String docID) {
+  void addTipDialog(Entry root, String docID) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -198,10 +170,10 @@ Map docData = doc.data;
           ),
           actions: <Widget>[
             new FlatButton(
-              child: Text('Crowd Source'),
+              child: Text('Popular Tips'),
               onPressed: () {
                 Navigator.of(context).pop();
-                crowdSourceDialog(context);
+                crowdSourceDialog(context, root, docID);
               }, 
               ),
             new FlatButton(
@@ -213,14 +185,19 @@ Map docData = doc.data;
                   List<String> tipsList = List<String>();
                   tipsList.add(tip);
 
-
-                  // Add to crowdsource
-                  _addToCrowdSource(tip);
+                  List<String> existingTipsList = List<String>();
+                  for (var x in root.children) { existingTipsList.add(x.title); }
+                  
+                  if(existingTipsList.contains(tip) == false)
+                    // Add to crowdsource
+                    _addToCrowdSource(tip);
 
                   // Add the tip to the Tips collection under the user's destination
-                  Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.plan.documentID).collection('tips').document(docID).updateData( {
+                  Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
                       'tips' : FieldValue.arrayUnion(tipsList),
                    });
+
+                  // Check array size after?
 
                    Navigator.of(context).pop();
                 }                
@@ -250,7 +227,7 @@ Map docData = doc.data;
               child: new Text("Confirm"),
               onPressed: () {              
 
-                Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.plan.documentID).collection('tips').document(docID).delete();
+                Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).delete();
                 Navigator.of(context).pop();
               },
             ),
@@ -283,7 +260,7 @@ Map docData = doc.data;
 
                 _removeFromCrowdSource(tipName);
 
-                Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.plan.documentID).collection('tips').document(docID).updateData( {
+                Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
                   'tips' : FieldValue.arrayRemove(tipsList),
                 });
                 Navigator.of(context).pop();
@@ -301,17 +278,41 @@ Map docData = doc.data;
     );
   }
 
+  // Get the user id to use for Firestore database operations
   getUser() async {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
       userId = user.uid;
       setState(() {});
   }
 
+  // Get a map of the crowdsource items based on destination of the current trip
   _getCrowdSource2() async {
     doc = await Firestore.instance.collection('destinations').document(this.widget.destination.documentID).collection('tips_sourced').document('tips_sourced').get();
-    setState(() {});
+
+    setState(() {
+      if (doc.exists) {
+        
+        Map docData = doc.data;
+        List mapKeys = doc.data.keys.toList(growable: false);
+        List mapVals = doc.data.values.toList();
+        
+        var sortedKeys = mapKeys..sort((k1, k2) => doc.data[k1].compareTo(doc.data[k2]));
+
+        if ( sortedKeys.length < 5) 
+          crowd_source = List.from(sortedKeys.reversed).sublist(0,sortedKeys.length);
+        else 
+          crowd_source = List.from(sortedKeys.reversed).sublist(0,5);
+
+        sortedMap = LinkedHashMap.fromIterable(crowd_source, key: (k) => k, value: (k) => docData[k]);
+      } 
+      else {
+        crowd_source = [];
+        sortedMap = Map();
+      }
+    });
   }
 
+  // Take the value that the user entered and add it to the Destination's crowdsource list
   void _addToCrowdSource(String val) {
         
     var document = Firestore.instance.collection('destinations').document(this.widget.destination.documentID).collection('tips_sourced').document('tips_sourced')
@@ -339,11 +340,10 @@ Map docData = doc.data;
             global_checklist_entry: 1
             });
         }
-    } 
-  );
-   
+    });
   }
 
+  // Take the value that user is opting to remove and decrease the count appropriately in the crowdsource database
   void _removeFromCrowdSource(String val) {
 
     var document = Firestore.instance.collection('destinations').document(this.widget.destination.documentID).collection('tips_sourced').document('tips_sourced')
@@ -371,20 +371,6 @@ Map docData = doc.data;
     });
   }
 
-  Future<String> crowdSourceDialog(BuildContext context) {
-    
-    TextEditingController myController = TextEditingController();
-
-    return showDialog(context: context, builder: (context) {
-      return AlertDialog(
-        title: Text("Crowd Sourced List:"),
-        actions: [
-          clist()    
-        ]
-      );
-    });
-  }
-
   // ==================================== Widget functions ====================================
 
   // Build tiles that represent categories
@@ -393,7 +379,7 @@ Map docData = doc.data;
       return ListTile(
         title: Text(root.title), 
         trailing: GestureDetector(
-          onTap: () => addTipDialog(docID),
+          onTap: () => addTipDialog(root, docID),
           child: Icon(Icons.add),
         ),
         onLongPress: () => deleteCategory(docID),
@@ -405,7 +391,7 @@ Map docData = doc.data;
         title: Text(root.title),
         children: [_buildTipsTiles(root, docID),],
         trailing: GestureDetector(
-            onTap: () => addTipDialog(docID),
+            onTap: () => addTipDialog(root, docID),
             child: Icon(Icons.add)
           ),
         ),
@@ -446,33 +432,126 @@ Map docData = doc.data;
     );
   }
 
-  Widget clist() {
+  // Dialog that appears when user selects the crowd source button when adding a tip
+  Future<String> crowdSourceDialog(BuildContext context, Entry root, String docID) {
+    
+    TextEditingController myController = TextEditingController();
+
+    return showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: Text("Crowd Sourced List:"),
+        actions: [
+          clist(docID),
+          new FlatButton(
+              child: new Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                addTipDialog(root, docID);
+              },
+            ),   
+        ]
+      );
+    });
+  }
+
+  Widget clist(String docID) {
     if(crowd_source == null || crowd_source.length == 0) {
       return Center(child:Text("No data found"));
     } 
+
     else { 
+      final pHeight = MediaQuery.of(context).size.height;
+      final pWidth = MediaQuery.of(context).size.width;
+      bool isPortrait = MediaQuery.of(context).orientation == Orientation.portrait;
+
+      // Crowd source dialog box fitted for portrait view
+      if(isPortrait) {
+        return Container(
+          height: pHeight / 2,
+          width: pWidth * .75,
+          child: ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: crowd_source.length,
+            itemBuilder: (context, index) {
+              var score = sortedMap[crowd_source[index]];
+              return SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    ListTile(
+                      title: Text(crowd_source[index]),
+                      trailing: Text("Score: $score"),
+                      leading: GestureDetector(
+                        child: Icon(Icons.add),
+                        onTap: () {
+                         Navigator.of(context).pop(crowd_source[index]);
+
+                         List<String> tipsList = List<String>();
+                         tipsList.add(crowd_source[index]);
+
+                          // Add to crowdsource
+                          _addToCrowdSource(crowd_source[index]);
+
+                          // Add the tip to the Tips collection under the user's destination
+                          Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
+                              'tips' : FieldValue.arrayUnion(tipsList),
+                           });
+                        },
+                      )
+                    ),
+                  ],
+                ),
+              );
+            },
+          )
+        );
+      }
+
+    // Crowd source dialog box fitted for landscape view
+    else {
       return Container(
-        height: 300,
-        width: 300,
+        height: pHeight / 2,
+        width: pWidth * .75,
         child: ListView.builder(
           scrollDirection: Axis.vertical,
           shrinkWrap: true,
           itemCount: crowd_source.length,
           itemBuilder: (context, index) {
             var score = sortedMap[crowd_source[index]];
-            return ListTile(
-              title: Text(crowd_source[index]),
-              trailing: Text("Score: $score"),
-              leading: GestureDetector(
-                child: Icon(Icons.add),
-                onTap: () {
-                 Navigator.of(context).pop(crowd_source[index]);
-                },
-              )
+            return SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  ListTile(
+                    title: Text(crowd_source[index]),
+                    trailing: Text("Score: $score"),
+                    leading: GestureDetector(
+                      child: Icon(Icons.add),
+                      onTap: () {
+                       Navigator.of(context).pop(crowd_source[index]);
+
+                       List<String> tipsList = List<String>();
+                       tipsList.add(crowd_source[index]);
+
+                        // Add to crowdsource
+                        _addToCrowdSource(crowd_source[index]);
+
+                        // Add the tip to the Tips collection under the user's destination
+                        Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
+                            'tips' : FieldValue.arrayUnion(tipsList),
+                         });
+                      },
+                    )
+                  ),
+                ],
+              ),
             );
           },
         )
       );
+    }
+
     }
   }
 
