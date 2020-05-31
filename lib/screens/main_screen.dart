@@ -4,104 +4,87 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:capstone/screens/login_screen.dart';
 import 'package:capstone/tripready.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends StatelessWidget {
   static const routeName = 'main_screen';
-  @override
-  _MainScreenState createState() => _MainScreenState();
-}
 
-class _MainScreenState extends State<MainScreen> {
-  var _scaffoldKey = GlobalKey<ScaffoldState>();
-  String userId;
-  @override
-  void initState() {
-    super.initState();
-  
-    Future.delayed(Duration(milliseconds: 200), () {
-      setState(() {
-            if (userId != null) {
-            _showSnackBar();
-          } 
-      });
-  
-    });
+  Future<bool> isSignedIn() async {
+    return (await FirebaseAuth.instance.currentUser()) != null;
   }
-  
+
   Widget build(BuildContext context) {
-    setState(() {
-      userId = ModalRoute.of(context).settings.arguments;
-    });
-    
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-       title: Text("Trip Ready"),
-       centerTitle: true),
-      body: buildMainScreen(context)
+    return FutureBuilder(
+      future: isSignedIn(),
+      builder: (BuildContext ctx, AsyncSnapshot<bool> snapshot) {
+        // if the future hasn't completed
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator();
+        }
+
+        // skip login process if the user is signed in
+        if (snapshot.data) {
+          return MainLandingScreen();
+        }
+
+        return Scaffold(
+            appBar: AppBar(title: Text("Trip Ready"), centerTitle: true),
+            body: Login());
+      },
+    );
+  }
+}
+
+class Login extends StatelessWidget {
+  final logoutSnackBar = SnackBar(content: Text('Sucessfully logged out'));
+
+  @override
+  Widget build(BuildContext context) {
+    return Builder(
+      builder: (context) {
+        // if (ModalRoute.of(context).settings.arguments != null) {
+        //   Scaffold.of(context).showSnackBar(logoutSnackBar);
+        // }
+
+        return Column(
+          children: [
+            Logo(),
+            Text(
+              "Trip Like Never Before",
+              style: TextStyle(
+                  color: Colors.blue,
+                  fontSize: 30,
+                  fontFamily: 'Sans-serif',
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic),
+            ),
+            SizedBox(height: 60),
+            SizedBox(height: 120),
+            _signInBtn(context),
+            _createAccountBtn(context)
+          ],
+        );
+      },
     );
   }
 
-  Widget buildMainScreen(BuildContext context) {
-    return Column(
-      children: [Logo(), Text("Trip Like Never Before", style: TextStyle(color: Colors.blue, fontSize: 30, fontFamily: 'Sans-serif', fontWeight: FontWeight.bold, fontStyle: FontStyle.italic),), SizedBox(height: 60), SizedBox(height: 120), signInBtn(context), createAccountBtn(context)],
-    );
+  Widget _signInBtn(BuildContext context) {
+    return ButtonTheme(
+        minWidth: 300,
+        child: RaisedButton(
+            color: Colors.blue,
+            onPressed: () {
+              Navigator.of(context).pushNamed(LoginScreen.routeName);
+            },
+            child: Text('Sign in')));
   }
 
-  Widget signInBtn(BuildContext context) {
-  return ButtonTheme(
-    minWidth: 300,
-    child:RaisedButton(
-    color: Colors.blue,
-    onPressed: () {
-      Navigator.of(context).pushNamed(LoginScreen.routeName);
-    },
-    child: Text('Sign in')
-  )
-  );
+  Widget _createAccountBtn(BuildContext context) {
+    return ButtonTheme(
+        minWidth: 300,
+        child: RaisedButton(
+            color: Colors.white,
+            onPressed: () {
+              Navigator.of(context).pushNamed(RegisterPage.routeName);
+            },
+            child: Text('Create Account')));
   }
-
-  // getUser() async {
-  //     FirebaseUser user = await FirebaseAuth.instance.currentUser();
-  //     if (user == null) {
-  //       userId = null; 
-  //     } 
-  //     setState(() {});
-  //     // print(userId);
-  // }
-
-  _showSnackBar() {
-    WidgetsBinding.instance.addPostFrameCallback((_) => _scaffoldKey.currentState.showSnackBar(SnackBar(content: Text('Sucessfully logged out'))));
-  }
-
 }
-
-
-
-Widget createAccountBtn(BuildContext context) {
-  return ButtonTheme(
-    minWidth: 300,
-    child:RaisedButton(
-    color: Colors.white,
-    onPressed: () {
-      Navigator.of(context).pushNamed(RegisterPage.routeName);
-    },
-    child: Text('Create Account')
-  )
-  );
-}
-
-Widget guestBtn() {
-  return ButtonTheme(
-    minWidth: 300,
-    child:RaisedButton(
-    color: Colors.white,
-    onPressed: () {},
-    child: Text('Enter as a guest')
-  )
-  );
-}
-
-
-
-
-
