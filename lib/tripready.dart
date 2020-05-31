@@ -40,5 +40,4 @@ export 'widgets/photo_listview_tile.dart';
 export 'widgets/rating_stars.dart';
 export 'services/authentication_service.dart';
 export 'services/data_service.dart';
-export 'services/image_service.dart';
 

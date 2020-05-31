@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/tripready.dart';
 
@@ -32,8 +33,10 @@ class ImageHeader extends StatelessWidget {
             ),
             child: Hero(
               tag: UniqueKey(),
-              child: Image(
-                image: ImageService.buildAssetImage(imageUrl),
+              child: CachedNetworkImage(
+                imageUrl: imageUrl,
+                placeholder: (context, url) => CircularProgressIndicator(),
+                errorWidget: (context, url, error) => Icon(Icons.error),
                 width: MediaQuery.of(context).size.width,
                 fit: BoxFit.cover,
               ),
