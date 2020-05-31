@@ -30,7 +30,7 @@ class _TipsScreenState extends State<TipsScreen> {
   void initState() {
     super.initState();
     getUser();
-    _getCrowdSource2();
+    getCrowdSourceList();
   }
   Widget build(BuildContext context) {
 
@@ -38,6 +38,7 @@ class _TipsScreenState extends State<TipsScreen> {
       title: widget.destination.city + ' - Tips',
       child: 
 
+      // Main Tips screen that shows categories and tips under each category
       StreamBuilder(
         stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').orderBy('category', descending: false).snapshots(),
         builder: (content, snapshot) {
@@ -68,7 +69,7 @@ class _TipsScreenState extends State<TipsScreen> {
 
                 return Column(
                   children: <Widget>[
-                      _buildCategoryTiles(tipsCategory, docID),
+                      buildCategoryTiles(tipsCategory, docID),
                   ],
                 );
               },
@@ -185,19 +186,19 @@ class _TipsScreenState extends State<TipsScreen> {
                   List<String> tipsList = List<String>();
                   tipsList.add(tip);
 
+                  // Create a list of strings representing the current tips under the category
                   List<String> existingTipsList = List<String>();
                   for (var x in root.children) { existingTipsList.add(x.title); }
                   
+                  // If the tip being added is already in the list
                   if(existingTipsList.contains(tip) == false)
                     // Add to crowdsource
-                    _addToCrowdSource(tip);
+                    addToCrowdSource(tip);
 
                   // Add the tip to the Tips collection under the user's destination
                   Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
                       'tips' : FieldValue.arrayUnion(tipsList),
                    });
-
-                  // Check array size after?
 
                    Navigator.of(context).pop();
                 }                
@@ -216,18 +217,35 @@ class _TipsScreenState extends State<TipsScreen> {
   }
 
   // Dialog that appears when user tries to delete a category
-  void deleteCategory(String docID) {
+  void deleteCategory(Entry root, String docID) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
+
+        // In case user deletes category, prepare a list to reference to pass into the removeFromCrowdSource function
+        List<String> categoryTipList = List<String>();
+        Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID)
+          .get().then( (onValue) {
+            for(var x in onValue['tips']) {
+              categoryTipList.add(x);
+            }
+          });
+
         return AlertDialog(
           title: new Text("Delete entry?"),
           actions: <Widget>[
             new FlatButton(
               child: new Text("Confirm"),
-              onPressed: () {              
+              onPressed: () {
 
+                // Remove all categories from crowd source
+                for (var x in categoryTipList) {
+                  removeFromCrowdSource(x);
+                }
+
+                // Delete entire document which represents category
                 Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).delete();
+
                 Navigator.of(context).pop();
               },
             ),
@@ -258,7 +276,7 @@ class _TipsScreenState extends State<TipsScreen> {
                 List<String> tipsList = List<String>();
                 tipsList.add(tipName);
 
-                _removeFromCrowdSource(tipName);
+                removeFromCrowdSource(tipName);
 
                 Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
                   'tips' : FieldValue.arrayRemove(tipsList),
@@ -286,7 +304,7 @@ class _TipsScreenState extends State<TipsScreen> {
   }
 
   // Get a map of the crowdsource items based on destination of the current trip
-  _getCrowdSource2() async {
+  getCrowdSourceList() async {
     doc = await Firestore.instance.collection('destinations').document(this.widget.destination.documentID).collection('tips_sourced').document('tips_sourced').get();
 
     setState(() {
@@ -313,7 +331,7 @@ class _TipsScreenState extends State<TipsScreen> {
   }
 
   // Take the value that the user entered and add it to the Destination's crowdsource list
-  void _addToCrowdSource(String val) {
+  void addToCrowdSource(String val) {
         
     var document = Firestore.instance.collection('destinations').document(this.widget.destination.documentID).collection('tips_sourced').document('tips_sourced')
     .get().then((DocumentSnapshot) {
@@ -344,7 +362,9 @@ class _TipsScreenState extends State<TipsScreen> {
   }
 
   // Take the value that user is opting to remove and decrease the count appropriately in the crowdsource database
-  void _removeFromCrowdSource(String val) {
+  void removeFromCrowdSource(String val) {
+
+    print('remove from crowd source');
 
     var document = Firestore.instance.collection('destinations').document(this.widget.destination.documentID).collection('tips_sourced').document('tips_sourced')
     .get().then((DocumentSnapshot) {
@@ -374,7 +394,7 @@ class _TipsScreenState extends State<TipsScreen> {
   // ==================================== Widget functions ====================================
 
   // Build tiles that represent categories
-  Widget _buildCategoryTiles(Entry root, String docID) {
+  Widget buildCategoryTiles(Entry root, String docID) {
     if (root.children.isEmpty) {
       return ListTile(
         title: Text(root.title), 
@@ -382,14 +402,14 @@ class _TipsScreenState extends State<TipsScreen> {
           onTap: () => addTipDialog(root, docID),
           child: Icon(Icons.add),
         ),
-        onLongPress: () => deleteCategory(docID),
+        onLongPress: () => deleteCategory(root, docID),
       ); 
     } return GestureDetector(
-        onLongPress: () => deleteCategory(docID),
+        onLongPress: () => deleteCategory(root, docID),
         child: ExpansionTile(
         key: PageStorageKey<Entry>(root),
         title: Text(root.title),
-        children: [_buildTipsTiles(root, docID),],
+        children: [buildTipsTiles(root, docID),],
         trailing: GestureDetector(
             onTap: () => addTipDialog(root, docID),
             child: Icon(Icons.add)
@@ -399,7 +419,7 @@ class _TipsScreenState extends State<TipsScreen> {
   }
 
   // Build the tiles that represent the tips in each category
-  Widget _buildTipsTiles(Entry root, String docID) {
+  Widget buildTipsTiles(Entry root, String docID) {
     return ListView.builder(
       scrollDirection: Axis.vertical,
       shrinkWrap: true,
@@ -424,7 +444,7 @@ class _TipsScreenState extends State<TipsScreen> {
     );
   }
 
-    Widget fab() {
+  Widget fab() {
     return FloatingActionButton(
       child: Icon(Icons.add),
       backgroundColor: Colors.blue,
@@ -441,7 +461,7 @@ class _TipsScreenState extends State<TipsScreen> {
       return AlertDialog(
         title: Text("Crowd Sourced List:"),
         actions: [
-          clist(docID),
+          clist(root, docID),
           new FlatButton(
               child: new Text("Cancel"),
               onPressed: () {
@@ -454,7 +474,8 @@ class _TipsScreenState extends State<TipsScreen> {
     });
   }
 
-  Widget clist(String docID) {
+  // Get and display crowd source list with option for user to add fro mit
+  Widget clist(Entry root, String docID) {
     if(crowd_source == null || crowd_source.length == 0) {
       return Center(child:Text("No data found"));
     } 
@@ -490,8 +511,13 @@ class _TipsScreenState extends State<TipsScreen> {
                          List<String> tipsList = List<String>();
                          tipsList.add(crowd_source[index]);
 
-                          // Add to crowdsource
-                          _addToCrowdSource(crowd_source[index]);
+                         List<String> existingTipsList = List<String>();
+                         for (var x in root.children) { existingTipsList.add(x.title); }
+                  
+                         // If the tip being added is already in the list
+                         if(existingTipsList.contains(crowd_source[index]) == false)
+                            // Add to crowdsource
+                            addToCrowdSource(crowd_source[index]);
 
                           // Add the tip to the Tips collection under the user's destination
                           Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
@@ -534,8 +560,13 @@ class _TipsScreenState extends State<TipsScreen> {
                        List<String> tipsList = List<String>();
                        tipsList.add(crowd_source[index]);
 
-                        // Add to crowdsource
-                        _addToCrowdSource(crowd_source[index]);
+                       List<String> existingTipsList = List<String>();
+                         for (var x in root.children) { existingTipsList.add(x.title); }
+                  
+                         // If the tip being added is already in the list
+                         if(existingTipsList.contains(crowd_source[index]) == false)
+                            // Add to crowdsource
+                            addToCrowdSource(crowd_source[index]);
 
                         // Add the tip to the Tips collection under the user's destination
                         Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
