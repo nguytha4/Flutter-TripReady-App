@@ -7,8 +7,8 @@ class PlanModel {
   DateTime travelDate;
   DateTime returnDate;
 
-  get travelDateString => DateFormat.yMMMEd().format(travelDate);
-  get returnDateString => DateFormat.yMMMEd().format(returnDate);
+  get travelDateString => DateFormat.yMd().format(travelDate);
+  get returnDateString => DateFormat.yMd().format(returnDate);
   
   PlanModel({this.documentID, this.destinationID, this.travelDate, this.returnDate});
 

@@ -27,8 +27,8 @@ class DataService {
   static Future<PlanModel> createPlan(PlanModel plan) async {
     var userId = await AuthenticationService.currentUserId();
 
-    plan.travelDate = DateTime(plan.travelDate.year, plan.travelDate.month,
-        plan.travelDate.day, 23, 59, 59);
+    plan.returnDate = DateTime(plan.returnDate.year, plan.returnDate.month,
+        plan.returnDate.day, 23, 59, 59);
 
     var collectionReference = Firestore.instance
         .collection('users')
