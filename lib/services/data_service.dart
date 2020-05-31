@@ -60,12 +60,42 @@ class DataService {
       await ratingRef.setData(UserActivityModel(rating: rating).toMap());
     } else {
       var userRating = UserActivityModel.fromSnapshot(userRatingSnapshot);
+      var oldRating = userRating.rating;
+
       userRating.rating = rating;
       await ratingRef.setData(userRating.toMap());
+
+      await undoRating(destinationId, activityId, oldRating);
     }
 
     // grab global rating
     await updateAverageRating(destinationId, activityId, rating);
+  }
+
+  static Future undoRating(
+      String destinationId, String activityId, double rating) async {
+    // grab global rating
+    var activityRef = Firestore.instance
+        .collection('destinations')
+        .document(destinationId)
+        .collection('activities')
+        .document(activityId);
+
+    var activity = ActivityModel.fromSnapshot(await activityRef.get());
+
+    if (activity.ratingCount <= 1) {
+      // this is the last rating
+      activity.rating = 0;
+      activity.ratingCount = 0;
+    } else {
+      // compute the new rolling average
+      activity.rating = (activity.rating * activity.ratingCount - rating) /
+          (activity.ratingCount - 1);
+      activity.ratingCount--;
+    }
+
+    // save the activity back
+    await activityRef.setData(activity.toMap());
   }
 
   static Future updateAverageRating(
