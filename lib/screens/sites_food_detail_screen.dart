@@ -32,22 +32,7 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AverageRating(rating: rating),
-              RatingBar(
-                itemCount: 5,
-                allowHalfRating: true,
-                itemBuilder: (context, _) =>
-                    Icon(Icons.star, color: Colors.amber),
-                onRatingUpdate: (rating) async {
-                  var updatedActivity = await DataService.addRating(this.widget.destination.documentID, this.widget.activity.documentID, rating);
-
-                  setState(() {
-                    this.rating = updatedActivity.rating;
-                  });
-                },
-              )
-            ],
+            children: [AverageRating(rating: rating), _buildRatingBar()],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -55,6 +40,31 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildRatingBar() {
+    return FutureBuilder(
+      future: DataService.getUserRating(
+          this.widget.destination.documentID, this.widget.activity.documentID),
+      builder: (context, AsyncSnapshot<double> snapshot) {
+        return RatingBar(
+          initialRating: snapshot.hasData ? snapshot.data : 0,
+          itemCount: 5,
+          allowHalfRating: true,
+          itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
+          onRatingUpdate: (rating) async {
+            var updatedActivity = await DataService.addRating(
+                this.widget.destination.documentID,
+                this.widget.activity.documentID,
+                rating);
+
+            setState(() {
+              this.rating = updatedActivity.rating;
+            });
+          },
+        );
+      },
     );
   }
 

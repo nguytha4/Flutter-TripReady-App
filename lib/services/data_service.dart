@@ -40,6 +40,28 @@ class DataService {
     return PlanModel.fromSnapshot(await ref.get());
   }
 
+  static Future<double> getUserRating(String destinationId, String activityId) async {
+    var userId = await AuthenticationService.currentUserId();
+
+    // grab individual rating
+    var ratingRef = Firestore.instance
+        .collection('users')
+        .document(userId)
+        .collection('destinations')
+        .document(destinationId)
+        .collection('activities')
+        .document(activityId);
+
+    var userRatingSnapshot = await ratingRef.get();
+
+    if (!userRatingSnapshot.exists) {
+      return 0;
+    }
+
+    var userActivity = UserActivityModel.fromSnapshot(userRatingSnapshot);
+    return userActivity.rating;
+  }
+
   static Future<ActivityModel> addRating(
       String destinationId, String activityId, double rating) async {
     var userId = await AuthenticationService.currentUserId();
