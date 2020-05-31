@@ -157,9 +157,6 @@ class RegisterPageState extends State<RegisterPage> {
               if (value.isEmpty) {
                 return 'Please re-enter your password';
               } else if (_userPassword != value.trim()) {
-                print(value);
-                print(_userPassword);
-                print(_userPassword == value);
                 return 'Error: Passwords do not match';
               }
               return null;
