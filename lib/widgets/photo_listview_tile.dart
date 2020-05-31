@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:capstone/tripready.dart';
@@ -53,10 +54,14 @@ class PhotoListViewTile extends StatelessWidget {
                   children: [
                     Hero(
                         tag: UniqueKey(),
-                        child: Image(
+                        child: CachedNetworkImage(
+                          imageUrl: imageUrl,
+                          placeholder: (context, url) =>
+                              CircularProgressIndicator(),
+                          errorWidget: (context, url, error) =>
+                              Icon(Icons.error),
                           height: 180.0,
                           width: MediaQuery.of(context).size.width,
-                          image: ImageService.buildAssetImage(imageUrl),
                           fit: BoxFit.cover,
                         )),
                     PhotoListViewTileTitle(

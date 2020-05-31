@@ -1,5 +1,6 @@
 import 'package:capstone/tripready.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class SitesFoodDetailScreen extends StatefulWidget {
   static const routeName = 'sites_food_detail_screen';
@@ -13,13 +14,43 @@ class SitesFoodDetailScreen extends StatefulWidget {
 }
 
 class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
-  Text _buildRatingStars(int rating) {
-    String stars = '';
-    for (int i = 0; i < rating; i++) {
-      stars += '⭐ ';
+  Widget _buildRatingStars() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AverageRating(rating: widget.activity.rating),
+              RatingBar(
+                //initialRating: 3,
+                itemCount: 5,
+                allowHalfRating: true,
+                itemBuilder: (context, _) =>
+                    Icon(Icons.star, color: Colors.amber),
+                onRatingUpdate: (rating) async {
+                  await DataService.addRating(this.widget.destination.documentID, this.widget.activity.documentID, rating);
+                },
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [Text('Your Rating')],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Text _buildRatingDollars(int price) {
+    String dollars = '';
+    for (int i = 0; i < price; i++) {
+      dollars += '💲';
     }
-    stars.trim();
-    return Text(stars);
+    dollars.trim();
+    return Text(dollars);
   }
 
   @override
@@ -46,7 +77,6 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
       children: [
         Container(
           margin: EdgeInsets.fromLTRB(20.0, 5.0, 20.0, 5.0),
-          height: 170.0,
           width: double.infinity,
           decoration: BoxDecoration(
             color: Colors.white,
@@ -55,7 +85,7 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
           child: Padding(
             padding: EdgeInsets.all(20.0),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
@@ -76,19 +106,7 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
                     ),
                     Column(
                       children: [
-                        Text(
-                          '\$${activity.price}',
-                          style: TextStyle(
-                            fontSize: 22.0,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Text(
-                          'per pax',
-                          style: TextStyle(
-                            color: Colors.grey,
-                          ),
-                        ),
+                        _buildRatingDollars(activity.price),
                       ],
                     ),
                   ],
@@ -99,7 +117,8 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
                     color: Colors.grey,
                   ),
                 ),
-                _buildRatingStars(activity.rating),
+                SizedBox(height: 10.0),
+                _buildRatingStars(),
                 SizedBox(height: 10.0),
                 Row(
                   children: [
