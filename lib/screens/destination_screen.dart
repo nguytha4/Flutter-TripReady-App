@@ -6,7 +6,8 @@ import 'wallet_screen.dart';
 
 class DestinationScreen extends StatefulWidget {
   final DestinationModel destination;
-  
+  final PlanModel plan;
+
   DestinationScreen({this.destination, this.plan});
 
   @override
