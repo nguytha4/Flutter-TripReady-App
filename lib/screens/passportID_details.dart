@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:capstone/tripready.dart';
 
@@ -9,7 +10,6 @@ class PassportIDDetails extends StatefulWidget {
 class _PassportIDDetailsState extends State<PassportIDDetails> {
   @override
   Widget build(BuildContext context) {
-
     // Get details of entry the ListView tile selected
     final PassportID passportID = ModalRoute.of(context).settings.arguments;
 
@@ -20,12 +20,12 @@ class _PassportIDDetailsState extends State<PassportIDDetails> {
     return CapstoneScaffold(
       title: 'Passport / ID Details',
       child: SizedBox(
-        height: pHeight * .7,
-        width: pWidth * 1,
-        child: Image.network('${passportID.imageURL}'),
-      ),
+          height: pHeight * .7,
+          width: pWidth * 1,
+          child: CachedNetworkImage(
+            placeholder: (context, url) => CircularProgressIndicator(),
+            imageUrl: '${passportID.imageURL}',
+          )),
     );
   }
-
-  
 }
