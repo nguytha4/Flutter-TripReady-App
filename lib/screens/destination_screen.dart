@@ -83,7 +83,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
               padding: padLeft,
               child: buildButton(
                   (_) => WalletScreen(
-                        destination: widget.destination,
+                        destination: widget.destination, plan: widget.plan,
                       ),
                   'Wallet',
                   Color(0xff2CCCB5),
