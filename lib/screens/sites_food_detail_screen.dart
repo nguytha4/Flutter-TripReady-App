@@ -1,5 +1,6 @@
 import 'package:capstone/tripready.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 
 class SitesFoodDetailScreen extends StatefulWidget {
   static const routeName = 'sites_food_detail_screen';
@@ -13,23 +14,44 @@ class SitesFoodDetailScreen extends StatefulWidget {
 }
 
 class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
-  Text _buildRatingStars(int rating) {
-    String stars = '';
-    for (int i = 0; i < rating; i++) {
-      stars += '⭐ ';
-    }
-    stars.trim();
-    return Text(stars);
+  Widget _buildRatingStars() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              AverageRating(rating: widget.activity.rating),
+              RatingBar(
+                initialRating: 3,
+                itemCount: 5,
+                itemBuilder: (context, _) =>
+                    Icon(Icons.star, color: Colors.amber),
+                onRatingUpdate: (rating) {
+                  print(rating);
+                },
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [Text('Your Rating')],
+          ),
+        ],
+      ),
+    );
   }
 
-Text _buildRatingDollars(int price) {
+  Text _buildRatingDollars(int price) {
     String dollars = '';
     for (int i = 0; i < price; i++) {
       dollars += '💲';
     }
     dollars.trim();
     return Text(dollars);
-  } 
+  }
+
   @override
   Widget build(BuildContext context) {
     return CapstoneScaffold(
@@ -95,8 +117,7 @@ Text _buildRatingDollars(int price) {
                   ),
                 ),
                 SizedBox(height: 10.0),
-                //_buildRatingStars(activity.rating),
-                AverageRating(rating: activity.rating),
+                _buildRatingStars(),
                 SizedBox(height: 10.0),
                 Row(
                   children: [
