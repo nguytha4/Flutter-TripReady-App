@@ -1,6 +1,7 @@
 import 'package:capstone/tripready.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SitesFoodDetailScreen extends StatefulWidget {
   static const routeName = 'sites_food_detail_screen';
@@ -81,19 +82,19 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
   Widget build(BuildContext context) {
     return CapstoneScaffold(
       title: '${this.widget.activity.category}',
-      child: Column(
-        children: [
-          ImageHeader(imageUrl: widget.activity.imageUrl, label: ''),
-          buildBody(),
-        ],
+      child: SingleChildScrollView(
+              child: Column(
+          children: [
+            ImageHeader(imageUrl: widget.activity.imageUrl, label: ''),
+            buildBody(),
+          ],
+        ),
       ),
     );
   }
 
   Widget buildBody() {
-    return Expanded(
-      child: buildStack(this.widget.activity, context),
-    );
+    return buildStack(this.widget.activity, context);
   }
 
   Stack buildStack(ActivityModel activity, BuildContext context) {
@@ -144,33 +145,49 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
                 SizedBox(height: 10.0),
                 _buildRatingStars(),
                 SizedBox(height: 10.0),
-                Row(
+                Column(
                   children: [
                     Container(
                       padding: EdgeInsets.all(5.0),
-                      width: 85.0,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).accentColor,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
-                      alignment: Alignment.center,
+                      alignment: Alignment.topLeft,
                       child: Text(
-                        activity.startTimes[0],
+                        'Description:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    SizedBox(width: 10.0),
+                    SizedBox(height: 10.0),
                     Container(
-                      padding: EdgeInsets.all(5.0),
-                      width: 85.0,
+                      padding: EdgeInsets.all(15.0),
                       decoration: BoxDecoration(
-                        color: Theme.of(context).accentColor,
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey.withOpacity(0.3),
+                              spreadRadius: 3,
+                              blurRadius: 7,
+                              offset: Offset(0, 3))
+                        ],
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        activity.startTimes[1],
+                        activity.description,
                       ),
                     ),
+                    SizedBox(height: 10.0),
+                    RaisedButton(
+                        color: Colors.blue,
+                        padding: EdgeInsets.fromLTRB(100, 0, 100, 0),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(50.0)),
+                        onPressed: _launcherUrl,
+                        child: Text(
+                          'More Info!',
+                        )),
                   ],
                 )
               ],
@@ -179,5 +196,14 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
         ),
       ],
     );
+  }
+
+  _launcherUrl() async {
+    const url = 'https://google.com';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
