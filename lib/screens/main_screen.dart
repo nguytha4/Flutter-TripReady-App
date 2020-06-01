@@ -44,23 +44,49 @@ class Login extends StatelessWidget {
         //   Scaffold.of(context).showSnackBar(logoutSnackBar);
         // }
 
-        return Column(
-          children: [
-            Logo(),
-            Text(
-              "Trip Like Never Before",
-              style: TextStyle(
-                  color: Colors.blue,
-                  fontSize: 30,
-                  fontFamily: 'Sans-serif',
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic),
-            ),
-            SizedBox(height: 60),
-            SizedBox(height: 120),
-            _signInBtn(context),
-            _createAccountBtn(context)
-          ],
+        return Container(
+          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(15.0),
+                  boxShadow: [
+                    BoxShadow(
+                        color: Colors.grey.withOpacity(0.5),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3))
+                  ],
+
+              image: DecorationImage(
+                  colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.6), BlendMode.colorDodge),
+                  image: AssetImage('assets/images/background.jpg'),
+                  fit: BoxFit.fitHeight)),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(30.0),
+                child: Container(
+                  // decoration: BoxDecoration(color: Colors.white, 
+                  child: Column(
+                    children: <Widget>[
+                      Logo(),
+                      Text(
+                        "Trip Like Never Before",
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 30,
+                            fontFamily: 'Sans-serif',
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(height: 30),
+              SizedBox(height: 120),
+              _signInBtn(context),
+              _createAccountBtn(context)
+            ],
+          ),
         );
       },
     );
