@@ -40,7 +40,29 @@ class DataService {
     return PlanModel.fromSnapshot(await ref.get());
   }
 
-  static Future addRating(
+  static Future<double> getUserRating(String destinationId, String activityId) async {
+    var userId = await AuthenticationService.currentUserId();
+
+    // grab individual rating
+    var ratingRef = Firestore.instance
+        .collection('users')
+        .document(userId)
+        .collection('destinations')
+        .document(destinationId)
+        .collection('activities')
+        .document(activityId);
+
+    var userRatingSnapshot = await ratingRef.get();
+
+    if (!userRatingSnapshot.exists) {
+      return 0;
+    }
+
+    var userActivity = UserActivityModel.fromSnapshot(userRatingSnapshot);
+    return userActivity.rating;
+  }
+
+  static Future<ActivityModel> addRating(
       String destinationId, String activityId, double rating) async {
     var userId = await AuthenticationService.currentUserId();
 
@@ -69,7 +91,7 @@ class DataService {
     }
 
     // grab global rating
-    await updateAverageRating(destinationId, activityId, rating);
+    return await updateAverageRating(destinationId, activityId, rating);
   }
 
   static Future undoRating(
@@ -98,7 +120,7 @@ class DataService {
     await activityRef.setData(activity.toMap());
   }
 
-  static Future updateAverageRating(
+  static Future<ActivityModel> updateAverageRating(
       String destinationId, String activityId, double rating) async {
     // grab global rating
     var activityRef = Firestore.instance
@@ -122,5 +144,7 @@ class DataService {
 
     // save the activity back
     await activityRef.setData(activity.toMap());
+
+    return activity;
   }
 }

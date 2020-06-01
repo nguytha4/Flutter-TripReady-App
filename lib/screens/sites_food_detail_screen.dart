@@ -14,6 +14,17 @@ class SitesFoodDetailScreen extends StatefulWidget {
 }
 
 class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
+  double rating;
+
+  @override
+  void initState() {
+    super.initState();
+
+    setState(() {
+      rating = widget.activity.rating;
+    });
+  }
+
   Widget _buildRatingStars() {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -21,19 +32,7 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              AverageRating(rating: widget.activity.rating),
-              RatingBar(
-                //initialRating: 3,
-                itemCount: 5,
-                allowHalfRating: true,
-                itemBuilder: (context, _) =>
-                    Icon(Icons.star, color: Colors.amber),
-                onRatingUpdate: (rating) async {
-                  await DataService.addRating(this.widget.destination.documentID, this.widget.activity.documentID, rating);
-                },
-              )
-            ],
+            children: [AverageRating(rating: rating), _buildRatingBar()],
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
@@ -41,6 +40,31 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildRatingBar() {
+    return FutureBuilder(
+      future: DataService.getUserRating(
+          this.widget.destination.documentID, this.widget.activity.documentID),
+      builder: (context, AsyncSnapshot<double> snapshot) {
+        return RatingBar(
+          initialRating: snapshot.hasData ? snapshot.data : 0,
+          itemCount: 5,
+          allowHalfRating: true,
+          itemBuilder: (context, _) => Icon(Icons.star, color: Colors.amber),
+          onRatingUpdate: (rating) async {
+            var updatedActivity = await DataService.addRating(
+                this.widget.destination.documentID,
+                this.widget.activity.documentID,
+                rating);
+
+            setState(() {
+              this.rating = updatedActivity.rating;
+            });
+          },
+        );
+      },
     );
   }
 
