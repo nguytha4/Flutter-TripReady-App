@@ -94,9 +94,6 @@ class CapstoneDrawer extends StatelessWidget {
                 Navigator.of(context).pop();
                 await Navigator.of(context)
                     .pushNamed(MainScreen.routeName, arguments: uid);
-
-                // Scaffold.of(context).showSnackBar(
-                //     SnackBar(content: Text('Sucessfully logged out')));
               },
             )),
       ],

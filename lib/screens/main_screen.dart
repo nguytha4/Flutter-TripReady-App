@@ -33,30 +33,42 @@ class MainScreen extends StatelessWidget {
   }
 }
 
-class Login extends StatelessWidget {
+class Login extends StatefulWidget {
+  @override
+  _LoginState createState() => _LoginState();
+}
+
+class _LoginState extends State<Login> {
   final logoutSnackBar = SnackBar(content: Text('Sucessfully logged out'));
+
+  @override
+  void initState() {
+    new Future<Null>.delayed(Duration.zero, () {
+      if (ModalRoute.of(context).settings.arguments != null) {
+        Scaffold.of(context).showSnackBar(logoutSnackBar);
+      }
+    });
+
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        // if (ModalRoute.of(context).settings.arguments != null) {
-        //   Scaffold.of(context).showSnackBar(logoutSnackBar);
-        // }
-
         return Container(
           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(15.0),
-                  boxShadow: [
-                    BoxShadow(
-                        color: Colors.grey.withOpacity(0.5),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3))
-                  ],
-
+              borderRadius: BorderRadius.circular(15.0),
+              boxShadow: [
+                BoxShadow(
+                    color: Colors.grey.withOpacity(0.5),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3))
+              ],
               image: DecorationImage(
-                  colorFilter: ColorFilter.mode(Colors.white.withOpacity(0.6), BlendMode.colorDodge),
+                  colorFilter: ColorFilter.mode(
+                      Colors.white.withOpacity(0.6), BlendMode.colorDodge),
                   image: AssetImage('assets/images/background.jpg'),
                   fit: BoxFit.fitHeight)),
           child: Column(
