@@ -1,6 +1,7 @@
 import 'package:capstone/tripready.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SitesFoodDetailScreen extends StatefulWidget {
   static const routeName = 'sites_food_detail_screen';
@@ -149,6 +150,19 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
                     Container(
                       padding: EdgeInsets.all(5.0),
                       decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      alignment: Alignment.topLeft,
+                      child: Text(
+                        'Description:',
+                        style: TextStyle(fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    SizedBox(height: 10.0),
+                    Container(
+                      padding: EdgeInsets.all(5.0),
+                      decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
                               color: Colors.grey.withOpacity(0.5),
@@ -165,24 +179,15 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
                       ),
                     ),
                     SizedBox(height: 10.0),
-                    Container(
-                      padding: EdgeInsets.all(5.0),
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
-                              blurRadius: 7,
-                              offset: Offset(0, 3))
-                        ],
-                        color: Theme.of(context).accentColor,
-                        borderRadius: BorderRadius.circular(10.0),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        activity.url,
-                      ),
-                    ),
+                    RaisedButton(
+                        color: Colors.blue,
+                        padding: EdgeInsets.fromLTRB(100, 0, 100, 0),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: new BorderRadius.circular(50.0)),
+                        onPressed: _launcherUrl,
+                        child: Text(
+                          'More Info!',
+                        )),
                   ],
                 )
               ],
@@ -191,5 +196,14 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
         ),
       ],
     );
+  }
+
+  _launcherUrl() async {
+    const url = 'https://google.com';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
   }
 }
