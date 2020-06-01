@@ -33,56 +33,60 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
   }
 
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-          title: Text("Checklist"),
-          actions: [
-              Builder(builder: (context) {
-                return IconButton (
-                icon: Icon(Icons.dehaze),
-                onPressed: () => Scaffold.of(context).openEndDrawer()
-                );
-              }),
-          ],
-          
-          centerTitle: true,
-      ),
-      body: buildPanels(),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.all(20), 
-        child: fab()),
-        floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
-        endDrawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            SizedBox(
-              height: 120,
-              child: DrawerHeader(child: Text('Settings') )),
-              Center(child:Text("Crowd Sourced Suggestions:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue))),
-              showSourcedDrawer(),
-              SizedBox(
-              height: 120),
-            Padding(
-              padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
-              child:RaisedButton(
-              color: Colors.red,
-              shape: RoundedRectangleBorder(
-                  borderRadius: new BorderRadius.circular(30.0)
-                ),
-              child: const Text('Sign out'),
-              textColor: Colors.white,
-              onPressed: () async {
-                Navigator.of(context).pop();  // hides drawer after clicking 'sign out'
-                _signOut();
-                final String uid = 'randomString';
-                Navigator.of(context).pop();
-                Navigator.of(context).pushNamed(MainScreen.routeName, arguments: uid);
-              },
-            ))
-          ],)
-      ),
+    return CapstoneScaffold(
+      title: "Checklist",
+      child: buildPanels(),
+      fab: fab(),
     );
+    // return Scaffold(
+    //   appBar: AppBar(
+    //       title: Text("Checklist"),
+    //       actions: [
+    //           Builder(builder: (context) {
+    //             return IconButton (
+    //             icon: Icon(Icons.dehaze),
+    //             onPressed: () => Scaffold.of(context).openEndDrawer()
+    //             );
+    //           }),
+    //       ],
+          
+    //       centerTitle: true,
+    //   ),
+    //   body: buildPanels(),
+    //   floatingActionButton: Padding(
+    //     padding: EdgeInsets.all(20), 
+    //     child: fab()),
+    //     floatingActionButtonLocation: FloatingActionButtonLocation.endDocked,
+    //     endDrawer: Drawer(
+    //     child: ListView(
+    //       padding: EdgeInsets.zero,
+    //       children: [
+    //         SizedBox(
+    //           height: 120,
+    //           child: DrawerHeader(child: Text('Settings') )),
+    //           Center(child:Text("Crowd Sourced Suggestions:", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.blue))),
+    //           SizedBox(
+    //           height: 120),
+    //         Padding(
+    //           padding: EdgeInsets.fromLTRB(25, 0, 25, 0),
+    //           child:RaisedButton(
+    //           color: Colors.red,
+    //           shape: RoundedRectangleBorder(
+    //               borderRadius: new BorderRadius.circular(30.0)
+    //             ),
+    //           child: const Text('Sign out'),
+    //           textColor: Colors.white,
+    //           onPressed: () async {
+    //             Navigator.of(context).pop();  // hides drawer after clicking 'sign out'
+    //             _signOut();
+    //             final String uid = 'randomString';
+    //             Navigator.of(context).pop();
+    //             Navigator.of(context).pushNamed(MainScreen.routeName, arguments: uid);
+    //           },
+    //         ))
+    //       ],)
+    //   ),
+    // );
   }
 
   // Example code for sign out.
@@ -182,6 +186,11 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
           if (val != null) {
           setState(() {
             Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').document(_id).delete();
+            if (_data['children'].length > 0) {
+              for (int i = 0; i < _data['children'].length; i++) {
+                _removeFromCrowdSource(_data['children'][i]['title']);
+              }
+            }
             // _removeFromCrowdSource(_data['title']);
           });
         }});
