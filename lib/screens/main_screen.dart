@@ -67,24 +67,36 @@ class Login extends StatelessWidget {
   }
 
   Widget _signInBtn(BuildContext context) {
-    return ButtonTheme(
-        minWidth: 300,
-        child: RaisedButton(
-            color: Colors.blue,
-            onPressed: () {
-              Navigator.of(context).pushNamed(LoginScreen.routeName);
-            },
-            child: Text('Sign in')));
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
+      alignment: Alignment.center,
+      child: ButtonTheme(
+          minWidth: double.infinity,
+          child: RaisedButton(
+              color: Colors.blue,
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(30.0)),
+              onPressed: () {
+                Navigator.of(context).pushNamed(LoginScreen.routeName);
+              },
+              child: Text('Sign in'))),
+    );
   }
 
   Widget _createAccountBtn(BuildContext context) {
-    return ButtonTheme(
-        minWidth: 300,
-        child: RaisedButton(
-            color: Colors.white,
-            onPressed: () {
-              Navigator.of(context).pushNamed(RegisterPage.routeName);
-            },
-            child: Text('Create Account')));
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20),
+      alignment: Alignment.center,
+      child: ButtonTheme(
+          minWidth: double.infinity,
+          child: RaisedButton(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: new BorderRadius.circular(30.0)),
+              onPressed: () {
+                Navigator.of(context).pushNamed(RegisterPage.routeName);
+              },
+              child: Text('Create Account'))),
+    );
   }
 }
