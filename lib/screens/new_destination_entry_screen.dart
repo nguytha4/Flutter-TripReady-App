@@ -71,7 +71,7 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text('Departure Date:'),
+                    child: Text('Departure Date:', style: TextStyle(fontWeight: FontWeight.bold),),
                   ),
                   Container(
                     child: buildDatePicker((dateTime) {
@@ -82,7 +82,7 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
                   ),
                   Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Text('Return Date:'),
+                    child: Text('Return Date:', style: TextStyle(fontWeight: FontWeight.bold),),
                   ),
                   Container(
                     child: buildDatePicker((dateTime) {
