@@ -20,7 +20,7 @@ class ActivityModel {
     name = snapshot['name'];
     type = snapshot['type'];
     category = snapshot['category'];
-    description  = snapshot['description'] ?? 'Named as a must visit places by travellers all around the world. There are a million things to experience here. It\'s a guaranteed place to have fun and enjoy every minute of your time. May be you\'ve indulged yourself before, but not quite like this. Give it a shot and find yourself here.';
+    description  = snapshot['description'] ?? 'Named as a must visit place by travellers all around the world. There are a million things to experience here. It\'s a guaranteed place to have fun and enjoy every minute of your time. Maybe you\'ve indulged yourself before, but not quite like this. Give it a shot and find yourself here.';
     rating = double.parse(snapshot['rating'].toString());
     ratingCount = snapshot['ratingCount'] ?? 0;
     price = snapshot['price'];

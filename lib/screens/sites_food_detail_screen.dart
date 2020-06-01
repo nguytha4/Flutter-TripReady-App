@@ -93,7 +93,7 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
 
   Widget buildBody() {
     return Expanded(
-      child: buildStack(this.widget.activity, context),
+      child: SingleChildScrollView(child: buildStack(this.widget.activity, context)),
     );
   }
 
@@ -161,12 +161,12 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
                     ),
                     SizedBox(height: 10.0),
                     Container(
-                      padding: EdgeInsets.all(5.0),
+                      padding: EdgeInsets.all(15.0),
                       decoration: BoxDecoration(
                         boxShadow: [
                           BoxShadow(
-                              color: Colors.grey.withOpacity(0.5),
-                              spreadRadius: 5,
+                              color: Colors.grey.withOpacity(0.3),
+                              spreadRadius: 3,
                               blurRadius: 7,
                               offset: Offset(0, 3))
                         ],
