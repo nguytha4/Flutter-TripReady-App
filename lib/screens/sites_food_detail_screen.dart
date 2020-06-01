@@ -82,19 +82,19 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
   Widget build(BuildContext context) {
     return CapstoneScaffold(
       title: '${this.widget.activity.category}',
-      child: Column(
-        children: [
-          ImageHeader(imageUrl: widget.activity.imageUrl, label: ''),
-          buildBody(),
-        ],
+      child: SingleChildScrollView(
+              child: Column(
+          children: [
+            ImageHeader(imageUrl: widget.activity.imageUrl, label: ''),
+            buildBody(),
+          ],
+        ),
       ),
     );
   }
 
   Widget buildBody() {
-    return Expanded(
-      child: SingleChildScrollView(child: buildStack(this.widget.activity, context)),
-    );
+    return buildStack(this.widget.activity, context);
   }
 
   Stack buildStack(ActivityModel activity, BuildContext context) {
