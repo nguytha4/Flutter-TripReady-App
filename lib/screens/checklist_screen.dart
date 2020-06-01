@@ -86,7 +86,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
               setState(() {
                  _removeFromCrowdSource(_data[index]['title']);
                 _data.removeAt(index);
-                Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').document(_id).updateData({
+                Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').document(_id).updateData({
                     'children': _data
                   });  
               });
@@ -101,7 +101,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
               onChanged: (bool value) {
                 setState(() {
                   _data[index]['checked'] = value;
-                  Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').document(_id).updateData({
+                  Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').document(_id).updateData({
                     'children': _data,
                   });
                 });
@@ -120,7 +120,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
 
   Widget buildPanels() {
        return StreamBuilder(
-          stream: Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').snapshots(),
+          stream: Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').snapshots(),
           builder: (content, snapshot) {
             if (snapshot.hasData && snapshot.data.documents.length != 0) {
                return ListView.builder(
@@ -136,7 +136,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
         createDeleteDialog(context).then((val) {
           if (val != null) {
           setState(() {
-            Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').document(_id).delete();
+            Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').document(_id).delete();
             if (_data['children'].length > 0) {
               for (int i = 0; i < _data['children'].length; i++) {
                 _removeFromCrowdSource(_data['children'][i]['title']);
@@ -152,7 +152,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
                 onChanged: (bool value) {
                   setState(() {
                     
-                  Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').document(_id).updateData({
+                  Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').document(_id).updateData({
                     'checked': value,
                   });                    
                   });
@@ -176,7 +176,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
                       };
                       var _data2 = List.from(_data['children']);
                       _data2.add(c);
-                      Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').document(_id).updateData({
+                      Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').document(_id).updateData({
                       'children': _data2
                       }); 
                     });
@@ -209,7 +209,7 @@ Widget fab() {
         createAlertDialogFAB(context).then((val) {
           if (val != null) {
           setState(() {
-            Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').add({
+            Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').add({
                       'title': val,
                       'checked': false,
                       'date': DateTime.now(),
@@ -317,7 +317,7 @@ Widget fab() {
           padding: EdgeInsets.fromLTRB(0, 0, 80, 0),
           child:MaterialButton(
             elevation: 5.0,
-            child: Text("Crowd Source"),
+            child: Text("Popular Items"),
             onPressed: () {
               Navigator.of(context).pop("crowd_sourced");
               crowdSourceDialog(context).then((val) {
@@ -332,7 +332,7 @@ Widget fab() {
                    var _data2 = List.from(_data['children']);
                    _data2.add(c);
                   //  print(_data2);
-                   Firestore.instance.collection('users').document(userId).collection('plans').document(this.widget.planModel.documentID).collection('checklist').document(_id).updateData({
+                   Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('checklist').document(_id).updateData({
                       'children': _data2
                       }); 
                  });
