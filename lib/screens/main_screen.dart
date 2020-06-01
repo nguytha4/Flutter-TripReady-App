@@ -64,7 +64,6 @@ class Login extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(30.0),
                 child: Container(
-                  // decoration: BoxDecoration(color: Colors.white, 
                   child: Column(
                     children: <Widget>[
                       Logo(),
