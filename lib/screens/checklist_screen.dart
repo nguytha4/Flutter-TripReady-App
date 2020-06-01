@@ -432,8 +432,9 @@ Widget fab() {
   Widget clist() {
     if(crowd_source == null || crowd_source.length == 0) {
               return Center(child:Text("No data found"));
-            } else { return Container(
-          height: 300,
+            } else { return 
+          Container(
+          height: MediaQuery.of(context).size.height * 0.5,
           width: 300,
           child:
           ListView.builder(
