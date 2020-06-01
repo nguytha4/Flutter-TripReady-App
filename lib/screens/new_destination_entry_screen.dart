@@ -69,7 +69,10 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
                       )),
                     ),
                   ),
-                  Text('Departure Date:'),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Departure Date:'),
+                  ),
                   Container(
                     child: buildDatePicker((dateTime) {
                       setState(() {
@@ -77,7 +80,10 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
                       });
                     }),
                   ),
-                  Text('Return Date:'),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Return Date:'),
+                  ),
                   Container(
                     child: buildDatePicker((dateTime) {
                       setState(() {
