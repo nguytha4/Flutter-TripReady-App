@@ -144,31 +144,43 @@ class _SitesFoodDetailScreenState extends State<SitesFoodDetailScreen> {
                 SizedBox(height: 10.0),
                 _buildRatingStars(),
                 SizedBox(height: 10.0),
-                Row(
+                Column(
                   children: [
                     Container(
                       padding: EdgeInsets.all(5.0),
-                      width: 85.0,
                       decoration: BoxDecoration(
-                        color: Theme.of(context).accentColor,
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3))
+                        ],
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        activity.startTimes[0],
+                        activity.description,
                       ),
                     ),
-                    SizedBox(width: 10.0),
+                    SizedBox(height: 10.0),
                     Container(
                       padding: EdgeInsets.all(5.0),
-                      width: 85.0,
                       decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.grey.withOpacity(0.5),
+                              spreadRadius: 5,
+                              blurRadius: 7,
+                              offset: Offset(0, 3))
+                        ],
                         color: Theme.of(context).accentColor,
                         borderRadius: BorderRadius.circular(10.0),
                       ),
                       alignment: Alignment.center,
                       child: Text(
-                        activity.startTimes[1],
+                        activity.url,
                       ),
                     ),
                   ],
