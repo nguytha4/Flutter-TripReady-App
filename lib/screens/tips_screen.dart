@@ -261,41 +261,6 @@ class _TipsScreenState extends State<TipsScreen> {
     );
   }
 
-  // Dialog that appears when user tries to delete a tip
-  void deleteTip(String docID, String tipName) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: new Text("Delete entry?"),
-          actions: <Widget>[
-            new FlatButton(
-              child: new Text("Confirm"),
-              onPressed: () {      
-
-                List<String> tipsList = List<String>();
-                tipsList.add(tipName);
-
-                removeFromCrowdSource(tipName);
-
-                Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
-                  'tips' : FieldValue.arrayRemove(tipsList),
-                });
-                Navigator.of(context).pop();
-              },
-            ),
-            new FlatButton(
-              child: new Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
   // Get the user id to use for Firestore database operations
   getUser() async {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
@@ -364,8 +329,6 @@ class _TipsScreenState extends State<TipsScreen> {
   // Take the value that user is opting to remove and decrease the count appropriately in the crowdsource database
   void removeFromCrowdSource(String val) {
 
-    print('remove from crowd source');
-
     var document = Firestore.instance.collection('destinations').document(this.widget.destination.documentID).collection('tips_sourced').document('tips_sourced')
     .get().then((DocumentSnapshot) {
 
@@ -429,7 +392,15 @@ class _TipsScreenState extends State<TipsScreen> {
         return Dismissible(
             key: Key(UniqueKey().toString()),
             onDismissed: (direction) {
-              setState( () => deleteTip(docID, root.children[index].title));
+
+              List<String> tipsList = List<String>();
+                tipsList.add(root.children[index].title);
+
+                removeFromCrowdSource(root.children[index].title);
+
+                Firestore.instance.collection('users').document(userId).collection('destinations').document(this.widget.destination.documentID).collection('tips').document(docID).updateData( {
+                  'tips' : FieldValue.arrayRemove(tipsList),
+                });
             },
             background: Container(color: Colors.red),
             child: ListTile(
