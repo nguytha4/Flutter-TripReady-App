@@ -30,7 +30,7 @@ class _WalletScreenState extends State<WalletScreen> {
     return DefaultTabController(
         length: 4,
         child: CapstoneScaffold(
-          title: widget.destination.country + ' - Wallet',
+          title: widget.destination.city + ' - Wallet',
           appbarChild: TabBar(
                   tabs: <Widget>[
                     Tab(icon: Icon(Icons.account_circle)),

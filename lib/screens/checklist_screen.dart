@@ -34,7 +34,7 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
 
   Widget build(BuildContext context) {
     return CapstoneScaffold(
-      title: "Checklist",
+      title: widget.destination.city + " - Checklist",
       child: buildPanels(),
       fab: fab(),
     );
