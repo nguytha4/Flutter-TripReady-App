@@ -196,7 +196,13 @@ class _ChecklistScreenState extends State<ChecklistScreen> with TickerProviderSt
             });
               }
             else {
-              return ListTile( title:Text('No entries'));
+              return Center(
+                child: Column(children: [
+              Padding(
+                padding: const EdgeInsets.all(50.0),
+                child: Text('No items. Please click the button below'),
+              )
+            ]));
             }
             });
   }

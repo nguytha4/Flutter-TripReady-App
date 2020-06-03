@@ -22,6 +22,8 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Allows access to your camera to upload photos to your wallet</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
 	<string>NOT USED</string>
 	<key>NSLocationAlwaysUsageDescription</key>
