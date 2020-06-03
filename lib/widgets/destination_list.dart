@@ -56,14 +56,21 @@ class DestinationList extends StatelessWidget {
 
   Widget buildListView(
       AsyncSnapshot destinationsSnapshot, AsyncSnapshot plansSnapshot) {
-    if (!destinationsSnapshot.hasData ||
-        destinationsSnapshot.data.documents.length <= 0 ||
-        !plansSnapshot.hasData) {
+    if (!destinationsSnapshot.hasData || !plansSnapshot.hasData) {
       return Center(
           child: Column(children: [
         Padding(
             child: CircularProgressIndicator(), padding: EdgeInsets.all(50)),
-        Text('No items. Please click the button below')
+      ]));
+    }
+
+    if (plansSnapshot.data.documents.length == 0) {
+      return Center(
+          child: Column(children: [
+        Padding(
+          padding: const EdgeInsets.all(50.0),
+          child: Text('No items. Please click the button below'),
+        )
       ]));
     }
 
@@ -71,20 +78,20 @@ class DestinationList extends StatelessWidget {
       scrollDirection: Axis.vertical,
       itemCount: plansSnapshot.data.documents.length,
       itemBuilder: (BuildContext context, int index) {
+        var planModel =
+            PlanModel.fromSnapshot(plansSnapshot.data.documents[index]);
 
-        var planModel = PlanModel.fromSnapshot(plansSnapshot.data.documents[index]);
-
-        var destinationSnapshot = destinationsSnapshot
-          .data
-          .documents
-          .singleWhere((element) => element.documentID == planModel.destinationID);
+        var destinationSnapshot = destinationsSnapshot.data.documents
+            .singleWhere(
+                (element) => element.documentID == planModel.destinationID);
 
         var destination = DestinationModel.fromSnapshot(destinationSnapshot);
 
         return PhotoListViewTile(
           title: "${destination.city}",
           subtitle: destination.country,
-          datetitle: '${planModel.travelDateString} - ${planModel.returnDateString}',
+          datetitle:
+              '${planModel.travelDateString} - ${planModel.returnDateString}',
           imageUrl: destination.imageUrl,
           routeBuilder: () => MaterialPageRoute(
             builder: (_) => DestinationScreen(
