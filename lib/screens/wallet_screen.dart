@@ -110,7 +110,16 @@ class _WalletScreenState extends State<WalletScreen> {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else {
+                }
+                else if (snapshot.data.documents.length == 0) {
+                  return Center(
+                      child: Column(children: [
+                    Padding(
+                      padding: const EdgeInsets.all(50.0),
+                      child: Text('No items. Please click the button below'),
+                    )
+                  ])); 
+                }else {
                   return new ListView.builder(
                     itemCount: snapshot.data.documents.length,
                     itemBuilder: (context, index) {
@@ -175,7 +184,15 @@ class _WalletScreenState extends State<WalletScreen> {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
-                } else {
+                } 
+                else if (snapshot.data.documents.length == 0) {
+                  return Center(
+                      child: Column(children: [
+                    Padding(
+                      padding: const EdgeInsets.all(50.0),
+                      child: Text('No items. Please click the button below'),
+                    )
+                  ])); } else {
                   return new ListView.builder(
                     itemCount: snapshot.data.documents.length,
                     itemBuilder: (context, index) {
@@ -243,6 +260,15 @@ class _WalletScreenState extends State<WalletScreen> {
                   return Center(
                     child: CircularProgressIndicator(),
                   );
+                } 
+                else if (snapshot.data.documents.length == 0) {
+                  return Center(
+                      child: Column(children: [
+                    Padding(
+                      padding: const EdgeInsets.all(50.0),
+                      child: Text('No items. Please click the button below'),
+                    )
+                  ]));
                 } else {
                   return new ListView.builder(
                     itemCount: snapshot.data.documents.length,
