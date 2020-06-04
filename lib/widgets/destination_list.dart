@@ -14,7 +14,6 @@ class DestinationList extends StatelessWidget {
           .document(uid)
           .collection('plans')
           .where('returnDate', isGreaterThanOrEqualTo: DateTime.now())
-          .orderBy('travelDate')
           .snapshots();
     } else {
       return Firestore.instance
@@ -22,7 +21,6 @@ class DestinationList extends StatelessWidget {
           .document(uid)
           .collection('plans')
           .where('returnDate', isLessThan: DateTime.now())
-          .orderBy('travelDate')
           .snapshots();
     }
   }
@@ -38,12 +36,11 @@ class DestinationList extends StatelessWidget {
 
         return StreamBuilder(
             stream: buildQuery(userIdSnapshot.data),
-            builder: (context, plansSnapshot) {
+            builder: (context, AsyncSnapshot plansSnapshot) {
               return Container(
                 child: StreamBuilder(
                     stream: Firestore.instance
                         .collection('destinations')
-                        .orderBy('country')
                         .snapshots(),
                     builder: (context, destinationsSnapshot) {
                       return buildListView(destinationsSnapshot, plansSnapshot);
@@ -74,12 +71,17 @@ class DestinationList extends StatelessWidget {
       ]));
     }
 
+    var plans = (plansSnapshot.data.documents as List<DocumentSnapshot>)
+      .map((e) => PlanModel.fromSnapshot(e))
+      .toList();
+
+    plans.sort((x, y) => x.travelDate.compareTo(y.travelDate));
+
     return ListView.builder(
       scrollDirection: Axis.vertical,
-      itemCount: plansSnapshot.data.documents.length,
+      itemCount: plans.length,
       itemBuilder: (BuildContext context, int index) {
-        var planModel =
-            PlanModel.fromSnapshot(plansSnapshot.data.documents[index]);
+        var planModel = plans[index];
 
         var destinationSnapshot = destinationsSnapshot.data.documents
             .singleWhere(
