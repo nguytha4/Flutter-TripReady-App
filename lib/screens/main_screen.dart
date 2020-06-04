@@ -83,7 +83,7 @@ class _LoginState extends State<Login> {
                         "Trip Like Never Before",
                         style: TextStyle(
                             color: Colors.blue,
-                            fontSize: 20,
+                            fontSize: 30,
                             fontFamily: 'Sans-serif',
                             fontWeight: FontWeight.bold,
                             fontStyle: FontStyle.italic),
@@ -92,6 +92,7 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
+              SizedBox(height: MediaQuery.of(context).size.height * 0.1),
               _signInBtn(context),
               _createAccountBtn(context)
             ],
