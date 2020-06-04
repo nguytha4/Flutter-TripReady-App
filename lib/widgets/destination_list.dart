@@ -13,7 +13,7 @@ class DestinationList extends StatelessWidget {
           .collection('users')
           .document(uid)
           .collection('plans')
-          .where('travelDate', isGreaterThanOrEqualTo: DateTime.now())
+          .where('returnDate', isGreaterThanOrEqualTo: DateTime.now())
           .orderBy('travelDate')
           .snapshots();
     } else {
@@ -21,7 +21,7 @@ class DestinationList extends StatelessWidget {
           .collection('users')
           .document(uid)
           .collection('plans')
-          .where('travelDate', isLessThan: DateTime.now())
+          .where('returnDate', isLessThan: DateTime.now())
           .orderBy('travelDate')
           .snapshots();
     }
