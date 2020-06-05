@@ -75,7 +75,7 @@ class _DestinationScreenState extends State<DestinationScreen> {
               padding: padRight,
               child: buildButton(
                   (_) => ChecklistScreen(destination: widget.destination, planModel: widget.plan),
-                  'Items Checklist',
+                  'Checklist',
                   Color(0xff2E5FEC),
                   _roundedRight),
             ),

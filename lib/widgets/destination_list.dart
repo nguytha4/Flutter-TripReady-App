@@ -112,8 +112,10 @@ class DestinationList extends StatelessWidget {
         context: context,
         builder: (BuildContext context) {
           return AlertDialog(
-            title: new Text("Delete this trip?"),
-            actions: <Widget>[
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            title: new Text("Delete this trip?"), titleTextStyle: TextStyle(color: Colors.red),
+            
+            actions: [
               new FlatButton(
                 child: new Text("Confirm"),
                 onPressed: () async {
