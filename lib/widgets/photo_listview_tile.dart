@@ -12,7 +12,8 @@ class PhotoListViewTile extends StatelessWidget {
       this.datetitle,
       this.showFavoriteIcon = false,
       this.isFavorite = false,
-      this.onFavorite})
+      this.onFavorite,
+      this.onDelete})
       : super(key: key);
 
   final String title;
@@ -23,6 +24,7 @@ class PhotoListViewTile extends StatelessWidget {
   final bool showFavoriteIcon;
   final bool isFavorite;
   final Function onFavorite;
+  final Function onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +33,7 @@ class PhotoListViewTile extends StatelessWidget {
         context,
         routeBuilder(),
       ),
+      onLongPress: onDelete,
       child: Container(
         margin: EdgeInsets.all(10.0),
         width: 210.0,

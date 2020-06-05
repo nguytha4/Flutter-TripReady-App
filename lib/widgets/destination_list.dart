@@ -101,8 +101,38 @@ class DestinationList extends StatelessWidget {
               plan: planModel,
             ),
           ),
+          onDelete: () => showDeleteDialog(context, planModel),
         );
       },
     );
   }
+
+  Future showDeleteDialog(context, PlanModel plan) async {
+  await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            title: new Text("Delete this trip?"), titleTextStyle: TextStyle(color: Colors.red),
+            
+            actions: [
+              new FlatButton(
+                child: new Text("Confirm"),
+                onPressed: () async {
+                  await DataService.deletePlan(plan.documentID);
+                  Navigator.of(context).pop();
+                },
+              ),
+              new FlatButton(
+                child: new Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+  }
 }
+
