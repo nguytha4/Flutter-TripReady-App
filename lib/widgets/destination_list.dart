@@ -13,16 +13,14 @@ class DestinationList extends StatelessWidget {
           .collection('users')
           .document(uid)
           .collection('plans')
-          .where('travelDate', isGreaterThanOrEqualTo: DateTime.now())
-          .orderBy('travelDate')
+          .where('returnDate', isGreaterThanOrEqualTo: DateTime.now())
           .snapshots();
     } else {
       return Firestore.instance
           .collection('users')
           .document(uid)
           .collection('plans')
-          .where('travelDate', isLessThan: DateTime.now())
-          .orderBy('travelDate')
+          .where('returnDate', isLessThan: DateTime.now())
           .snapshots();
     }
   }
@@ -38,12 +36,11 @@ class DestinationList extends StatelessWidget {
 
         return StreamBuilder(
             stream: buildQuery(userIdSnapshot.data),
-            builder: (context, plansSnapshot) {
+            builder: (context, AsyncSnapshot plansSnapshot) {
               return Container(
                 child: StreamBuilder(
                     stream: Firestore.instance
                         .collection('destinations')
-                        .orderBy('country')
                         .snapshots(),
                     builder: (context, destinationsSnapshot) {
                       return buildListView(destinationsSnapshot, plansSnapshot);
@@ -74,12 +71,17 @@ class DestinationList extends StatelessWidget {
       ]));
     }
 
+    var plans = (plansSnapshot.data.documents as List<DocumentSnapshot>)
+      .map((e) => PlanModel.fromSnapshot(e))
+      .toList();
+
+    plans.sort((x, y) => x.travelDate.compareTo(y.travelDate));
+
     return ListView.builder(
       scrollDirection: Axis.vertical,
-      itemCount: plansSnapshot.data.documents.length,
+      itemCount: plans.length,
       itemBuilder: (BuildContext context, int index) {
-        var planModel =
-            PlanModel.fromSnapshot(plansSnapshot.data.documents[index]);
+        var planModel = plans[index];
 
         var destinationSnapshot = destinationsSnapshot.data.documents
             .singleWhere(
@@ -99,8 +101,38 @@ class DestinationList extends StatelessWidget {
               plan: planModel,
             ),
           ),
+          onDelete: () => showDeleteDialog(context, planModel),
         );
       },
     );
   }
+
+  Future showDeleteDialog(context, PlanModel plan) async {
+  await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(20.0))),
+            title: new Text("Delete this trip?"), titleTextStyle: TextStyle(color: Colors.red),
+            
+            actions: [
+              new FlatButton(
+                child: new Text("Confirm"),
+                onPressed: () async {
+                  await DataService.deletePlan(plan.documentID);
+                  Navigator.of(context).pop();
+                },
+              ),
+              new FlatButton(
+                child: new Text("Cancel"),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+  }
 }
+

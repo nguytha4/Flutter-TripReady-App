@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'app.dart';
 
-const String title = 'Trip Ready';
+const String title = 'TripReady';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();

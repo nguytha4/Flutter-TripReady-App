@@ -40,6 +40,18 @@ class DataService {
     return PlanModel.fromSnapshot(await ref.get());
   }
 
+  static Future deletePlan(String planId) async {
+    var userId = await AuthenticationService.currentUserId();
+
+    var documentReference = Firestore.instance
+        .collection('users')
+        .document(userId)
+        .collection('plans')
+        .document(planId);
+
+    await documentReference.delete();
+  }
+
   static Future<double> getUserRating(String destinationId, String activityId) async {
     var userId = await AuthenticationService.currentUserId();
 
