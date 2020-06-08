@@ -92,7 +92,6 @@ class _LoginState extends State<Login> {
                   ),
                 ),
               ),
-              SizedBox(height: MediaQuery.of(context).size.height * 0.1),
               _signInBtn(context),
               _createAccountBtn(context)
             ],
