@@ -130,6 +130,13 @@ class _NewDestinationEntryScreenState extends State<NewDestinationEntryScreen> {
                                 planModel.returnDate = _dateTime;
                               }
 
+                              // date validation
+                              if (planModel.returnDate.compareTo(planModel.travelDate) < 0) {
+                                var temp = planModel.returnDate;
+                                planModel.returnDate = planModel.travelDate;
+                                planModel.travelDate = temp;
+                              }
+
                               await DataService.createPlan(planModel);
                               Navigator.pop(context);
                             },
