@@ -26,7 +26,7 @@ class MainScreen extends StatelessWidget {
         }
 
         return Scaffold(
-            appBar: AppBar(title: Text("Trip Ready"), centerTitle: true),
+            appBar: AppBar(title: Text("TripReady"), centerTitle: true),
             body: Login());
       },
     );
